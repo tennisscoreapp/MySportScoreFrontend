@@ -28,3 +28,24 @@ export async function fetchTournamentGroups(id: string) {
 	}
 	return res.json()
 }
+
+export async function createTournament(tournament: {
+	name: string
+	year: number
+	start_date: string
+	end_date: string
+}) {
+	const res = await fetch('http://localhost:5000/api/v1/tournaments', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(tournament),
+	})
+
+	if (!res.ok) {
+		throw new Error('Failed to create tournament')
+	}
+
+	return res.json()
+}

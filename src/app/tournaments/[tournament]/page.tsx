@@ -1,5 +1,7 @@
 import { fetchTournament, fetchTournamentGroups } from '@/api/tournamentsApi'
+import { Button } from '@/components/ui/button'
 import { Tournament, TournamentGroup } from '@/interfaces/tournamentInterfaces'
+import Link from 'next/link'
 
 export default async function SingleTournamentPage({
 	params,
@@ -12,24 +14,83 @@ export default async function SingleTournamentPage({
 	const tournamentGroups = await fetchTournamentGroups(tournament)
 
 	return (
-		<div>
-			{tournamentData.map((tournament: Tournament) => (
-				<div key={tournament.id}>
-					<h1>{tournament.name}</h1>
-					<p>
-						Start Date: {tournament.start_date} End Date: {tournament.end_date}
-					</p>
-					<p>Status: {tournament.status}</p>
+		<div className='container mx-auto p-6'>
+			{/* Информация о турнире */}
+			{tournamentData.map((tournamentInfo: Tournament) => (
+				<div key={tournamentInfo.id} className='mb-8'>
+					<h1 className='text-3xl font-bold mb-4'>{tournamentInfo.name}</h1>
+					<div className='bg-gray-100 p-4 rounded-lg mb-6'>
+						<div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+							<div>
+								<span className='font-semibold'>Дата начала:</span>
+								<p>{tournamentInfo.start_date}</p>
+							</div>
+							<div>
+								<span className='font-semibold'>Дата окончания:</span>
+								<p>{tournamentInfo.end_date}</p>
+							</div>
+							<div>
+								<span className='font-semibold'>Статус:</span>
+								<p
+									className={`inline-block px-2 py-1 rounded text-sm ${
+										tournamentInfo.status === 'active'
+											? 'bg-green-200 text-green-800'
+											: tournamentInfo.status === 'completed'
+											? 'bg-blue-200 text-blue-800'
+											: 'bg-red-200 text-red-800'
+									}`}
+								>
+									{tournamentInfo.status}
+								</p>
+							</div>
+						</div>
+					</div>
 				</div>
 			))}
-			<div> Groups: </div>
-			{tournamentGroups.map((group: TournamentGroup) => (
-				<div key={group.id}>
-					<p>
-						{group.name} - Status: {group.status}
-					</p>
-				</div>
-			))}
+
+			{/* Список групп */}
+			<div>
+				<h2 className='text-2xl font-bold mb-4'>Группы турнира</h2>
+				{tournamentGroups.length > 0 ? (
+					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+						{tournamentGroups.map((group: TournamentGroup) => (
+							<Link
+								key={group.id}
+								href={`/tournaments/${tournament}/${group.id}`}
+								className='block p-4 border border-gray-300 rounded-lg hover:shadow-lg transition-shadow bg-white hover:bg-gray-50'
+							>
+								<h3 className='text-lg font-semibold mb-2'>{group.name}</h3>
+								<div className='flex justify-between items-center'>
+									<span
+										className={`px-2 py-1 rounded text-sm ${
+											group.status === 'active'
+												? 'bg-green-200 text-green-800'
+												: group.status === 'completed'
+												? 'bg-blue-200 text-blue-800'
+												: 'bg-red-200 text-red-800'
+										}`}
+									>
+										{group.status}
+									</span>
+									<span className='text-blue-600 text-sm'>
+										Перейти в группу →
+									</span>
+								</div>
+							</Link>
+						))}
+					</div>
+				) : (
+					<p className='text-gray-600'>В данном турнире пока нет групп</p>
+				)}
+			</div>
+			<div className='mt-10 flex gap-4'>
+				<Link href={`/tournaments/${tournament}/creategroup`}>
+					<Button>Создать группу</Button>
+				</Link>
+				<Link href={`/tournaments`}>
+					<Button>Назад</Button>
+				</Link>
+			</div>
 		</div>
 	)
 }

@@ -20,6 +20,7 @@ function AddPlayers() {
 	const queryClient = useQueryClient()
 	const params = useParams()
 	const groupId = params?.group as string
+	const tournamentId = params?.tournament as string
 	const [showAddForm, setShowAddForm] = useState(false)
 	const [newPlayer, setNewPlayer] = useState<NewPlayerData>({
 		first_name: '',
@@ -208,7 +209,7 @@ function AddPlayers() {
 				)}
 			</div>
 			<div className='flex flex-row gap-4 mt-10'>
-				<Link href={`/groups/${groupId}/`}>
+				<Link href={`/tournaments/${tournamentId}/${groupId}/`}>
 					<Button>Get back</Button>
 				</Link>
 			</div>

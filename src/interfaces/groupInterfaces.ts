@@ -7,6 +7,12 @@ export interface GroupData {
 	players: Player[]
 }
 
+export interface Group {
+	tournament_id: number
+	name: string
+	status: 'active' | 'completed'
+}
+
 export interface Match {
 	id: number
 	group_id: number

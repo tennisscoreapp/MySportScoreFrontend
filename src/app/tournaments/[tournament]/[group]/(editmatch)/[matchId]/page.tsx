@@ -1,49 +1,36 @@
 'use client'
 
-import { createMatch, fetchGroupPlayers } from '@/api/groupApi'
+import { fetchGroup, updateMatch } from '@/api/groupApi'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Player } from '@/interfaces/groupInterfaces'
+import { GroupResponse, Match } from '@/interfaces/groupInterfaces'
 import { determineWinner } from '@/utils/addMatchUtils/addMatchUtils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useFieldArray, useForm } from 'react-hook-form'
-
-export interface MatchFormData {
-	group_id: number
-	player1_id: number
-	player2_id: number
-	winner_id: number | null
-	match_date: string
-	status: 'active' | 'completed' | 'cancelled'
-	sets: {
-		set_number: number
-		player1_games: number
-		player2_games: number
-	}[]
-}
-
-export interface MatchData {
-	group_id: number
-	player1_id: number
-	player2_id: number
-	winner_id: number | null
-	status: 'active' | 'completed' | 'cancelled'
-	match_date: string
-	sets: {
-		set_number: number
-		player1_games: number
-		player2_games: number
-	}[]
-}
+import { MatchData, MatchFormData } from '../../addmatch/page'
 
 export default function AddMatchPage() {
 	const params = useParams()
+	console.log(params)
 	const router = useRouter()
-	const groupId = params?.group as string
 	const queryClient = useQueryClient()
+
+	const groupId = (params?.group as string) || ''
+	const matchId = (params?.matchId as string) || ''
+	const tournamentId = (params?.tournament as string) || ''
+
+	const { data: groupResponse, isLoading } = useQuery<GroupResponse[]>({
+		queryKey: ['group', groupId],
+		queryFn: () => fetchGroup(groupId),
+	})
+
+	const match = groupResponse?.[0]?.group_data?.matches.find(
+		(match: Match) => match.id === Number(matchId)
+	)
+	console.log(match)
 	const {
 		register,
 		control,
@@ -52,14 +39,11 @@ export default function AddMatchPage() {
 		formState: { errors },
 	} = useForm<MatchFormData>({
 		defaultValues: {
-			player1_id: undefined,
-			player2_id: undefined,
-			match_date: new Date().toISOString().split('T')[0],
-			status: 'completed',
-			sets: [
-				{ set_number: 1, player1_games: 0, player2_games: 0 },
-				{ set_number: 2, player1_games: 0, player2_games: 0 },
-			],
+			player1_id: match?.player1_id,
+			player2_id: match?.player2_id,
+			match_date: match?.match_date.split('T')[0],
+			status: match?.status || 'completed',
+			sets: match?.sets || [],
 		},
 	})
 
@@ -68,20 +52,16 @@ export default function AddMatchPage() {
 		name: 'sets',
 	})
 
-	const watchedSets = watch('sets')
+	const watchedSets = watch('sets') || match?.sets
 
-	const { data: players, isLoading } = useQuery<Player[]>({
-		queryKey: ['players', groupId],
-		queryFn: () => fetchGroupPlayers(groupId),
-	})
-
-	const createMatchMutation = useMutation({
-		mutationFn: (matchData: MatchData) => createMatch(matchData),
+	const updateMatchMutation = useMutation({
+		mutationFn: (matchData: MatchData) =>
+			updateMatch(Number(matchId), matchData),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['matches', groupId] })
+			queryClient.invalidateQueries({ queryKey: ['match', matchId] })
 		},
 		onError: error => {
-			console.error('Error creating match:', error)
+			console.error('Error updating match:', error)
 		},
 	})
 
@@ -103,10 +83,10 @@ export default function AddMatchPage() {
 			match_date: data.match_date,
 			sets: data.sets,
 		}
-		createMatchMutation.mutate(matchData)
+		updateMatchMutation.mutate(matchData)
 
-		alert('Матч успешно добавлен!')
-		router.push(`/groups/${groupId}`)
+		alert('Матч успешно обновлен!')
+		router.push(`/tournaments/${tournamentId}/${groupId}`)
 	}
 
 	if (isLoading) {
@@ -116,65 +96,42 @@ export default function AddMatchPage() {
 	return (
 		<div className='max-w-2xl mx-auto p-6'>
 			<div className='mb-6'>
-				<h1 className='text-2xl font-bold mb-2'>Add New Match</h1>
+				<h1 className='text-2xl font-bold mb-2'>Edit match</h1>
 			</div>
 
 			<form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
-				{/* Выбор игроков */}
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 					<div className='space-y-2'>
 						<Label htmlFor='player1_id'>Player 1</Label>
-						<select
-							{...register('player1_id', {
-								required: 'Player 1 is required',
-								valueAsNumber: true,
-							})}
-							className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-transparent'
-						>
-							<option value=''>Select Player 1</option>
-							{players?.map(player => (
-								<option key={player.id} value={player.id}>
-									{player.first_name} {player.last_name}
-								</option>
-							))}
-						</select>
-						{errors.player1_id && (
-							<p className='text-sm text-red-600'>
-								{errors.player1_id.message}
-							</p>
-						)}
+						<Input
+							type='hidden'
+							{...register('player1_id')}
+							defaultValue={match?.player1_id}
+						/>
+						<div className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-gray-100 flex items-center'>
+							{`${match?.player1_first_name} ${match?.player1_last_name}`}
+						</div>
 					</div>
 
 					<div className='space-y-2'>
 						<Label htmlFor='player2_id'>Player 2</Label>
-						<select
-							{...register('player2_id', {
-								required: 'Player 2 is required',
-								valueAsNumber: true,
-							})}
-							className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-transparent'
-						>
-							<option value=''>Select Player 2</option>
-							{players?.map(player => (
-								<option key={player.id} value={player.id}>
-									{player.first_name} {player.last_name}
-								</option>
-							))}
-						</select>
-						{errors.player2_id && (
-							<p className='text-sm text-red-600'>
-								{errors.player2_id.message}
-							</p>
-						)}
+						<Input
+							type='hidden'
+							{...register('player2_id')}
+							defaultValue={match?.player2_id}
+						/>
+						<div className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-gray-100 flex items-center'>
+							{`${match?.player2_first_name} ${match?.player2_last_name}`}
+						</div>
 					</div>
 				</div>
 
-				{/* Дата и статус */}
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 					<div className='space-y-2'>
 						<Label htmlFor='match_date'>Match Date</Label>
 						<Input
 							type='date'
+							defaultValue={match?.match_date}
 							{...register('match_date', {
 								required: 'Match date is required',
 							})}
@@ -189,6 +146,7 @@ export default function AddMatchPage() {
 					<div className='space-y-2'>
 						<Label htmlFor='status'>Status</Label>
 						<select
+							defaultValue={match?.status}
 							{...register('status', { required: 'Status is required' })}
 							className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-transparent'
 						>
@@ -240,6 +198,7 @@ export default function AddMatchPage() {
 									<Input
 										type='number'
 										min='0'
+										defaultValue={match?.sets[index]?.player1_games}
 										{...register(`sets.${index}.player1_games` as const, {
 											required: 'Games count is required',
 											valueAsNumber: true,
@@ -252,6 +211,7 @@ export default function AddMatchPage() {
 									<Input
 										type='number'
 										min='0'
+										defaultValue={match?.sets[index]?.player2_games}
 										{...register(`sets.${index}.player2_games` as const, {
 											required: 'Games count is required',
 											valueAsNumber: true,
@@ -289,9 +249,9 @@ export default function AddMatchPage() {
 				{/* Кнопки действий */}
 				<div className='flex gap-4 pt-4'>
 					<Button type='submit' className='flex-1'>
-						Create Match
+						Update Match
 					</Button>
-					<Link href={`/groups/${groupId}`}>
+					<Link href={`/tournaments/${tournamentId}/${groupId}`}>
 						<Button type='button' variant='outline'>
 							Cancel
 						</Button>

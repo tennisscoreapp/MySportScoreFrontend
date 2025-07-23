@@ -1,5 +1,6 @@
-import { MatchData } from '@/app/groups/[group]/addmatch/page'
-import { NewPlayerData } from '@/app/groups/[group]/addplayers/page'
+import { MatchData } from '@/app/tournaments/[tournament]/[group]/addmatch/page'
+import { NewPlayerData } from '@/app/tournaments/[tournament]/[group]/addplayers/page'
+import { Group } from '@/interfaces/groupInterfaces'
 
 export async function fetchGroup(id: string) {
 	try {
@@ -23,6 +24,25 @@ export async function fetchGroupPlayers(id: string) {
 		return res.json()
 	} catch (error) {
 		console.error('Error fetching group players', error)
+		throw error
+	}
+}
+
+export async function createGroup(groupData: Group) {
+	try {
+		const res = await fetch('http://localhost:5000/api/v1/groups', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(groupData),
+		})
+		if (!res.ok) {
+			throw new Error('Failed to create group')
+		}
+		return res.json()
+	} catch (error) {
+		console.error('Error creating group', error)
 		throw error
 	}
 }

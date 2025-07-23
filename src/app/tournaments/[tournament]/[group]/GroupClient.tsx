@@ -7,28 +7,37 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { SquarePen, X } from 'lucide-react'
 import Link from 'next/link'
 
-function GroupClient({ group }: { group: string }) {
+function GroupClient({
+	group,
+	tournamentId,
+}: {
+	group: string
+	tournamentId: string
+}) {
 	const queryClient = useQueryClient()
+
+	// Ensure group is a string, not an object
+	const groupId = typeof group === 'string' ? group : String(group)
 
 	const {
 		data: groupData,
 		isLoading,
 		error,
 	} = useQuery({
-		queryKey: ['group', group],
-		queryFn: () => fetchGroup(group),
+		queryKey: ['group', groupId],
+		queryFn: () => fetchGroup(groupId),
 	})
 
 	const deleteMatchMutation = useMutation({
 		mutationFn: (matchId: number) => deleteMatch(matchId),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['group', group] })
+			queryClient.invalidateQueries({ queryKey: ['group', groupId] })
 		},
 		onMutate: async (matchId: number) => {
-			await queryClient.cancelQueries({ queryKey: ['group', group] })
-			const previousData = queryClient.getQueryData(['group', group])
+			await queryClient.cancelQueries({ queryKey: ['group', groupId] })
+			const previousData = queryClient.getQueryData(['group', groupId])
 			queryClient.setQueryData(
-				['group', group],
+				['group', groupId],
 				(old: GroupResponse[] | undefined) => {
 					if (!old) return old
 					return old.map(groupItem => ({
@@ -47,7 +56,7 @@ function GroupClient({ group }: { group: string }) {
 		},
 		onError: (err, matchId, context) => {
 			if (context?.previousData) {
-				queryClient.setQueryData(['group', group], context.previousData)
+				queryClient.setQueryData(['group', groupId], context.previousData)
 			}
 		},
 	})
@@ -65,7 +74,7 @@ function GroupClient({ group }: { group: string }) {
 	return (
 		<div>
 			<div>
-				{groupData.map((group: GroupResponse) => (
+				{groupData?.map((group: GroupResponse) => (
 					<div
 						key={group.group_data.matches?.[0]?.id}
 						className='flex flex-col gap-10'
@@ -101,7 +110,7 @@ function GroupClient({ group }: { group: string }) {
 									{sortPlayers(
 										group.group_data.players,
 										group.group_data.matches
-									).map((player: Player, index: number) => {
+									)?.map((player: Player, index: number) => {
 										const stats = calculatePlayerStats(
 											player.id,
 											group.group_data.matches
@@ -173,7 +182,11 @@ function GroupClient({ group }: { group: string }) {
 													</div>
 													<div className='text-sm text-gray-600'>
 														Sets: {player1Sets} | Games: (
-														{match.sets.map(set => set.player1_games).join(' ')}
+														{match.sets
+															?.map((set, index) => (
+																<span key={index}>{set.player1_games}</span>
+															))
+															.join(' ')}
 														)
 													</div>
 												</div>
@@ -184,7 +197,7 @@ function GroupClient({ group }: { group: string }) {
 														{player1Sets} - {player2Sets}
 													</div>
 													<div className='text-sm text-gray-500'>
-														{match.sets.map(set => (
+														{match.sets?.map(set => (
 															<span key={set.set_number} className='mr-2'>
 																{set.player1_games}-{set.player2_games}
 															</span>
@@ -205,7 +218,11 @@ function GroupClient({ group }: { group: string }) {
 													</div>
 													<div className='text-sm text-gray-600'>
 														Sets: {player2Sets} | Games: (
-														{match.sets.map(set => set.player2_games).join(' ')}
+														{match.sets
+															?.map((set, index) => (
+																<span key={index}>{set.player2_games}</span>
+															))
+															.join(' ')}
 														)
 													</div>
 												</div>
@@ -221,8 +238,14 @@ function GroupClient({ group }: { group: string }) {
 											</div>
 											<div className='flex flex-row gap-4 justify-center mt-4'>
 												<div className='text-center'>
-													<Link href={``}>
-														<Button variant='outline' size='icon'>
+													<Link
+														href={`/tournaments/${tournamentId}/${groupId}/${match.id}`}
+													>
+														<Button
+															variant='outline'
+															size='icon'
+															className='hover:bg-blue-500 hover:text-white'
+														>
 															<SquarePen strokeWidth={2.25} />
 														</Button>
 													</Link>
@@ -245,13 +268,20 @@ function GroupClient({ group }: { group: string }) {
 					</div>
 				))}
 			</div>
-			<div className='flex flex-row gap-4 mt-10'>
-				<Link href={`/groups/${group}/addmatch`}>
-					<Button>Add match</Button>
-				</Link>
-				<Link href={`/groups/${group}/addplayers`}>
-					<Button>Add players</Button>
-				</Link>
+			<div className='mt-10'>
+				<div className='flex flex-row mt-10 justify-between'>
+					<div className='flex flex-row gap-4'>
+						<Link href={`/tournaments/${tournamentId}/${groupId}/addmatch`}>
+							<Button>Add match</Button>
+						</Link>
+						<Link href={`/tournaments/${tournamentId}/${groupId}/addplayers`}>
+							<Button>Add players</Button>
+						</Link>
+					</div>
+					<Link href={`/tournaments/${tournamentId}`}>
+						<Button>Get back</Button>
+					</Link>
+				</div>
 			</div>
 		</div>
 	)

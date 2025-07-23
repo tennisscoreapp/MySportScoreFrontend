@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='ru'>
-			<body className={`${pressStart2P.variable} antialiased p-10`}>
+			<body className={`${pressStart2P.variable} antialiased min-h-screen`}>
 				<Providers>{children}</Providers>
 			</body>
 		</html>
