@@ -1,16 +1,17 @@
 'use client'
 
-import { fetchGroup, updateMatch } from '@/api/groupApi'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { GroupResponse, Match } from '@/interfaces/groupInterfaces'
+import { useUpdateMatchMutation } from '@/hooks/mutations/useUpdateMatchMutation'
+import { useFetchGroupQuery } from '@/hooks/queries/useFetchGroupQuery'
+import { Match } from '@/interfaces/groupInterfaces'
+import { MatchFormData } from '@/interfaces/matchInterfaces'
 import { determineWinner } from '@/utils/addMatchUtils/addMatchUtils'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useFieldArray, useForm } from 'react-hook-form'
-import { MatchData, MatchFormData } from '../../addmatch/page'
 
 export default function AddMatchPage() {
 	const params = useParams()
@@ -22,10 +23,7 @@ export default function AddMatchPage() {
 	const matchId = (params?.matchId as string) || ''
 	const tournamentId = (params?.tournament as string) || ''
 
-	const { data: groupResponse, isLoading } = useQuery<GroupResponse[]>({
-		queryKey: ['group', groupId],
-		queryFn: () => fetchGroup(groupId),
-	})
+	const { data: groupResponse, isLoading } = useFetchGroupQuery(groupId)
 
 	const match = groupResponse?.[0]?.group_data?.matches.find(
 		(match: Match) => match.id === Number(matchId)
@@ -54,16 +52,7 @@ export default function AddMatchPage() {
 
 	const watchedSets = watch('sets') || match?.sets
 
-	const updateMatchMutation = useMutation({
-		mutationFn: (matchData: MatchData) =>
-			updateMatch(Number(matchId), matchData),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['match', matchId] })
-		},
-		onError: error => {
-			console.error('Error updating match:', error)
-		},
-	})
+	const updateMatchMutation = useUpdateMatchMutation(matchId, queryClient)
 
 	const onSubmit = async (data: MatchFormData) => {
 		const winner = determineWinner(data.sets)

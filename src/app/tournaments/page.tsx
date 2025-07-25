@@ -1,23 +1,18 @@
 'use client'
 
-import { fetchTournaments } from '@/api/tournamentsApi'
 import { Button } from '@/components/ui/button'
-import { Tournament } from '@/interfaces/tournamentInterfaces'
+import { useFetchTournamentsQuery } from '@/hooks/queries/useFetchTournamentsQuery'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
 import {
 	getStatusColor,
 	getStatusIcon,
 	getStatusText,
 } from '@/utils/tournamentPageUtils/tournamentPageUtils'
-import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, Calendar, Loader2, Plus, Trophy, X } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Tournaments() {
-	const { data, isLoading, isError, error } = useQuery<Tournament[]>({
-		queryKey: ['tournaments'],
-		queryFn: fetchTournaments,
-	})
+	const { data, isLoading, isError, error } = useFetchTournamentsQuery()
 
 	if (isLoading) {
 		return (

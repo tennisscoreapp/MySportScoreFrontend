@@ -1,43 +1,16 @@
 'use client'
 
-import { createMatch, fetchGroupPlayers } from '@/api/groupApi'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Player } from '@/interfaces/groupInterfaces'
+import { useCreateMatchMutation } from '@/hooks/mutations/useCreateMatchMutation'
+import { useFetchGroupPlayers } from '@/hooks/queries/useFetchGroupPlayers'
+import { MatchFormData } from '@/interfaces/matchInterfaces'
 import { determineWinner } from '@/utils/addMatchUtils/addMatchUtils'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useFieldArray, useForm } from 'react-hook-form'
-
-export interface MatchFormData {
-	group_id: number
-	player1_id: number
-	player2_id: number
-	winner_id: number | null
-	match_date: string
-	status: 'active' | 'completed' | 'cancelled'
-	sets: {
-		set_number: number
-		player1_games: number
-		player2_games: number
-	}[]
-}
-
-export interface MatchData {
-	group_id: number
-	player1_id: number
-	player2_id: number
-	winner_id: number | null
-	status: 'active' | 'completed' | 'cancelled'
-	match_date: string
-	sets: {
-		set_number: number
-		player1_games: number
-		player2_games: number
-	}[]
-}
 
 export default function AddMatchPage() {
 	const params = useParams()
@@ -71,20 +44,9 @@ export default function AddMatchPage() {
 
 	const watchedSets = watch('sets')
 
-	const { data: players, isLoading } = useQuery<Player[]>({
-		queryKey: ['players', groupId],
-		queryFn: () => fetchGroupPlayers(groupId),
-	})
+	const { data: players, isLoading } = useFetchGroupPlayers(groupId)
 
-	const createMatchMutation = useMutation({
-		mutationFn: (matchData: MatchData) => createMatch(matchData),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['matches', groupId] })
-		},
-		onError: error => {
-			console.error('Error creating match:', error)
-		},
-	})
+	const createMatchMutation = useCreateMatchMutation(groupId, queryClient)
 
 	const onSubmit = async (data: MatchFormData) => {
 		const winner = determineWinner(data.sets)
@@ -173,11 +135,11 @@ export default function AddMatchPage() {
 				{/* Дата и статус */}
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 					<div className='space-y-2'>
-						<Label htmlFor='match_date'>Match Date</Label>
+						<Label htmlFor='match_date'>Дата матча</Label>
 						<Input
 							type='date'
 							{...register('match_date', {
-								required: 'Match date is required',
+								required: 'Дата матча обязательна',
 							})}
 						/>
 						{errors.match_date && (
@@ -188,14 +150,14 @@ export default function AddMatchPage() {
 					</div>
 
 					<div className='space-y-2'>
-						<Label htmlFor='status'>Status</Label>
+						<Label htmlFor='status'>Статус</Label>
 						<select
-							{...register('status', { required: 'Status is required' })}
+							{...register('status', { required: 'Статус обязательно' })}
 							className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-transparent'
 						>
-							<option value='completed'>Completed</option>
-							<option value='active'>Active</option>
-							<option value='cancelled'>Cancelled</option>
+							<option value='completed'>Завершен</option>
+							<option value='active'>Активен</option>
+							<option value='cancelled'>Отменен</option>
 						</select>
 					</div>
 				</div>
@@ -203,7 +165,7 @@ export default function AddMatchPage() {
 				{/* Сеты */}
 				<div className='space-y-4'>
 					<div className='flex items-center justify-between'>
-						<Label className='text-lg font-semibold'>Sets</Label>
+						<Label className='text-lg font-semibold'>Сеты</Label>
 						<div className='space-x-2'>
 							<Button
 								type='button'
@@ -217,7 +179,7 @@ export default function AddMatchPage() {
 									})
 								}
 							>
-								Add Set
+								Добавить сет
 							</Button>
 							{fields.length > 1 && (
 								<Button
@@ -226,7 +188,7 @@ export default function AddMatchPage() {
 									size='sm'
 									onClick={() => remove(fields.length - 1)}
 								>
-									Remove Set
+									Удалить сет
 								</Button>
 							)}
 						</div>
@@ -234,10 +196,10 @@ export default function AddMatchPage() {
 
 					{fields.map((field, index) => (
 						<div key={field.id} className='border rounded-lg p-4 space-y-3'>
-							<h3 className='font-medium'>Set {index + 1}</h3>
+							<h3 className='font-medium'>Сет {index + 1}</h3>
 							<div className='grid grid-cols-2 gap-4'>
 								<div className='space-y-2'>
-									<Label>Player 1 Games</Label>
+									<Label>Игрок 1</Label>
 									<Input
 										type='number'
 										min='0'
@@ -249,7 +211,7 @@ export default function AddMatchPage() {
 									/>
 								</div>
 								<div className='space-y-2'>
-									<Label>Player 2 Games</Label>
+									<Label>Игрок 2</Label>
 									<Input
 										type='number'
 										min='0'
@@ -268,20 +230,20 @@ export default function AddMatchPage() {
 				{/* Предварительный результат */}
 				{watchedSets && watchedSets.length > 0 && (
 					<div className='bg-gray-50 p-4 rounded-lg'>
-						<h3 className='font-medium mb-2'>Preview Result:</h3>
+						<h3 className='font-medium mb-2'>Предварительный результат:</h3>
 						<div className='text-sm space-y-1'>
 							{watchedSets.map((set, index) => (
 								<div key={index}>
-									Set {index + 1}: {set.player1_games} - {set.player2_games}
+									Сет {index + 1}: {set.player1_games} - {set.player2_games}
 								</div>
 							))}
 							<div className='font-medium pt-2 border-t'>
-								Winner:{' '}
+								Победитель:{' '}
 								{determineWinner(watchedSets) === 'player1'
-									? 'Player 1'
+									? 'Игрок 1'
 									: determineWinner(watchedSets) === 'player2'
-									? 'Player 2'
-									: 'Draw'}
+									? 'Игрок 2'
+									: 'Ничья'}
 							</div>
 						</div>
 					</div>
@@ -290,11 +252,11 @@ export default function AddMatchPage() {
 				{/* Кнопки действий */}
 				<div className='flex gap-4 pt-4'>
 					<Button type='submit' className='flex-1'>
-						Create Match
+						Создать матч
 					</Button>
 					<Link href={`/tournaments/${tournamentId}/${groupId}`}>
 						<Button type='button' variant='outline'>
-							Cancel
+							Отмена
 						</Button>
 					</Link>
 				</div>

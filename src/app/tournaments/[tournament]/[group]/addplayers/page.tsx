@@ -1,20 +1,14 @@
 'use client'
 
-import { createPlayer, fetchGroupPlayers, removePlayer } from '@/api/groupApi'
 import { Button } from '@/components/ui/button'
-import { Player } from '@/interfaces/groupInterfaces'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useCreatePlayerMutation } from '@/hooks/mutations/useCreatePlayerMutation'
+import { useRemovePlayer } from '@/hooks/mutations/useRemovePlayer'
+import { useFetchGroupPlayers } from '@/hooks/queries/useFetchGroupPlayers'
+import { NewPlayerData } from '@/interfaces/playerInterfaces'
+import { useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
-
-export interface NewPlayerData {
-	first_name: string
-	last_name: string
-	email: string
-	phone: string
-	status: 'active' | 'inactive'
-}
 
 function AddPlayers() {
 	const queryClient = useQueryClient()
@@ -30,31 +24,11 @@ function AddPlayers() {
 		status: 'active',
 	})
 
-	const { data: players, isLoading } = useQuery<Player[]>({
-		queryKey: ['players', groupId],
-		queryFn: () => fetchGroupPlayers(groupId),
-	})
+	const { data: players, isLoading } = useFetchGroupPlayers(groupId)
 
-	const createPlayerMutation = useMutation({
-		mutationFn: (playerData: NewPlayerData) =>
-			createPlayer(groupId, playerData),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['players', groupId] })
-		},
-		onError: error => {
-			console.error('Error creating player:', error)
-		},
-	})
+	const createPlayerMutation = useCreatePlayerMutation(groupId, queryClient)
 
-	const removePlayerMutation = useMutation({
-		mutationFn: (playerId: number) => removePlayer(groupId, playerId),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['players', groupId] })
-		},
-		onError: error => {
-			console.error('Error removing player:', error)
-		},
-	})
+	const removePlayerMutation = useRemovePlayer(groupId, queryClient)
 
 	const handleCreatePlayer = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -210,7 +184,7 @@ function AddPlayers() {
 			</div>
 			<div className='flex flex-row gap-4 mt-10'>
 				<Link href={`/tournaments/${tournamentId}/${groupId}/`}>
-					<Button>Get back</Button>
+					<Button>Назад</Button>
 				</Link>
 			</div>
 		</div>

@@ -1,5 +1,4 @@
 'use client'
-import { createGroup } from '@/api/groupApi'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,8 +9,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
+import { useCreateGroupMutation } from '@/hooks/mutations/useCreateGroupMutation'
 import { Group } from '@/interfaces/groupInterfaces'
-import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -34,15 +33,7 @@ export default function CreateGroupClient({
 		mode: 'onChange',
 	})
 
-	const mutation = useMutation({
-		mutationFn: createGroup,
-		onSuccess: () => {
-			router.push(`/tournaments/${tournamentId}`)
-		},
-		onError: error => {
-			console.error('Error creating tournament:', error)
-		},
-	})
+	const mutation = useCreateGroupMutation(tournamentId, router)
 
 	const onSubmit = (data: Group) => {
 		mutation.mutate({

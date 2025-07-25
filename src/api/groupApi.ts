@@ -1,6 +1,6 @@
-import { MatchData } from '@/app/tournaments/[tournament]/[group]/addmatch/page'
-import { NewPlayerData } from '@/app/tournaments/[tournament]/[group]/addplayers/page'
 import { Group } from '@/interfaces/groupInterfaces'
+import { MatchData } from '@/interfaces/matchInterfaces'
+import { NewPlayerData } from '@/interfaces/playerInterfaces'
 
 export async function fetchGroup(id: string) {
 	try {

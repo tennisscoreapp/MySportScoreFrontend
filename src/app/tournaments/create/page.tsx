@@ -1,10 +1,9 @@
 'use client'
 
-import { createTournament } from '@/api/tournamentsApi'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useMutation } from '@tanstack/react-query'
+import { useCreateTournamentMutation } from '@/hooks/mutations/useCreateTournamentMutation'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -35,15 +34,7 @@ export default function CreateTournament() {
 
 	const startDate = watch('start_date')
 
-	const mutation = useMutation({
-		mutationFn: createTournament,
-		onSuccess: () => {
-			router.push('/tournaments')
-		},
-		onError: error => {
-			console.error('Error creating tournament:', error)
-		},
-	})
+	const mutation = useCreateTournamentMutation(router)
 
 	const onSubmit = (data: TournamentForm) => {
 		mutation.mutate(data)

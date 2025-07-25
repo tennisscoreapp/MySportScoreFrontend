@@ -1,9 +1,10 @@
 'use client'
-import { deleteMatch, fetchGroup } from '@/api/groupApi'
 import { Button } from '@/components/ui/button'
+import { useDeleteMatchMutation } from '@/hooks/mutations/useDeleteMatchMutation'
+import { useFetchGroupQuery } from '@/hooks/queries/useFetchGroupQuery'
 import { GroupResponse, Match, Player } from '@/interfaces/groupInterfaces'
 import { calculatePlayerStats, sortPlayers } from '@/utils/sortGroupTable'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { SquarePen, X } from 'lucide-react'
 import Link from 'next/link'
 
@@ -16,50 +17,11 @@ function GroupClient({
 }) {
 	const queryClient = useQueryClient()
 
-	// Ensure group is a string, not an object
 	const groupId = typeof group === 'string' ? group : String(group)
 
-	const {
-		data: groupData,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ['group', groupId],
-		queryFn: () => fetchGroup(groupId),
-	})
+	const { data: groupData, isLoading, error } = useFetchGroupQuery(groupId)
 
-	const deleteMatchMutation = useMutation({
-		mutationFn: (matchId: number) => deleteMatch(matchId),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['group', groupId] })
-		},
-		onMutate: async (matchId: number) => {
-			await queryClient.cancelQueries({ queryKey: ['group', groupId] })
-			const previousData = queryClient.getQueryData(['group', groupId])
-			queryClient.setQueryData(
-				['group', groupId],
-				(old: GroupResponse[] | undefined) => {
-					if (!old) return old
-					return old.map(groupItem => ({
-						...groupItem,
-						group_data: {
-							...groupItem.group_data,
-							matches:
-								groupItem.group_data.matches?.filter(
-									match => match.id !== matchId
-								) || [],
-						},
-					}))
-				}
-			)
-			return { previousData }
-		},
-		onError: (err, matchId, context) => {
-			if (context?.previousData) {
-				queryClient.setQueryData(['group', groupId], context.previousData)
-			}
-		},
-	})
+	const deleteMatchMutation = useDeleteMatchMutation(groupId, queryClient)
 
 	const handleDeleteMatch = (matchId: number) => {
 		if (confirm('Вы уверены, что хотите удалить этот матч?')) {
@@ -84,25 +46,25 @@ function GroupClient({
 								<thead>
 									<tr className='bg-gray-100'>
 										<th className='border border-gray-300 px-4 py-2 text-left'>
-											Players standings
+											Рейтинг игроков
 										</th>
 										<th className='border border-gray-300 px-4 py-2 text-left'>
-											Matches played
+											Сыграно матчей
 										</th>
 										<th className='border border-gray-300 px-4 py-2 text-left'>
-											Matches won
+											Выиграно матчей
 										</th>
 										<th className='border border-gray-300 px-4 py-2 text-left'>
-											Sets (W - L)
+											Сыграно сетов (В - П)
 										</th>
 										<th className='border border-gray-300 px-4 py-2 text-left'>
-											Sets difference
+											Разница сетов
 										</th>
 										<th className='border border-gray-300 px-4 py-2 text-left'>
-											Games (W - L)
+											Сыграно игр (В - П)
 										</th>
 										<th className='border border-gray-300 px-4 py-2 text-left'>
-											Games difference
+											Разница игр
 										</th>
 									</tr>
 								</thead>
@@ -148,7 +110,7 @@ function GroupClient({
 						</div>
 						<div className='space-y-4'>
 							<h2 className='text-xl font-bold border-b pb-2'>
-								Matches History
+								История матчей
 							</h2>
 							<div className='space-y-4'>
 								{group.group_data.matches?.map((match: Match) => {
@@ -181,11 +143,9 @@ function GroupClient({
 														{match.player1_first_name} {match.player1_last_name}
 													</div>
 													<div className='text-sm text-gray-600'>
-														Sets: {player1Sets} | Games: (
+														Сеты: {player1Sets} | Геймы: (
 														{match.sets
-															?.map((set, index) => (
-																<span key={index}>{set.player1_games}</span>
-															))
+															?.map(set => set.player1_games)
 															.join(' ')}
 														)
 													</div>
@@ -217,17 +177,15 @@ function GroupClient({
 														{match.player2_first_name} {match.player2_last_name}
 													</div>
 													<div className='text-sm text-gray-600'>
-														Sets: {player2Sets} | Games: (
+														Сеты: {player2Sets} | Геймы: (
 														{match.sets
-															?.map((set, index) => (
-																<span key={index}>{set.player2_games}</span>
-															))
+															?.map(set => set.player2_games)
 															.join(' ')}
 														)
 													</div>
 												</div>
 											</div>
-											{/* Победитель */}
+											{/* победитель */}
 											<div className='mt-2 text-center'>
 												<span className='inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium'>
 													Победитель:{' '}
@@ -272,14 +230,14 @@ function GroupClient({
 				<div className='flex flex-row mt-10 justify-between'>
 					<div className='flex flex-row gap-4'>
 						<Link href={`/tournaments/${tournamentId}/${groupId}/addmatch`}>
-							<Button>Add match</Button>
+							<Button>Добавить матч</Button>
 						</Link>
 						<Link href={`/tournaments/${tournamentId}/${groupId}/addplayers`}>
-							<Button>Add players</Button>
+							<Button>Добавить игроков</Button>
 						</Link>
 					</div>
 					<Link href={`/tournaments/${tournamentId}`}>
-						<Button>Get back</Button>
+						<Button>Назад</Button>
 					</Link>
 				</div>
 			</div>

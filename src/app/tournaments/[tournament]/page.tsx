@@ -1,6 +1,7 @@
 import { fetchTournament, fetchTournamentGroups } from '@/api/tournamentsApi'
 import { Button } from '@/components/ui/button'
 import { Tournament, TournamentGroup } from '@/interfaces/tournamentInterfaces'
+import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
 import Link from 'next/link'
 
 export default async function SingleTournamentPage({
@@ -23,11 +24,11 @@ export default async function SingleTournamentPage({
 						<div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
 							<div>
 								<span className='font-semibold'>Дата начала:</span>
-								<p>{tournamentInfo.start_date}</p>
+								<p>{formatDateDDMMYYYY(tournamentInfo.start_date)}</p>
 							</div>
 							<div>
 								<span className='font-semibold'>Дата окончания:</span>
-								<p>{tournamentInfo.end_date}</p>
+								<p>{formatDateDDMMYYYY(tournamentInfo.end_date)}</p>
 							</div>
 							<div>
 								<span className='font-semibold'>Статус:</span>
