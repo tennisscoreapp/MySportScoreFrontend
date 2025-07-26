@@ -1,14 +1,21 @@
-export async function fetchTournaments() {
-	const res = await fetch('http://localhost:5000/api/v1/tournaments')
+export async function fetchTournaments(userId: number) {
+	const res = await fetch(
+		`http://localhost:5000/api/v1/tournaments?userId=${userId}`,
+		{ credentials: 'include' }
+	)
 	if (!res.ok) {
-		throw new Error('Failed to fetch posts')
+		throw new Error('Failed to fetch tournaments')
 	}
 	return res.json()
 }
 
-export async function fetchTournament(id: string) {
+export async function fetchTournament(id: string, userId: number) {
+	console.log('fetchTournament', id, userId)
 	try {
-		const res = await fetch(`http://localhost:5000/api/v1/tournaments/${id}`)
+		const res = await fetch(
+			`http://localhost:5000/api/v1/tournaments/${id}?userId=${userId}`,
+			{ credentials: 'include' }
+		)
 		if (!res.ok) {
 			throw new Error('Failed to fetch tournament')
 		}
@@ -34,14 +41,18 @@ export async function createTournament(tournament: {
 	year: number
 	start_date: string
 	end_date: string
+	userId: number
 }) {
-	const res = await fetch('http://localhost:5000/api/v1/tournaments', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(tournament),
-	})
+	const res = await fetch(
+		`http://localhost:5000/api/v1/tournaments?userId=${tournament.userId}`,
+		{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(tournament),
+		}
+	)
 
 	if (!res.ok) {
 		throw new Error('Failed to create tournament')

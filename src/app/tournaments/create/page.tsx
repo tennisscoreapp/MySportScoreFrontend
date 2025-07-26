@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useAuth } from '@/contexts/AuthContext'
 import { useCreateTournamentMutation } from '@/hooks/mutations/useCreateTournamentMutation'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -17,6 +18,7 @@ interface TournamentForm {
 
 export default function CreateTournament() {
 	const router = useRouter()
+	const { user } = useAuth()
 	const {
 		register,
 		handleSubmit,
@@ -37,7 +39,13 @@ export default function CreateTournament() {
 	const mutation = useCreateTournamentMutation(router)
 
 	const onSubmit = (data: TournamentForm) => {
-		mutation.mutate(data)
+		mutation.mutate({
+			...data,
+			user_id: user?.id ?? 0,
+			status: 'active',
+			created_at: new Date().toISOString(),
+			id: 0,
+		})
 	}
 
 	const currentYear = new Date().getFullYear()

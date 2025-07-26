@@ -113,114 +113,122 @@ function GroupClient({
 								История матчей
 							</h2>
 							<div className='space-y-4'>
-								{group.group_data.matches?.map((match: Match) => {
-									const player1Sets = match.sets.reduce(
-										(acc, set) =>
-											acc + (set.player1_games > set.player2_games ? 1 : 0),
-										0
+								{group.group_data.matches
+									?.sort(
+										(a: Match, b: Match) =>
+											new Date(a.match_date).getTime() -
+											new Date(b.match_date).getTime()
 									)
-									const player2Sets = match.sets.reduce(
-										(acc, set) =>
-											acc + (set.player2_games > set.player1_games ? 1 : 0),
-										0
-									)
+									.map((match: Match) => {
+										const player1Sets = match.sets.reduce(
+											(acc, set) =>
+												acc + (set.player1_games > set.player2_games ? 1 : 0),
+											0
+										)
+										const player2Sets = match.sets.reduce(
+											(acc, set) =>
+												acc + (set.player2_games > set.player1_games ? 1 : 0),
+											0
+										)
 
-									return (
-										<div
-											key={match.id}
-											className='border rounded-lg p-4 bg-white shadow-sm'
-										>
-											<div className='grid grid-cols-3 items-center gap-4'>
-												{/* Игрок 1 */}
-												<div
-													className={`text-right ${
-														match.winner_id === match.player1_id
-															? 'font-bold text-green-600'
-															: ''
-													}`}
-												>
-													<div className='text-lg'>
-														{match.player1_first_name} {match.player1_last_name}
-													</div>
-													<div className='text-sm text-gray-600'>
-														Сеты: {player1Sets} | Геймы: (
-														{match.sets
-															?.map(set => set.player1_games)
-															.join(' ')}
-														)
-													</div>
-												</div>
-
-												{/* Счет */}
-												<div className='text-center'>
-													<div className='text-2xl font-bold text-blue-600'>
-														{player1Sets} - {player2Sets}
-													</div>
-													<div className='text-sm text-gray-500'>
-														{match.sets?.map(set => (
-															<span key={set.set_number} className='mr-2'>
-																{set.player1_games}-{set.player2_games}
-															</span>
-														))}
-													</div>
-												</div>
-
-												{/* Игрок 2 */}
-												<div
-													className={`text-left ${
-														match.winner_id === match.player2_id
-															? 'font-bold text-green-600'
-															: ''
-													}`}
-												>
-													<div className='text-lg'>
-														{match.player2_first_name} {match.player2_last_name}
-													</div>
-													<div className='text-sm text-gray-600'>
-														Сеты: {player2Sets} | Геймы: (
-														{match.sets
-															?.map(set => set.player2_games)
-															.join(' ')}
-														)
-													</div>
-												</div>
-											</div>
-											{/* победитель */}
-											<div className='mt-2 text-center'>
-												<span className='inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium'>
-													Победитель:{' '}
-													{match.winner_first_name
-														? `${match.winner_first_name} ${match.winner_last_name}`
-														: 'Ничья'}
-												</span>
-											</div>
-											<div className='flex flex-row gap-4 justify-center mt-4'>
-												<div className='text-center'>
-													<Link
-														href={`/tournaments/${tournamentId}/${groupId}/${match.id}`}
+										return (
+											<div
+												key={match.id}
+												className='border rounded-lg p-4 bg-white shadow-sm'
+											>
+												<div className='grid grid-cols-3 items-center gap-4'>
+													{/* Игрок 1 */}
+													<div
+														className={`text-right ${
+															match.winner_id === match.player1_id
+																? 'font-bold text-green-600'
+																: ''
+														}`}
 													>
-														<Button
-															variant='outline'
-															size='icon'
-															className='hover:bg-blue-500 hover:text-white'
+														<div className='text-lg'>
+															{match.player1_first_name}{' '}
+															{match.player1_last_name}
+														</div>
+														<div className='text-sm text-gray-600'>
+															Сеты: {player1Sets} | Геймы: (
+															{match.sets
+																?.map(set => set.player1_games)
+																.join(' ')}
+															)
+														</div>
+													</div>
+
+													{/* Счет */}
+													<div className='text-center'>
+														<div className='text-2xl font-bold text-blue-600'>
+															{player1Sets} - {player2Sets}
+														</div>
+														<div className='text-sm text-gray-500'>
+															{match.sets?.map(set => (
+																<span key={set.set_number} className='mr-2'>
+																	{set.player1_games}-{set.player2_games}
+																</span>
+															))}
+														</div>
+													</div>
+
+													{/* Игрок 2 */}
+													<div
+														className={`text-left ${
+															match.winner_id === match.player2_id
+																? 'font-bold text-green-600'
+																: ''
+														}`}
+													>
+														<div className='text-lg'>
+															{match.player2_first_name}{' '}
+															{match.player2_last_name}
+														</div>
+														<div className='text-sm text-gray-600'>
+															Сеты: {player2Sets} | Геймы: (
+															{match.sets
+																?.map(set => set.player2_games)
+																.join(' ')}
+															)
+														</div>
+													</div>
+												</div>
+												{/* победитель */}
+												<div className='mt-2 text-center'>
+													<span className='inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium'>
+														Победитель:{' '}
+														{match.winner_first_name
+															? `${match.winner_first_name} ${match.winner_last_name}`
+															: 'Ничья'}
+													</span>
+												</div>
+												<div className='flex flex-row gap-4 justify-center mt-4'>
+													<div className='text-center'>
+														<Link
+															href={`/tournaments/${tournamentId}/${groupId}/${match.id}`}
 														>
-															<SquarePen strokeWidth={2.25} />
+															<Button
+																variant='outline'
+																size='icon'
+																className='hover:bg-blue-500 hover:text-white'
+															>
+																<SquarePen strokeWidth={2.25} />
+															</Button>
+														</Link>
+													</div>
+													<div className='text-center'>
+														<Button
+															variant='destructive'
+															size='icon'
+															onClick={() => handleDeleteMatch(match.id)}
+														>
+															<X strokeWidth={2.25} />
 														</Button>
-													</Link>
-												</div>
-												<div className='text-center'>
-													<Button
-														variant='destructive'
-														size='icon'
-														onClick={() => handleDeleteMatch(match.id)}
-													>
-														<X strokeWidth={2.25} />
-													</Button>
+													</div>
 												</div>
 											</div>
-										</div>
-									)
-								})}
+										)
+									})}
 							</div>
 						</div>
 					</div>

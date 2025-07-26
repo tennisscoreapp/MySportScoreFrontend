@@ -1,5 +1,6 @@
 export interface Tournament {
 	id: number
+	user_id: number
 	name: string
 	year: number
 	start_date: string

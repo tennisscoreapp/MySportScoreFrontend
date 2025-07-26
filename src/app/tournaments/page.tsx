@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/AuthContext'
 import { useFetchTournamentsQuery } from '@/hooks/queries/useFetchTournamentsQuery'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
 import {
@@ -12,7 +13,10 @@ import { ArrowLeft, Calendar, Loader2, Plus, Trophy, X } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Tournaments() {
-	const { data, isLoading, isError, error } = useFetchTournamentsQuery()
+	const { user } = useAuth()
+	const { data, isLoading, isError, error } = useFetchTournamentsQuery(
+		user?.id ?? 0
+	)
 
 	if (isLoading) {
 		return (

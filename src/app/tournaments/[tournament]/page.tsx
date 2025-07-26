@@ -1,22 +1,39 @@
-import { fetchTournament, fetchTournamentGroups } from '@/api/tournamentsApi'
+'use client'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/AuthContext'
+import { useFetchTournamentGroupsQuery } from '@/hooks/queries/useFetchTournamentGroupsQuery'
+import { useFetchTournamentQuery } from '@/hooks/queries/useFetchTournamentQuery'
 import { Tournament, TournamentGroup } from '@/interfaces/tournamentInterfaces'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
-export default async function SingleTournamentPage({
-	params,
-}: {
-	params: Promise<{ tournament: string }>
-}) {
-	const { tournament } = await params
+export default function SingleTournamentPage() {
+	const params = useParams<{ tournament: string }>()
+	const tournament = params?.tournament ?? ''
+	const { user } = useAuth()
 
-	const tournamentData = await fetchTournament(tournament)
-	const tournamentGroups = await fetchTournamentGroups(tournament)
+	const {
+		data: tournamentData,
+		isLoading,
+		isError,
+	} = useFetchTournamentQuery(tournament, user?.id ?? 0)
+	const {
+		data: tournamentGroups,
+		isLoading: isLoadingGroups,
+		isError: isErrorGroups,
+	} = useFetchTournamentGroupsQuery(tournament)
+
+	if (isLoading || isLoadingGroups) {
+		return <div>Loading...</div>
+	}
+	if (isError || isErrorGroups) {
+		return <div>Error</div>
+	}
 
 	return (
 		<div className='container mx-auto p-6'>
-			{/* Информация о турнире */}
+			{/* информация о турнире */}
 			{tournamentData.map((tournamentInfo: Tournament) => (
 				<div key={tournamentInfo.id} className='mb-8'>
 					<h1 className='text-3xl font-bold mb-4'>{tournamentInfo.name}</h1>
