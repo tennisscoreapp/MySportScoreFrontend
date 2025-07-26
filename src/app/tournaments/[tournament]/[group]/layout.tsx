@@ -1,13 +1,10 @@
-import Navbar from '@/components/ui/Navbar'
-
 export default function DashboardLayout({
 	children,
 }: {
 	children: React.ReactNode
 }) {
 	return (
-		<div>
-			<Navbar />
+		<div className='p-10'>
 			<main>{children}</main>
 		</div>
 	)

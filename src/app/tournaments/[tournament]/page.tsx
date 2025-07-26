@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useAuth } from '@/contexts/AuthContext'
 import { useFetchTournamentGroupsQuery } from '@/hooks/queries/useFetchTournamentGroupsQuery'
 import { useFetchTournamentQuery } from '@/hooks/queries/useFetchTournamentQuery'
 import { Tournament, TournamentGroup } from '@/interfaces/tournamentInterfaces'
@@ -11,13 +10,12 @@ import { useParams } from 'next/navigation'
 export default function SingleTournamentPage() {
 	const params = useParams<{ tournament: string }>()
 	const tournament = params?.tournament ?? ''
-	const { user } = useAuth()
 
 	const {
 		data: tournamentData,
 		isLoading,
 		isError,
-	} = useFetchTournamentQuery(tournament, user?.id ?? 0)
+	} = useFetchTournamentQuery(tournament)
 	const {
 		data: tournamentGroups,
 		isLoading: isLoadingGroups,

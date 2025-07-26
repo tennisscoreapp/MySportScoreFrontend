@@ -14,9 +14,7 @@ import Link from 'next/link'
 
 export default function Tournaments() {
 	const { user } = useAuth()
-	const { data, isLoading, isError, error } = useFetchTournamentsQuery(
-		user?.id ?? 0
-	)
+	const { data, isLoading, isError, error } = useFetchTournamentsQuery()
 
 	if (isLoading) {
 		return (

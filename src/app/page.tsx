@@ -3,41 +3,6 @@ import { Plus, Settings, Trophy, Zap } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Home() {
-	// const stats = [
-	// 	{
-	// 		title: 'Активные турниры',
-	// 		value: '12',
-	// 		change: '+2.5%',
-	// 		changeType: 'positive',
-	// 		icon: Trophy,
-	// 		color: 'bg-gradient-to-r from-blue-500 to-blue-600',
-	// 	},
-	// 	{
-	// 		title: 'Всего игроков',
-	// 		value: '248',
-	// 		change: '+12.3%',
-	// 		changeType: 'positive',
-	// 		icon: Users,
-	// 		color: 'bg-gradient-to-r from-green-500 to-green-600',
-	// 	},
-	// 	{
-	// 		title: 'Матчей сегодня',
-	// 		value: '18',
-	// 		change: '-3.2%',
-	// 		changeType: 'negative',
-	// 		icon: Calendar,
-	// 		color: 'bg-gradient-to-r from-purple-500 to-purple-600',
-	// 	},
-	// 	{
-	// 		title: 'Завершенных игр',
-	// 		value: '1,247',
-	// 		change: '+8.1%',
-	// 		changeType: 'positive',
-	// 		icon: BarChart3,
-	// 		color: 'bg-gradient-to-r from-orange-500 to-orange-600',
-	// 	},
-	// ]
-
 	const quickActions = [
 		{
 			title: 'Создать турнир',
@@ -65,7 +30,7 @@ export default function Home() {
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'>
 			{/* Header */}
-			<div className='bg-white shadow-sm border-b border-gray-200'>
+			<div className='bg-white'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 					<div className='flex justify-between items-center py-6'>
 						<div className='flex items-center space-x-4'>

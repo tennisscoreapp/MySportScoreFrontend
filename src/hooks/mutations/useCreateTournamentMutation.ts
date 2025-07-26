@@ -11,7 +11,6 @@ export const useCreateTournamentMutation = (router: AppRouterInstance) =>
 				year: tournament.year,
 				start_date: tournament.start_date,
 				end_date: tournament.end_date,
-				userId: tournament.user_id,
 			}),
 		onSuccess: () => {
 			router.push('/tournaments')

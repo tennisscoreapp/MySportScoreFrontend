@@ -42,28 +42,28 @@ function GroupClient({
 						className='flex flex-col gap-10'
 					>
 						<div className='overflow-x-auto'>
-							<table className='w-full border-collapse border border-gray-300'>
+							<table className='w-full border-collapse border border-gray-300 '>
 								<thead>
 									<tr className='bg-gray-100'>
-										<th className='border border-gray-300 px-4 py-2 text-left'>
+										<th className='border border-gray-300 px-4 py-2 text-center'>
 											Рейтинг игроков
 										</th>
-										<th className='border border-gray-300 px-4 py-2 text-left'>
+										<th className='border border-gray-300 px-4 py-2 text-center'>
 											Сыграно матчей
 										</th>
-										<th className='border border-gray-300 px-4 py-2 text-left'>
+										<th className='border border-gray-300 px-4 py-2 text-center'>
 											Выиграно матчей
 										</th>
-										<th className='border border-gray-300 px-4 py-2 text-left'>
+										<th className='border border-gray-300 px-4 py-2 text-center'>
 											Сыграно сетов (В - П)
 										</th>
-										<th className='border border-gray-300 px-4 py-2 text-left'>
+										<th className='border border-gray-300 px-4 py-2 text-center'>
 											Разница сетов
 										</th>
-										<th className='border border-gray-300 px-4 py-2 text-left'>
+										<th className='border border-gray-300 px-4 py-2 text-center'>
 											Сыграно игр (В - П)
 										</th>
-										<th className='border border-gray-300 px-4 py-2 text-left'>
+										<th className='border border-gray-300 px-4 py-2 text-center'>
 											Разница игр
 										</th>
 									</tr>
@@ -79,27 +79,27 @@ function GroupClient({
 										)
 										return (
 											<tr key={player.id} className='hover:bg-gray-50'>
-												<td className='border border-gray-300 px-4 py-2'>
+												<td className='border border-gray-300 px-4 py-2 text-left'>
 													{`${index + 1}. ${player.first_name} ${
 														player.last_name
 													}`}
 												</td>
-												<td className='border border-gray-300 px-4 py-2'>
+												<td className='border border-gray-300 px-4 py-2 text-center'>
 													{stats.matchesPlayed}
 												</td>
-												<td className='border border-gray-300 px-4 py-2'>
+												<td className='border border-gray-300 px-4 py-2 text-center'>
 													{stats.matchesWon}
 												</td>
-												<td className='border border-gray-300 px-4 py-2'>
+												<td className='border border-gray-300 px-4 py-2 text-center'>
 													{`${stats.setsWon} - ${stats.setsLost}`}
 												</td>
-												<td className='border border-gray-300 px-4 py-2'>
+												<td className='border border-gray-300 px-4 py-2 text-center'>
 													{stats.setsDifference}
 												</td>
-												<td className='border border-gray-300 px-4 py-2'>
+												<td className='border border-gray-300 px-4 py-2 text-center'>
 													{`${stats.gamesWon} - ${stats.gamesLost}`}
 												</td>
-												<td className='border border-gray-300 px-4 py-2'>
+												<td className='border border-gray-300 px-4 py-2 text-center'>
 													{stats.gamesDifference}
 												</td>
 											</tr>

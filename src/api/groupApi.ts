@@ -2,9 +2,13 @@ import { Group } from '@/interfaces/groupInterfaces'
 import { MatchData } from '@/interfaces/matchInterfaces'
 import { NewPlayerData } from '@/interfaces/playerInterfaces'
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
 export async function fetchGroup(id: string) {
 	try {
-		const res = await fetch(`http://localhost:5000/api/v1/groups/${id}`)
+		const res = await fetch(`${API_URL}/api/v1/groups/${id}`, {
+			credentials: 'include',
+		})
 		if (!res.ok) {
 			throw new Error('Failed to fetch group')
 		}
@@ -17,7 +21,9 @@ export async function fetchGroup(id: string) {
 
 export async function fetchGroupPlayers(id: string) {
 	try {
-		const res = await fetch(`http://localhost:5000/api/v1/groups/${id}/players`)
+		const res = await fetch(`${API_URL}/api/v1/groups/${id}/players`, {
+			credentials: 'include',
+		})
 		if (!res.ok) {
 			throw new Error('Failed to fetch group players')
 		}
@@ -30,12 +36,13 @@ export async function fetchGroupPlayers(id: string) {
 
 export async function createGroup(groupData: Group) {
 	try {
-		const res = await fetch('http://localhost:5000/api/v1/groups', {
+		const res = await fetch(`${API_URL}/api/v1/groups`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(groupData),
+			credentials: 'include',
 		})
 		if (!res.ok) {
 			throw new Error('Failed to create group')
@@ -49,12 +56,13 @@ export async function createGroup(groupData: Group) {
 
 export async function createMatch(matchData: MatchData) {
 	try {
-		const res = await fetch('http://localhost:5000/api/v1/matches', {
+		const res = await fetch(`${API_URL}/api/v1/matches`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(matchData),
+			credentials: 'include',
 		})
 		if (!res.ok) {
 			throw new Error('Failed to create match')
@@ -68,16 +76,14 @@ export async function createMatch(matchData: MatchData) {
 
 export async function createPlayer(groupId: string, playerData: NewPlayerData) {
 	try {
-		const res = await fetch(
-			`http://localhost:5000/api/v1/groups/${groupId}/players`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(playerData),
-			}
-		)
+		const res = await fetch(`${API_URL}/api/v1/groups/${groupId}/players`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(playerData),
+			credentials: 'include',
+		})
 		const createdPlayer = await res.json()
 		return createdPlayer
 	} catch (error) {
@@ -89,9 +95,10 @@ export async function createPlayer(groupId: string, playerData: NewPlayerData) {
 export async function removePlayer(groupId: string, playerId: number) {
 	try {
 		const res = await fetch(
-			`http://localhost:5000/api/v1/groups/${groupId}/players/${playerId}`,
+			`${API_URL}/api/v1/groups/${groupId}/players/${playerId}`,
 			{
 				method: 'DELETE',
+				credentials: 'include',
 			}
 		)
 		if (!res.ok) {
@@ -106,8 +113,9 @@ export async function removePlayer(groupId: string, playerId: number) {
 
 export async function deleteMatch(matchId: number) {
 	try {
-		const res = await fetch(`http://localhost:5000/api/v1/matches/${matchId}`, {
+		const res = await fetch(`${API_URL}/api/v1/matches/${matchId}`, {
 			method: 'DELETE',
+			credentials: 'include',
 		})
 		if (!res.ok) {
 			throw new Error('Failed to delete match')
@@ -121,7 +129,9 @@ export async function deleteMatch(matchId: number) {
 
 export async function fetchMatch(matchId: number) {
 	try {
-		const res = await fetch(`http://localhost:5000/api/v1/matches/${matchId}`)
+		const res = await fetch(`${API_URL}/api/v1/matches/${matchId}`, {
+			credentials: 'include',
+		})
 		if (!res.ok) {
 			throw new Error('Failed to fetch match')
 		}
@@ -134,12 +144,13 @@ export async function fetchMatch(matchId: number) {
 
 export async function updateMatch(matchId: number, matchData: MatchData) {
 	try {
-		const res = await fetch(`http://localhost:5000/api/v1/matches/${matchId}`, {
+		const res = await fetch(`${API_URL}/api/v1/matches/${matchId}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(matchData),
+			credentials: 'include',
 		})
 		if (!res.ok) {
 			throw new Error('Failed to update match')

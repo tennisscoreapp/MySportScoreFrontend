@@ -5,10 +5,49 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
 // список защищенных маршрутов
 const protectedRoutes = ['/tournaments']
-// const protectedRoutesWithId = ['/tournaments/:tournament', ]
 
 // список публичных маршрутов аутентификации
 const authRoutes = ['/auth/login', '/auth/register']
+
+// Функция для проверки доступа к конкретному ресурсу
+async function checkResourceAccess(
+	pathname: string,
+	authToken: string
+): Promise<boolean> {
+	// Извлекаем ID из пути для проверки доступа к конкретному ресурсу
+	const tournamentMatch = pathname.match(/^\/tournaments\/(\d+)/)
+	const groupMatch = pathname.match(/^\/tournaments\/\d+\/([^\/]+)\/(\d+)/)
+
+	try {
+		if (tournamentMatch) {
+			const tournamentId = tournamentMatch[1]
+			const response = await fetch(
+				`${API_BASE_URL}/api/v1/tournaments/${tournamentId}`,
+				{
+					headers: {
+						Cookie: `auth_token=${authToken}`,
+					},
+				}
+			)
+			return response.ok
+		}
+
+		if (groupMatch) {
+			const groupId = groupMatch[2]
+			const response = await fetch(`${API_BASE_URL}/api/v1/groups/${groupId}`, {
+				headers: {
+					Cookie: `auth_token=${authToken}`,
+				},
+			})
+			return response.ok
+		}
+
+		return true
+	} catch (error) {
+		console.error('Resource access check failed:', error)
+		return false
+	}
+}
 
 export async function middleware(request: NextRequest) {
 	console.log('request', request)
@@ -40,6 +79,13 @@ export async function middleware(request: NextRequest) {
 			if (!response.ok) {
 				// токен недействителен, перенаправляем на вход
 				return NextResponse.redirect(new URL('/auth/login', request.url))
+			}
+
+			// Дополнительная проверка доступа к конкретному ресурсу
+			const hasResourceAccess = await checkResourceAccess(pathname, authToken)
+			if (!hasResourceAccess) {
+				// Нет доступа к ресурсу, перенаправляем на страницу турниров
+				return NextResponse.redirect(new URL('/restricted', request.url))
 			}
 		} catch (error) {
 			console.error('Middleware auth check failed:', error)

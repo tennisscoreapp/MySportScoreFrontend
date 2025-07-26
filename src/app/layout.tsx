@@ -1,4 +1,3 @@
-import Navbar from '@/components/ui/Navbar'
 import Providers from '@/utils/provider'
 import type { Metadata } from 'next'
 import { Press_Start_2P } from 'next/font/google'
@@ -24,10 +23,7 @@ export default function RootLayout({
 	return (
 		<html lang='ru'>
 			<body className={`${pressStart2P.variable} antialiased min-h-screen`}>
-				<Providers>
-					<Navbar />
-					{children}
-				</Providers>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	)

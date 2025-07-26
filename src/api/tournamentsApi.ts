@@ -1,21 +1,20 @@
-export async function fetchTournaments(userId: number) {
-	const res = await fetch(
-		`http://localhost:5000/api/v1/tournaments?userId=${userId}`,
-		{ credentials: 'include' }
-	)
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+export async function fetchTournaments() {
+	const res = await fetch(`${API_URL}/api/v1/tournaments`, {
+		credentials: 'include',
+	})
 	if (!res.ok) {
 		throw new Error('Failed to fetch tournaments')
 	}
 	return res.json()
 }
 
-export async function fetchTournament(id: string, userId: number) {
-	console.log('fetchTournament', id, userId)
+export async function fetchTournament(id: string) {
 	try {
-		const res = await fetch(
-			`http://localhost:5000/api/v1/tournaments/${id}?userId=${userId}`,
-			{ credentials: 'include' }
-		)
+		const res = await fetch(`${API_URL}/api/v1/tournaments/${id}`, {
+			credentials: 'include',
+		})
 		if (!res.ok) {
 			throw new Error('Failed to fetch tournament')
 		}
@@ -27,9 +26,9 @@ export async function fetchTournament(id: string, userId: number) {
 }
 
 export async function fetchTournamentGroups(id: string) {
-	const res = await fetch(
-		`http://localhost:5000/api/v1/tournaments/${id}/groups`
-	)
+	const res = await fetch(`${API_URL}/api/v1/tournaments/${id}/groups`, {
+		credentials: 'include',
+	})
 	if (!res.ok) {
 		throw new Error('Failed to fetch tournament groups')
 	}
@@ -41,18 +40,15 @@ export async function createTournament(tournament: {
 	year: number
 	start_date: string
 	end_date: string
-	userId: number
 }) {
-	const res = await fetch(
-		`http://localhost:5000/api/v1/tournaments?userId=${tournament.userId}`,
-		{
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(tournament),
-		}
-	)
+	const res = await fetch(`${API_URL}/api/v1/tournaments`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(tournament),
+		credentials: 'include',
+	})
 
 	if (!res.ok) {
 		throw new Error('Failed to create tournament')
