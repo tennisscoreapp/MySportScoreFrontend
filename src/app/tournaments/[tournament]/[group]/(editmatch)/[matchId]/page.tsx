@@ -15,7 +15,6 @@ import { useFieldArray, useForm } from 'react-hook-form'
 
 export default function AddMatchPage() {
 	const params = useParams()
-	console.log(params)
 	const router = useRouter()
 	const queryClient = useQueryClient()
 
@@ -28,7 +27,6 @@ export default function AddMatchPage() {
 	const match = groupResponse?.[0]?.group_data?.matches.find(
 		(match: Match) => match.id === Number(matchId)
 	)
-	console.log(match)
 	const {
 		register,
 		control,

@@ -56,3 +56,14 @@ export async function createTournament(tournament: {
 
 	return res.json()
 }
+
+export async function deleteTournament(id: string) {
+	const res = await fetch(`${API_URL}/api/v1/tournaments/${id}`, {
+		method: 'DELETE',
+		credentials: 'include',
+	})
+	if (!res.ok) {
+		throw new Error('Failed to delete tournament')
+	}
+	return res.json()
+}

@@ -54,6 +54,17 @@ export async function createGroup(groupData: Group) {
 	}
 }
 
+export async function deleteGroup(groupId: string) {
+	const res = await fetch(`${API_URL}/api/v1/groups/${groupId}`, {
+		method: 'DELETE',
+		credentials: 'include',
+	})
+	if (!res.ok) {
+		throw new Error('Failed to delete group')
+	}
+	return res.json()
+}
+
 export async function createMatch(matchData: MatchData) {
 	try {
 		const res = await fetch(`${API_URL}/api/v1/matches`, {

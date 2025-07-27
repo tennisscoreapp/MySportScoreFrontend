@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useAuth } from '@/contexts/AuthContext'
+import { useDeleteTournamentMutation } from '@/hooks/mutations/useDeleteTournamentMutation'
 import { useFetchTournamentsQuery } from '@/hooks/queries/useFetchTournamentsQuery'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
 import {
@@ -13,8 +13,14 @@ import { ArrowLeft, Calendar, Loader2, Plus, Trophy, X } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Tournaments() {
-	const { user } = useAuth()
 	const { data, isLoading, isError, error } = useFetchTournamentsQuery()
+	const deleteJournamentMutation = useDeleteTournamentMutation()
+
+	const handleDeleteTournament = (tournamentId: string) => {
+		if (confirm('Вы уверены, что хотите удалить этот турнир?')) {
+			deleteJournamentMutation.mutate(tournamentId)
+		}
+	}
 
 	if (isLoading) {
 		return (
@@ -77,59 +83,71 @@ export default function Tournaments() {
 				{data && data.length > 0 ? (
 					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8'>
 						{data.map(tournament => (
-							<Link
-								key={tournament.id}
-								href={`/tournaments/${tournament.id}`}
-								className='group'
-							>
-								<div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200 h-full'>
-									{/* Header */}
-									<div className='flex items-start justify-between mb-4'>
-										<div className='flex-1 min-w-0'>
-											<h3 className='text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate'>
-												{tournament.name}
-											</h3>
-											<p className='text-sm text-gray-500 mt-1'>
-												{tournament.year} год
-											</p>
+							<div key={`tournament-${tournament.id}`} className='relative'>
+								<Link
+									href={`/tournaments/${tournament.id}`}
+									className='group block'
+								>
+									<div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200 h-full'>
+										{/* Header */}
+										<div className='flex items-start justify-between mb-4'>
+											<div className='flex-1 min-w-0'>
+												<h3 className='text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate'>
+													{tournament.name}
+												</h3>
+												<p className='text-sm text-gray-500 mt-1'>
+													{tournament.year} год
+												</p>
+											</div>
+											<div
+												className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ml-3 ${getStatusColor(
+													tournament.status
+												)}`}
+											>
+												{getStatusIcon(tournament.status)}
+												{getStatusText(tournament.status)}
+											</div>
 										</div>
-										<div
-											className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ml-3 ${getStatusColor(
-												tournament.status
-											)}`}
-										>
-											{getStatusIcon(tournament.status)}
-											{getStatusText(tournament.status)}
-										</div>
-									</div>
 
-									{/* Dates */}
-									<div className='space-y-2 mb-4'>
-										<div className='flex items-center gap-2 text-sm text-gray-600'>
-											<Calendar className='w-4 h-4' />
-											<span>
-												Начало: {formatDateDDMMYYYY(tournament.start_date)}
-											</span>
+										{/* Dates */}
+										<div className='space-y-2 mb-4'>
+											<div className='flex items-center gap-2 text-sm text-gray-600'>
+												<Calendar className='w-4 h-4' />
+												<span>
+													Начало: {formatDateDDMMYYYY(tournament.start_date)}
+												</span>
+											</div>
+											<div className='flex items-center gap-2 text-sm text-gray-600'>
+												<Calendar className='w-4 h-4' />
+												<span>
+													Окончание: {formatDateDDMMYYYY(tournament.end_date)}
+												</span>
+											</div>
 										</div>
-										<div className='flex items-center gap-2 text-sm text-gray-600'>
-											<Calendar className='w-4 h-4' />
-											<span>
-												Окончание: {formatDateDDMMYYYY(tournament.end_date)}
-											</span>
-										</div>
-									</div>
 
-									{/* Footer */}
-									<div className='flex items-center justify-between pt-4 border-t border-gray-100'>
-										<span className='text-xs text-gray-500'>
-											ID: {tournament.id}
-										</span>
-										<div className='w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center group-hover:bg-blue-700 transition-colors'>
-											<ArrowLeft className='w-3 h-3 text-white rotate-180' />
+										{/* Footer */}
+										<div className='flex items-center justify-between pt-4 border-t border-gray-100'>
+											<span className='text-xs text-gray-500'>
+												ID: {tournament.id}
+											</span>
+											<div className='w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center group-hover:bg-blue-700 transition-colors'>
+												<ArrowLeft className='w-3 h-3 text-white rotate-180' />
+											</div>
 										</div>
 									</div>
-								</div>
-							</Link>
+								</Link>
+								<Button
+									variant='ghost'
+									size='icon'
+									className='absolute top-0 right-0 cursor-pointer'
+									onClick={() =>
+										handleDeleteTournament(tournament.id.toString())
+									}
+									title='Удалить турнир'
+								>
+									<X />
+								</Button>
+							</div>
 						))}
 					</div>
 				) : (

@@ -109,7 +109,7 @@ export default function CreateGroupClient({
 
 			{mutation.isError && (
 				<p className='text-red-500 text-sm mt-4'>
-					Произошла ошибка при создании турнира. Попробуйте еще раз.
+					Произошла ошибка при создании группы. Попробуйте еще раз.
 				</p>
 			)}
 		</div>

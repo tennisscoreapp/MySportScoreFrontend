@@ -1,6 +1,6 @@
 'use client'
 
-import { AuthProvider } from '@/contexts/AuthContext'
+import { AuthProvider } from '@/shared/contexts/AuthContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 

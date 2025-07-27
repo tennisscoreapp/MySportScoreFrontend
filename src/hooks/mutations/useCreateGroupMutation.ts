@@ -12,6 +12,6 @@ export const useCreateGroupMutation = (
 			router.push(`/tournaments/${tournamentId}`)
 		},
 		onError: error => {
-			console.error('Error creating tournament:', error)
+			console.error('Error creating group:', error)
 		},
 	})

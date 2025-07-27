@@ -50,7 +50,6 @@ async function checkResourceAccess(
 }
 
 export async function middleware(request: NextRequest) {
-	console.log('request', request)
 	const { pathname } = request.nextUrl
 
 	// получаем токен из куки
