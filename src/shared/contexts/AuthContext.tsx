@@ -13,6 +13,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 	const checkAuth = async () => {
 		console.log('API_BASE_URL', API_BASE_URL)
+		console.log(
+			'process.env.NEXT_PUBLIC_API_URL',
+			process.env.NEXT_PUBLIC_API_URL
+		)
+		console.log('Full URL:', `${API_BASE_URL}/api/v1/me`)
 		try {
 			const response = await fetch(`${API_BASE_URL}/api/v1/me`, {
 				credentials: 'include',

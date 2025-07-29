@@ -12,19 +12,33 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Добавляем ARG для переменных окружения
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
 
-FROM nginx:stable-alpine
-WORKDIR /usr/share/nginx/html
+FROM base AS runner
+WORKDIR /app
 
-RUN rm -rf ./*
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-COPY --from=builder /app/out .
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-COPY nginx.conf /etc/nginx/nginx.conf
+# Копируем необходимые файлы для Next.js сервера
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 3000
 
-CMD ["nginx", "-g", "daemon off;"]
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]
