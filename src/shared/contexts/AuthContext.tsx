@@ -12,6 +12,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [loading, setLoading] = useState(true)
 
 	const checkAuth = async () => {
+		console.log('API_BASE_URL', API_BASE_URL)
 		try {
 			const response = await fetch(`${API_BASE_URL}/api/v1/me`, {
 				credentials: 'include',
