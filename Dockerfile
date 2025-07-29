@@ -16,6 +16,13 @@ COPY . .
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
+# Проверяем что переменная установлена
+RUN echo "🔍 NEXT_PUBLIC_API_URL = $NEXT_PUBLIC_API_URL" && \
+    if [ -z "$NEXT_PUBLIC_API_URL" ]; then \
+        echo "❌ ОШИБКА: NEXT_PUBLIC_API_URL не установлена!"; \
+        exit 1; \
+    fi
+
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
@@ -29,7 +36,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Копируем необходимые файлы для Next.js сервера
+# Копируем необходимые файлы для Next.js сервера  
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static

@@ -5,19 +5,31 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
+// Добавляем fallback и проверку корректности URL
+const API_BASE_URL =
+	process.env.NEXT_PUBLIC_API_URL ||
+	(typeof window !== 'undefined'
+		? `${window.location.protocol}//${window.location.hostname}:5000`
+		: 'http://localhost:5000')
+
+// Проверяем, что URL не содержит undefined
+if (API_BASE_URL.includes('undefined')) {
+	console.error(
+		'❌ NEXT_PUBLIC_API_URL содержит undefined. Проверьте переменные окружения в Coolify!'
+	)
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<User | null>(null)
 	const [loading, setLoading] = useState(true)
 
 	const checkAuth = async () => {
-		console.log('API_BASE_URL', API_BASE_URL)
-		console.log(
-			'process.env.NEXT_PUBLIC_API_URL',
-			process.env.NEXT_PUBLIC_API_URL
-		)
-		console.log('Full URL:', `${API_BASE_URL}/api/v1/me`)
+		// Логируем только в development
+		if (process.env.NODE_ENV === 'development') {
+			console.log('API_BASE_URL:', API_BASE_URL)
+			console.log('Full URL:', `${API_BASE_URL}/api/v1/me`)
+		}
+
 		try {
 			const response = await fetch(`${API_BASE_URL}/api/v1/me`, {
 				credentials: 'include',

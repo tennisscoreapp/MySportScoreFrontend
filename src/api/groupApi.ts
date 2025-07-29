@@ -2,7 +2,11 @@ import { Group } from '@/interfaces/groupInterfaces'
 import { MatchData } from '@/interfaces/matchInterfaces'
 import { NewPlayerData } from '@/interfaces/playerInterfaces'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+
+if (API_URL.includes('undefined')) {
+	console.error(' NEXT_PUBLIC_API_URL содержит undefined в groupApi!')
+}
 
 export async function fetchGroup(id: string) {
 	try {

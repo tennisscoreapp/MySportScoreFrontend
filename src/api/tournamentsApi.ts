@@ -1,4 +1,9 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+
+// Проверяем корректность URL
+if (API_URL.includes('undefined')) {
+	console.error(' NEXT_PUBLIC_API_URL содержит undefined в tournamentsApi!')
+}
 
 export async function fetchTournaments() {
 	const res = await fetch(`${API_URL}/api/v1/tournaments`, {
