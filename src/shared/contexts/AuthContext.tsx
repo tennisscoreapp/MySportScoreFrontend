@@ -27,10 +27,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		try {
 			const response = await fetch(`${API_BASE_URL}/api/v1/me`, {
 				credentials: 'include',
-				headers: {
-					'Content-Type': 'application/json',
-					'Cache-Control': 'no-cache',
-				},
 			})
 
 			if (response.ok) {
@@ -56,7 +52,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					'Cache-Control': 'no-cache',
 				},
 				credentials: 'include',
 				body: JSON.stringify({ email, password }),
@@ -84,7 +79,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					'Cache-Control': 'no-cache',
 				},
 				credentials: 'include',
 			})
