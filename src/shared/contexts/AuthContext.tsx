@@ -15,7 +15,7 @@ const API_BASE_URL =
 // Проверяем, что URL не содержит undefined
 if (API_BASE_URL.includes('undefined')) {
 	console.error(
-		'❌ NEXT_PUBLIC_API_URL содержит undefined. Проверьте переменные окружения в Coolify!'
+		'NEXT_PUBLIC_API_URL содержит undefined. Проверьте переменные окружения в Coolify!'
 	)
 }
 

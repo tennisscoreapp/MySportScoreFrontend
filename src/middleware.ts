@@ -60,6 +60,7 @@ export async function middleware(request: NextRequest) {
 
 	// получаем токен из куки
 	const authToken = request.cookies.get('auth_token')?.value
+	console.log('Auth token:', authToken)
 
 	// проверяем статус аутентификации для защищенных роутов
 	const isProtectedRoute = protectedRoutes.some(route =>
@@ -69,6 +70,7 @@ export async function middleware(request: NextRequest) {
 
 	if (isProtectedRoute) {
 		if (!authToken) {
+			console.log('No auth token found, redirecting to login')
 			// Перенаправляем на страницу входа
 			return NextResponse.redirect(new URL('/auth/login', request.url))
 		}
@@ -82,6 +84,7 @@ export async function middleware(request: NextRequest) {
 			})
 
 			if (!response.ok) {
+				console.log('Auth token is invalid, redirecting to login')
 				// токен недействителен, перенаправляем на вход
 				return NextResponse.redirect(new URL('/auth/login', request.url))
 			}
@@ -94,6 +97,7 @@ export async function middleware(request: NextRequest) {
 			}
 		} catch (error) {
 			console.error('Middleware auth check failed:', error)
+			console.log('Redirecting to login due to error')
 			return NextResponse.redirect(new URL('/auth/login', request.url))
 		}
 	}
