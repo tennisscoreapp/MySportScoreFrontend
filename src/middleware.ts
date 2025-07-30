@@ -60,17 +60,26 @@ export async function middleware(request: NextRequest) {
 
 	// получаем токен из куки с fallback для production
 	let authToken = request.cookies.get('auth_token')?.value
-	console.log('Request path:', pathname, request.cookies)
-	console.log('Auth token:', authToken)
+
+	// Детальная отладка куков
+	const cookieHeader = request.headers.get('cookie')
+	console.log('===== COOKIE DEBUG =====')
+	console.log('Request path:', pathname)
+	console.log('request.cookies:', request.cookies)
+	console.log('Cookie header:', cookieHeader)
+	console.log('Auth token from request.cookies:', authToken)
 
 	// Fallback: пытаемся извлечь токен из заголовка Cookie если стандартный способ не работает
-	if (!authToken) {
-		const cookieHeader = request.headers.get('cookie')
-		if (cookieHeader) {
-			const authTokenMatch = cookieHeader.match(/auth_token=([^;]+)/)
-			authToken = authTokenMatch?.[1]
+	if (!authToken && cookieHeader) {
+		const authTokenMatch = cookieHeader.match(/auth_token=([^;]+)/)
+		if (authTokenMatch) {
+			authToken = authTokenMatch[1]
+			console.log('Auth token from header fallback:', authToken)
 		}
 	}
+
+	console.log('Final auth token:', authToken)
+	console.log('=========================')
 
 	// проверяем статус аутентификации для защищенных роутов
 	const isProtectedRoute = protectedRoutes.some(route =>
