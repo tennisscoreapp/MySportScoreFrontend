@@ -24,15 +24,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [loading, setLoading] = useState(true)
 
 	const checkAuth = async () => {
-		// Логируем только в development
-		if (process.env.NODE_ENV === 'development') {
-			console.log('API_BASE_URL:', API_BASE_URL)
-			console.log('Full URL:', `${API_BASE_URL}/api/v1/me`)
-		}
-
 		try {
 			const response = await fetch(`${API_BASE_URL}/api/v1/me`, {
 				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+					'Cache-Control': 'no-cache',
+				},
 			})
 
 			if (response.ok) {
@@ -58,6 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
+					'Cache-Control': 'no-cache',
 				},
 				credentials: 'include',
 				body: JSON.stringify({ email, password }),
@@ -83,6 +82,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		try {
 			await fetch(`${API_BASE_URL}/api/v1/logout`, {
 				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Cache-Control': 'no-cache',
+				},
 				credentials: 'include',
 			})
 		} catch (error) {

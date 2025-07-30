@@ -58,10 +58,19 @@ async function checkResourceAccess(
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl
 
-	// получаем токен из куки
-	const authToken = request.cookies.get('auth_token')?.value
+	// получаем токен из куки с fallback для production
+	let authToken = request.cookies.get('auth_token')?.value
 	console.log('Request path:', pathname, request.cookies)
 	console.log('Auth token:', authToken)
+
+	// Fallback: пытаемся извлечь токен из заголовка Cookie если стандартный способ не работает
+	if (!authToken) {
+		const cookieHeader = request.headers.get('cookie')
+		if (cookieHeader) {
+			const authTokenMatch = cookieHeader.match(/auth_token=([^;]+)/)
+			authToken = authTokenMatch?.[1]
+		}
+	}
 
 	// проверяем статус аутентификации для защищенных роутов
 	const isProtectedRoute = protectedRoutes.some(route =>
