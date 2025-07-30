@@ -60,6 +60,7 @@ export async function middleware(request: NextRequest) {
 
 	// получаем токен из куки
 	const authToken = request.cookies.get('auth_token')?.value
+	console.log('Request path:', pathname, request.cookies)
 	console.log('Auth token:', authToken)
 
 	// проверяем статус аутентификации для защищенных роутов
