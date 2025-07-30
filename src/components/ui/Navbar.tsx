@@ -4,6 +4,7 @@ import { useAuth } from '@/shared/contexts/AuthContext'
 import { LogIn, LogOut, User } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { Button } from './button'
 
 export default function Navbar() {
 	const { user, logout, loading } = useAuth()
@@ -24,7 +25,10 @@ export default function Navbar() {
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 					<div className='flex justify-between h-16'>
 						<div className='flex items-center'>
-							<Link href='/' className='text-xl font-bold text-gray-900'>
+							<Link
+								href='/'
+								className='text-lg sm:text-xl font-bold text-gray-900'
+							>
 								Tournament Manager
 							</Link>
 						</div>
@@ -42,7 +46,10 @@ export default function Navbar() {
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 				<div className='flex justify-between h-16'>
 					<div className='flex items-center'>
-						<Link href='/' className='text-xl font-bold text-gray-900'>
+						<Link
+							href='/'
+							className='text-sm sm:text-lg font-bold text-gray-900'
+						>
 							Tournament Manager
 						</Link>
 					</div>
@@ -52,17 +59,19 @@ export default function Navbar() {
 							<>
 								<div className='flex items-center space-x-2 text-gray-700'>
 									<User className='h-5 w-5' />
-									<span className='text-sm'>
+									<span className='text-xs sm:text-sm'>
 										{user.first_name} {user.last_name}
 									</span>
 								</div>
-								<button
+								<Button
+									size='sm'
 									onClick={handleLogout}
-									className='flex items-center space-x-1 px-3 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors'
+									variant='ghost'
+									className='flex items-center space-x-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors'
 								>
 									<LogOut className='h-4 w-4' />
-									<span>Выйти</span>
-								</button>
+									<span className='text-xs sm:text-sm'>Выйти</span>
+								</Button>
 							</>
 						) : (
 							<Link

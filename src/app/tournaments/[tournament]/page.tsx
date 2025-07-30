@@ -37,25 +37,33 @@ export default function SingleTournamentPage() {
 	}
 
 	return (
-		<div className='container mx-auto p-6'>
+		<div className='container mx-auto p-8 sm:p-12 min-h-screen'>
 			{/* информация о турнире */}
 			{tournamentData.map((tournamentInfo: Tournament) => (
-				<div key={tournamentInfo.id} className='mb-8'>
-					<h1 className='text-3xl font-bold mb-4'>{tournamentInfo.name}</h1>
-					<div className='bg-gray-100 p-4 rounded-lg mb-6'>
-						<div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+				<div key={tournamentInfo.id} className='mb-4 sm:mb-8'>
+					<h1 className='text-xl sm:text-2xl font-bold mb-4'>
+						{tournamentInfo.name}
+					</h1>
+					<div className='bg-gray-100 p-2 sm:p-4 rounded-lg mb-2 sm:mb-6'>
+						<div className='grid grid-cols-1 md:grid-cols-3 gap-1 sm:gap-4'>
 							<div>
-								<span className='font-semibold'>Дата начала:</span>
+								<span className='font-semibold text-sm sm:text-base'>
+									Дата начала:
+								</span>
 								<p>{formatDateDDMMYYYY(tournamentInfo.start_date)}</p>
 							</div>
 							<div>
-								<span className='font-semibold'>Дата окончания:</span>
+								<span className='font-semibold text-sm sm:text-base'>
+									Дата окончания:
+								</span>
 								<p>{formatDateDDMMYYYY(tournamentInfo.end_date)}</p>
 							</div>
 							<div>
-								<span className='font-semibold'>Статус:</span>
+								<span className='font-semibold text-sm sm:text-base'>
+									Статус:
+								</span>
 								<p
-									className={`inline-block px-2 py-1 rounded text-sm ${
+									className={`inline-block px-1 sm:px-2 py-1 rounded text-xs sm:text-sm ${
 										tournamentInfo.status === 'active'
 											? 'bg-green-200 text-green-800'
 											: tournamentInfo.status === 'completed'
@@ -73,20 +81,22 @@ export default function SingleTournamentPage() {
 
 			{/* Список групп */}
 			<div>
-				<h2 className='text-2xl font-bold mb-4'>Группы турнира</h2>
+				<h2 className='text-lg sm:text-xl font-bold mb-4'>Группы турнира</h2>
 				{tournamentGroups.length > 0 ? (
-					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 sm:gap-4'>
 						{tournamentGroups.map((group: TournamentGroup) => (
 							<div key={group.id} className='relative'>
 								<Link
 									key={group.id}
 									href={`/tournaments/${tournament}/${group.id}`}
-									className='block p-4 border border-gray-300 rounded-lg hover:shadow-lg transition-shadow bg-white hover:bg-gray-50'
+									className='block p-1 sm:p-4 border border-gray-300 rounded-lg hover:shadow-lg transition-shadow bg-white hover:bg-gray-50'
 								>
-									<h3 className='text-lg font-semibold mb-2'>{group.name}</h3>
+									<h3 className='text-sm sm:text-lg font-semibold mb-2'>
+										{group.name}
+									</h3>
 									<div className='flex justify-between items-center'>
 										<span
-											className={`px-2 py-1 rounded text-sm ${
+											className={`px-1 sm:px-2 py-1 rounded text-xs sm:text-sm ${
 												group.status === 'active'
 													? 'bg-green-200 text-green-800'
 													: group.status === 'completed'
@@ -96,15 +106,16 @@ export default function SingleTournamentPage() {
 										>
 											{group.status}
 										</span>
-										<span className='text-blue-600 text-sm'>
+										<span className='text-blue-600 text-xs sm:text-sm'>
 											Перейти в группу →
 										</span>
 									</div>
 								</Link>
 								<Button
+									disabled={group.status === 'completed'}
 									variant='ghost'
-									size='icon'
-									className='absolute top-0 right-0 cursor-pointer'
+									size='sm'
+									className='absolute top-0 right-0 cursor-pointer hidden sm:block'
 									onClick={() => handleDeleteGroup(group.id.toString())}
 									title='Удалить турнир'
 								>
@@ -114,15 +125,19 @@ export default function SingleTournamentPage() {
 						))}
 					</div>
 				) : (
-					<p className='text-gray-600'>В данном турнире пока нет групп</p>
+					<p className='text-sm sm:text-base text-gray-600'>
+						В данном турнире пока нет групп
+					</p>
 				)}
 			</div>
-			<div className='mt-10 flex gap-4'>
+			<div className='mt-2 sm:mt-10 flex gap-2 sm:gap-4'>
 				<Link href={`/tournaments/${tournament}/creategroup`}>
-					<Button>Создать группу</Button>
+					<Button size='sm'>Создать группу</Button>
 				</Link>
 				<Link href={`/tournaments`}>
-					<Button>Назад</Button>
+					<Button size='sm' variant='outline'>
+						Назад
+					</Button>
 				</Link>
 			</div>
 		</div>

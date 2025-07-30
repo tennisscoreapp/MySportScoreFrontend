@@ -5,19 +5,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// Добавляем fallback и проверку корректности URL
-const API_BASE_URL =
-	process.env.NEXT_PUBLIC_API_URL ||
-	(typeof window !== 'undefined'
-		? `${window.location.protocol}//${window.location.hostname}:5000`
-		: 'http://localhost:5000')
-
-// Проверяем, что URL не содержит undefined
-if (API_BASE_URL.includes('undefined')) {
-	console.error(
-		'NEXT_PUBLIC_API_URL содержит undefined. Проверьте переменные окружения в Coolify!'
-	)
-}
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<User | null>(null)
