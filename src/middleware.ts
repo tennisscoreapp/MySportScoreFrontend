@@ -4,11 +4,6 @@ import { NextResponse } from 'next/server'
 // Добавляем fallback для API_BASE_URL
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
-// Проверяем корректность URL
-if (API_BASE_URL.includes('undefined')) {
-	console.error(' NEXT_PUBLIC_API_URL содержит undefined в middleware!')
-}
-
 // список защищенных маршрутов
 const protectedRoutes = ['/tournaments']
 
