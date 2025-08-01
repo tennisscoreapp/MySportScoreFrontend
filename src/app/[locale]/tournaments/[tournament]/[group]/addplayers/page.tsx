@@ -1,27 +1,40 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { useCreatePlayerMutation } from '@/hooks/mutations/useCreatePlayerMutation'
 import { useRemovePlayer } from '@/hooks/mutations/useRemovePlayer'
 import { useFetchGroupPlayers } from '@/hooks/queries/useFetchGroupPlayers'
 import { NewPlayerData } from '@/interfaces/playerInterfaces'
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 function AddPlayers() {
+	const t = useTranslations('AddPlayers')
 	const queryClient = useQueryClient()
 	const params = useParams()
 	const groupId = params?.group as string
 	const tournamentId = params?.tournament as string
 	const [showAddForm, setShowAddForm] = useState(false)
-	const [newPlayer, setNewPlayer] = useState<NewPlayerData>({
-		first_name: '',
-		last_name: '',
-		email: '',
-		phone: '',
-		status: 'active',
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		reset,
+	} = useForm<NewPlayerData>({
+		defaultValues: {
+			first_name: '',
+			last_name: '',
+			email: '',
+			phone: '',
+			status: 'active',
+		},
 	})
 
 	const { data: players, isLoading } = useFetchGroupPlayers(groupId)
@@ -30,21 +43,14 @@ function AddPlayers() {
 
 	const removePlayerMutation = useRemovePlayer(groupId, queryClient)
 
-	const handleCreatePlayer = async (e: React.FormEvent) => {
-		e.preventDefault()
-		createPlayerMutation.mutate(newPlayer)
-		setNewPlayer({
-			first_name: '',
-			last_name: '',
-			email: '',
-			phone: '',
-			status: 'active',
-		})
+	const onSubmit: SubmitHandler<NewPlayerData> = async data => {
+		createPlayerMutation.mutate(data)
+		reset()
 		setShowAddForm(false)
 	}
 
 	const handleRemovePlayer = async (playerId: number) => {
-		if (confirm('Вы уверены, что хотите удалить этого игрока?')) {
+		if (confirm(t('confirm_delete'))) {
 			removePlayerMutation.mutate(playerId)
 		}
 	}
@@ -52,7 +58,7 @@ function AddPlayers() {
 	if (isLoading) {
 		return (
 			<div className='flex justify-center items-center min-h-screen'>
-				<div className='text-lg'>Загрузка...</div>
+				<div className='text-lg'>{t('loading')}</div>
 			</div>
 		)
 	}
@@ -60,91 +66,99 @@ function AddPlayers() {
 		<div className='max-w-4xl mx-auto p-6'>
 			<div className='flex justify-between items-center mb-6'>
 				<h1 className='text-2xl font-bold'>
-					Игроки группы ({players?.length || 0})
+					{t('title')} ({players?.length || 0})
 				</h1>
 				<button
 					onClick={() => setShowAddForm(!showAddForm)}
 					className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded'
 				>
-					{showAddForm ? 'Отмена' : 'Добавить игрока'}
+					{showAddForm ? t('buttons.cancel') : t('buttons.add_player')}
 				</button>
 			</div>
 
-			{/* Форма добавления игрока */}
 			{showAddForm && (
 				<div className='bg-gray-50 p-4 rounded-lg mb-6'>
-					<h2 className='text-lg font-semibold mb-4'>Добавить игрока</h2>
+					<h2 className='text-lg font-semibold mb-4'>{t('form.title')}</h2>
 					<form
-						onSubmit={handleCreatePlayer}
+						onSubmit={handleSubmit(onSubmit)}
 						className='grid grid-cols-1 md:grid-cols-2 gap-4'
 					>
 						<div>
-							<label className='block text-sm font-medium mb-1'>Имя *</label>
-							<input
-								type='text'
-								required
-								value={newPlayer.first_name}
-								onChange={e =>
-									setNewPlayer({ ...newPlayer, first_name: e.target.value })
-								}
-								className='w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-							/>
-						</div>
-						<div>
 							<label className='block text-sm font-medium mb-1'>
-								Фамилия *
+								{t('form.first_name')} *
 							</label>
-							<input
+							<Input
 								type='text'
-								required
-								value={newPlayer.last_name}
-								onChange={e =>
-									setNewPlayer({ ...newPlayer, last_name: e.target.value })
-								}
-								className='w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+								{...register('first_name', {
+									required: t('validation.first_name_required'),
+								})}
 							/>
+							{errors.first_name && (
+								<p className='text-red-500 text-sm mt-1'>
+									{errors.first_name.message}
+								</p>
+							)}
 						</div>
 						<div>
-							<label className='block text-sm font-medium mb-1'>Email *</label>
-							<input
+							<Label className='block text-sm font-medium mb-1'>
+								{t('form.last_name')} *
+							</Label>
+							<Input
+								type='text'
+								{...register('last_name', {
+									required: t('validation.last_name_required'),
+								})}
+							/>
+							{errors.last_name && (
+								<p className='text-red-500 text-sm mt-1'>
+									{errors.last_name.message}
+								</p>
+							)}
+						</div>
+						<div>
+							<Label className='block text-sm font-medium mb-1'>
+								{t('form.email')} *
+							</Label>
+							<Input
 								type='email'
-								required
-								value={newPlayer.email}
-								onChange={e =>
-									setNewPlayer({ ...newPlayer, email: e.target.value })
-								}
-								className='w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
+								{...register('email', {
+									required: t('validation.email_required'),
+									pattern: {
+										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+										message: t('validation.email_invalid'),
+									},
+								})}
 							/>
+							{errors.email && (
+								<p className='text-red-500 text-sm mt-1'>
+									{errors.email.message}
+								</p>
+							)}
 						</div>
 						<div>
-							<label className='block text-sm font-medium mb-1'>Телефон</label>
-							<input
-								type='tel'
-								value={newPlayer.phone}
-								onChange={e =>
-									setNewPlayer({ ...newPlayer, phone: e.target.value })
-								}
-								className='w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-							/>
+							<Label className='block text-sm font-medium mb-1'>
+								{t('form.phone')}
+							</Label>
+							<Input type='tel' {...register('phone')} />
 						</div>
-						<div className='md:col-span-2'>
-							<button
+						<div className='md:col-span-2 flex gap-2'>
+							<Button
 								type='submit'
-								className='bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded'
+								variant='green'
+								disabled={createPlayerMutation.isPending}
 							>
-								Добавить
-							</button>
+								{createPlayerMutation.isPending
+									? t('Global.loading')
+									: t('buttons.add')}
+							</Button>
 						</div>
 					</form>
 				</div>
 			)}
 
-			{/* Список игроков */}
 			<div className='bg-white rounded-lg shadow'>
 				{!players || players.length === 0 ? (
-					<div className='p-8 text-center text-gray-500'>
-						В группе пока нет игроков
-					</div>
+					<div className='p-8 text-center text-gray-500'>{t('no_players')}</div>
 				) : (
 					<ul className='divide-y divide-gray-200'>
 						{players.map(player => (
@@ -167,16 +181,18 @@ function AddPlayers() {
 												: 'bg-gray-100 text-gray-800'
 										}`}
 									>
-										{player.status === 'active' ? 'Активен' : 'Неактивен'}
+										{player.status === 'active'
+											? t('active_player')
+											: t('inactive_player')}
 									</span>
 								</div>
-								<button
+								<Button
 									onClick={() => handleRemovePlayer(player.id)}
-									className='text-red-500 hover:text-red-700 text-xl font-bold'
-									title='Удалить игрока'
+									variant='redDelete'
+									title={t('delete_player')}
 								>
 									×
-								</button>
+								</Button>
 							</li>
 						))}
 					</ul>
@@ -184,7 +200,7 @@ function AddPlayers() {
 			</div>
 			<div className='flex flex-row gap-4 mt-10'>
 				<Link href={`/tournaments/${tournamentId}/${groupId}/`}>
-					<Button>Назад</Button>
+					<Button>{t('buttons.back')}</Button>
 				</Link>
 			</div>
 		</div>

@@ -1,7 +1,9 @@
+import '@/app/globals.css'
 import Providers from '@/utils/provider'
 import type { Metadata } from 'next'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
 import { Press_Start_2P } from 'next/font/google'
-import './globals.css'
 
 const pressStart2P = Press_Start_2P({
 	variable: '--font-press-start-2p',
@@ -15,15 +17,21 @@ export const metadata: Metadata = {
 	description: 'Tournament index page',
 }
 
-export default function RootLayout({
+export default async function LocaleLayout({
 	children,
-}: Readonly<{
+	params: { locale },
+}: {
 	children: React.ReactNode
-}>) {
+	params: { locale: string }
+}) {
+	const messages = await getMessages()
+
 	return (
-		<html lang='ru'>
+		<html lang={locale}>
 			<body className={`${pressStart2P.variable} antialiased min-h-screen`}>
-				<Providers>{children}</Providers>
+				<NextIntlClientProvider messages={messages}>
+					<Providers>{children}</Providers>
+				</NextIntlClientProvider>
 			</body>
 		</html>
 	)

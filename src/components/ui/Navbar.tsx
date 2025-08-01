@@ -2,12 +2,14 @@
 
 import { useAuth } from '@/shared/contexts/AuthContext'
 import { LogIn, LogOut, User } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from './button'
 
 export default function Navbar() {
 	const { user, logout, loading } = useAuth()
+	const t = useTranslations('Global')
 	const router = useRouter()
 
 	const handleLogout = async () => {
@@ -70,7 +72,9 @@ export default function Navbar() {
 									className='flex items-center space-x-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors'
 								>
 									<LogOut className='h-4 w-4' />
-									<span className='text-xs sm:text-sm'>Выйти</span>
+									<span className='text-xs sm:text-sm'>
+										{t('navbar.logout')}
+									</span>
 								</Button>
 							</>
 						) : (
@@ -79,7 +83,7 @@ export default function Navbar() {
 								className='flex items-center space-x-1 px-3 py-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors'
 							>
 								<LogIn className='h-4 w-4' />
-								<span>Войти</span>
+								<span>{t('navbar.login')}</span>
 							</Link>
 						)}
 					</div>

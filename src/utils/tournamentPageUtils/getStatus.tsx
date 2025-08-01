@@ -1,5 +1,6 @@
 import { Tournament } from '@/interfaces/tournamentInterfaces'
 import { Check, Play, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export const getStatusIcon = (status: Tournament['status']) => {
 	switch (status) {
@@ -23,13 +24,16 @@ export const getStatusColor = (status: Tournament['status']) => {
 	}
 }
 
-export const getStatusText = (status: Tournament['status']) => {
+export const getStatusText = (
+	status: Tournament['status'],
+	t: ReturnType<typeof useTranslations>
+) => {
 	switch (status) {
 		case 'active':
-			return 'Активный'
+			return t('tournament_card.active')
 		case 'completed':
-			return 'Завершен'
+			return t('tournament_card.completed')
 		case 'cancelled':
-			return 'Отменен'
+			return t('tournament_card.cancelled')
 	}
 }

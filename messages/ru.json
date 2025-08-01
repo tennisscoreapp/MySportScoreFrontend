@@ -1,0 +1,225 @@
+{
+	"Index": {
+		"header": {
+			"subtitle": "Админ панель",
+			"system_active": "Система активна"
+		},
+		"title": "Главная",
+		"description_1": "Добро пожаловать в систему управления турнирами",
+		"description_2": "Здесь вы можете создать новый турнир, просматривать и редактировать существующие турниры и настраивать систему",
+		"quick_actions": {
+			"title": "Быстрые действия",
+			"create_tournament": {
+				"title": "Создать турнир",
+				"description": "Настроить новый турнир с группами и участниками"
+			},
+			"tournament_management": {
+				"title": "Управление турнирами",
+				"description": "Просмотр и редактирование существующих турниров"
+			},
+			"system_settings": {
+				"title": "Настройки системы",
+				"description": "Конфигурация приложения и параметры"
+			}
+		}
+	},
+	"Auth": {
+		"login": {
+			"title": "Вход в систему",
+			"email": "Email",
+			"password": "Пароль",
+			"enter": "Войти",
+			"enter_loading": "Вход..."
+		},
+		"validation": {
+			"email_required": "Email обязателен",
+			"email_invalid": "Неверный формат email",
+			"password_required": "Пароль обязателен",
+			"password_min_length": "Пароль должен содержать минимум 6 символов"
+		}
+	},
+	"Restricted": {
+		"title": "Ограниченная страница",
+		"description": "У вас нет доступа к этой странице",
+		"back_to_tournaments": "Назад к турнирам"
+	},
+	"Tournaments": {
+		"title": "Турниры",
+		"description": "Управление турнирами по настольному теннису",
+		"tournament_card": {
+			"year": "год",
+			"start_date": "Дата начала",
+			"end_date": "Дата окончания",
+			"active": "Активный",
+			"completed": "Завершен",
+			"cancelled": "Отменен"
+		},
+		"tournament_loading": "Загрузка турниров...",
+		"delete_tournament_confirmation": "Вы уверены, что хотите удалить этот турнир?",
+		"error_loading": "Ошибка загрузки турниров",
+		"error_loading_message": "Не удалось загрузить турниры",
+		"delete_tournament_title": "Удалить турнир",
+		"no_tournaments": "Нет турниров",
+		"create_tournament_message": "Создайте свой первый турнир для начала работы",
+		"create_tournament": "Создать турнир",
+		"back": "Назад",
+		"create_tournament_form": {
+			"name": "Название турнира",
+			"year": "Год",
+			"start_date": "Дата начала",
+			"end_date": "Дата окончания",
+			"create": "Создать турнир",
+			"validation": {
+				"name_required": "Название обязательно",
+				"name_min_length": "Название должно содержать минимум 2 символа",
+				"year_required": "Год обязателен",
+				"year_min": "Год должен быть не менее {currentYear}",
+				"year_max": "Год должен быть менее {currentYear + 10}",
+				"start_date_required": "Дата начала обязательна",
+				"end_date_required": "Дата окончания обязательна",
+				"end_date_after_start_date": "Дата окончания должна быть после даты начала",
+				"creating": "Создание...",
+				"create": "Создать турнир",
+				"cancel": "Отмена",
+				"error": "Произошла ошибка при создании турнира. Попробуйте еще раз."
+			}
+		}
+	},
+	"TournamentGroups": {
+		"title": "Группы турнира",
+		"tournament_groups": "Группы турнира",
+		"group_loading": "Загрузка групп...",
+		"error_loading": "Ошибка загрузки групп",
+		"delete_group_confirmation": "Вы уверены, что хотите удалить эту группу?",
+		"delete_group_title": "Удалить группу",
+		"no_groups": "В этом турнире пока нет групп",
+		"create_group": "Создать группу",
+		"back": "Вернуться к турнирам",
+		"group_card": {
+			"enter_group": "Войти в группу →"
+		},
+		"tournament_card": {
+			"active": "Активный",
+			"completed": "Завершен",
+			"cancelled": "Отменен"
+		},
+		"tournament_start_date": "Дата начала",
+		"tournament_end_date": "Дата окончания",
+		"tournament_status": "Статус"
+	},
+	"TournamentGroup": {
+		"no_data": "Нет данных",
+		"group_loading": "Загрузка группы...",
+		"error_loading": "Ошибка загрузки группы",
+		"table": {},
+		"matches_history": {
+			"title": "История матчей",
+			"game": {
+				"sets": "Сеты",
+				"games": "Игры",
+				"winner": "Победитель",
+				"draw": "Ничья"
+			}
+		},
+		"buttons": {
+			"add_match": "Добавить матч",
+			"add_players": "Добавить игроков",
+			"back": "Назад"
+		}
+	},
+	"Match": {
+		"titleAdd": "Добавить новый матч",
+		"titleEdit": "Редактировать матч",
+		"loading": "Загрузка...",
+		"match_updated": "Матч успешно обновлен",
+		"form": {
+			"player1": "Игрок 1",
+			"player2": "Игрок 2",
+			"select_player1": "Выберите игрока 1",
+			"select_player2": "Выберите игрока 2",
+			"match_date": "Дата матча",
+			"status": "Статус",
+			"status_completed": "Завершен",
+			"status_active": "Активный",
+			"status_cancelled": "Отменен",
+			"sets": "Сеты",
+			"set": "Сет",
+			"add_set": "Добавить сет",
+			"delete_set": "Удалить сет",
+			"preview_result": "Предварительный результат",
+			"winner": "Победитель",
+			"draw": "Ничья"
+		},
+		"validation": {
+			"player1_required": "Игрок 1 обязателен",
+			"player2_required": "Игрок 2 обязателен",
+			"match_date_required": "Дата матча обязательна",
+			"status_required": "Статус обязателен",
+			"games_count_required": "Количество игр обязательно",
+			"games_count_min": "Игр должно быть 0 или больше"
+		},
+		"buttons": {
+			"create_match": "Создать матч",
+			"cancel": "Отмена",
+			"update_match": "Обновить матч"
+		}
+	},
+	"AddPlayers": {
+		"title": "Игроки группы",
+		"active_player": "Активный",
+		"inactive_player": "Неактивный",
+		"no_players": "В этой группе пока нет игроков",
+		"confirm_delete": "Вы уверены, что хотите удалить этого игрока?",
+		"delete_player": "Удалить игрока",
+		"buttons": {
+			"add_player": "Добавить игрока",
+			"back": "Вернуться",
+			"add": "Добавить",
+			"cancel": "Отмена"
+		},
+		"form": {
+			"title": "Добавить игрока",
+			"first_name": "Имя",
+			"last_name": "Фамилия",
+			"email": "Email",
+			"phone": "Телефон"
+		},
+		"validation": {
+			"first_name_required": "Имя обязательно",
+			"last_name_required": "Фамилия обязательна",
+			"email_required": "Email обязателен",
+			"email_invalid": "Неверный email адрес"
+		}
+	},
+	"Global": {
+		"navbar": {
+			"logout": "Выйти",
+			"login": "Войти"
+		},
+		"loading": "Загрузка...",
+		"error": "Ошибка",
+		"delete": "Удалить",
+		"edit": "Редактировать",
+		"create": "Создать",
+		"cancel": "Отмена",
+		"save": "Сохранить",
+		"close": "Закрыть"
+	},
+	"Settings": {
+		"title": "Настройки",
+		"description": "Настройте параметры приложения",
+		"back": "Вернуться",
+		"language": {
+			"title": "Язык интерфейса",
+			"description": "Выберите язык для отображения интерфейса",
+			"russian": "Русский",
+			"english": "English",
+			"loading": "Загрузка нового языка..."
+		},
+		"info": {
+			"title": "Информация",
+			"description": "Изменение языка применится сразу же. Все интерфейсы будут переведены на выбранный язык."
+		},
+		"save_success": "Настройки сохранены"
+	}
+}

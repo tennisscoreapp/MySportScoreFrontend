@@ -1,9 +1,11 @@
 'use client'
 
 import { useAuth } from '@/shared/contexts/AuthContext'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Button } from '../ui/button'
 
 interface LoginFormData {
 	email: string
@@ -13,6 +15,7 @@ interface LoginFormData {
 export default function LoginForm() {
 	const { login } = useAuth()
 	const router = useRouter()
+	const t = useTranslations('Auth')
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
 
@@ -38,7 +41,9 @@ export default function LoginForm() {
 
 	return (
 		<div className='max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md'>
-			<h2 className='text-2xl font-bold text-center mb-6'>Вход в систему</h2>
+			<h2 className='text-2xl font-bold text-center mb-6'>
+				{t('login.title')}
+			</h2>
 
 			{error && (
 				<div className='bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-4'>
@@ -52,14 +57,14 @@ export default function LoginForm() {
 						htmlFor='email'
 						className='block text-sm font-medium text-gray-700 mb-1'
 					>
-						Email
+						{t('login.email')}
 					</label>
 					<input
 						{...register('email', {
-							required: 'Email обязателен',
+							required: t('validation.email_required'),
 							pattern: {
 								value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-								message: 'Неверный формат email',
+								message: t('validation.email_invalid'),
 							},
 						})}
 						type='email'
@@ -77,14 +82,14 @@ export default function LoginForm() {
 						htmlFor='password'
 						className='block text-sm font-medium text-gray-700 mb-1'
 					>
-						Пароль
+						{t('login.password')}
 					</label>
 					<input
 						{...register('password', {
-							required: 'Пароль обязателен',
+							required: t('validation.password_required'),
 							minLength: {
 								value: 6,
-								message: 'Пароль должен содержать минимум 6 символов',
+								message: t('validation.password_min_length'),
 							},
 						})}
 						type='password'
@@ -99,20 +104,10 @@ export default function LoginForm() {
 					)}
 				</div>
 
-				<button
-					type='submit'
-					disabled={isLoading}
-					className='w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
-				>
-					{isLoading ? 'Вход...' : 'Войти'}
-				</button>
+				<Button type='submit' disabled={isLoading} variant='login'>
+					{isLoading ? t('login.enter_loading') : t('login.enter')}
+				</Button>
 			</form>
-
-			<div className='mt-4 text-center text-sm text-gray-600'>
-				<p>Тестовые данные:</p>
-				<p>Email: admin@test.local</p>
-				<p>Пароль: admin123</p>
-			</div>
 		</div>
 	)
 }

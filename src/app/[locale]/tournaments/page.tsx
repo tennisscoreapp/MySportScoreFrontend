@@ -8,16 +8,18 @@ import {
 	getStatusColor,
 	getStatusIcon,
 	getStatusText,
-} from '@/utils/tournamentPageUtils/tournamentPageUtils'
+} from '@/utils/tournamentPageUtils/getStatus'
 import { ArrowLeft, Calendar, Loader2, Plus, Trophy, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 export default function Tournaments() {
 	const { data, isLoading, isError, error } = useFetchTournamentsQuery()
 	const deleteJournamentMutation = useDeleteTournamentMutation()
+	const t = useTranslations('Tournaments')
 
 	const handleDeleteTournament = (tournamentId: string) => {
-		if (confirm('Вы уверены, что хотите удалить этот турнир?')) {
+		if (confirm(t('delete_tournament_confirmation'))) {
 			deleteJournamentMutation.mutate(tournamentId)
 		}
 	}
@@ -29,7 +31,7 @@ export default function Tournaments() {
 					<div className='flex items-center justify-center h-64'>
 						<div className='flex flex-col items-center gap-4'>
 							<Loader2 className='w-8 h-8 animate-spin text-blue-600' />
-							<p className='text-lg text-gray-600'>Загрузка турниров...</p>
+							<p className='text-lg text-gray-600'>{t('tournament_loading')}</p>
 						</div>
 					</div>
 				</div>
@@ -48,10 +50,10 @@ export default function Tournaments() {
 							</div>
 							<div className='text-center'>
 								<h2 className='text-xl font-semibold text-gray-900 mb-2'>
-									Ошибка загрузки
+									{t('error_loading')}
 								</h2>
 								<p className='text-gray-600'>
-									{error?.message || 'Не удалось загрузить турниры'}
+									{error?.message || t('error_loading_message')}
 								</p>
 							</div>
 						</div>
@@ -72,10 +74,10 @@ export default function Tournaments() {
 						</div>
 						<div>
 							<h1 className='text-xl sm:text-2xl font-bold text-gray-900'>
-								Турниры
+								{t('title')}
 							</h1>
 							<p className='text-sm sm:text-base text-gray-600'>
-								Управление турнирами по большому теннису
+								{t('description')}
 							</p>
 						</div>
 					</div>
@@ -98,7 +100,7 @@ export default function Tournaments() {
 													{tournament.name}
 												</h3>
 												<p className='text-xs sm:text-sm text-gray-500 mt-1'>
-													{tournament.year} год
+													{tournament.year} {t('tournament_card.year')}
 												</p>
 											</div>
 											<div
@@ -107,7 +109,7 @@ export default function Tournaments() {
 												)}`}
 											>
 												{getStatusIcon(tournament.status)}
-												{getStatusText(tournament.status)}
+												{getStatusText(tournament.status, t)}
 											</div>
 										</div>
 
@@ -116,13 +118,15 @@ export default function Tournaments() {
 											<div className='flex items-center gap-2 text-xs sm:text-sm text-gray-600'>
 												<Calendar className='w-4 h-4' />
 												<span>
-													Начало: {formatDateDDMMYYYY(tournament.start_date)}
+													{t('tournament_card.start_date')}:{' '}
+													{formatDateDDMMYYYY(tournament.start_date)}
 												</span>
 											</div>
 											<div className='flex items-center gap-2 text-xs sm:text-sm text-gray-600'>
 												<Calendar className='w-4 h-4' />
 												<span>
-													Окончание: {formatDateDDMMYYYY(tournament.end_date)}
+													{t('tournament_card.end_date')}:{' '}
+													{formatDateDDMMYYYY(tournament.end_date)}
 												</span>
 											</div>
 										</div>
@@ -145,7 +149,7 @@ export default function Tournaments() {
 									onClick={() =>
 										handleDeleteTournament(tournament.id.toString())
 									}
-									title='Удалить турнир'
+									title={t('delete_tournament_title')}
 								>
 									<X />
 								</Button>
@@ -158,10 +162,10 @@ export default function Tournaments() {
 							<Trophy className='w-8 h-8 text-gray-400' />
 						</div>
 						<h2 className='text-lg sm:text-xl font-semibold text-gray-900 mb-2'>
-							Нет турниров
+							{t('no_tournaments')}
 						</h2>
 						<p className='text-sm sm:text-base text-gray-600 mb-6'>
-							Создайте первый турнир для начала работы
+							{t('create_tournament_message')}
 						</p>
 					</div>
 				)}
@@ -174,7 +178,7 @@ export default function Tournaments() {
 							size='sm'
 						>
 							<Plus className='w-5 h-5' />
-							Создать турнир
+							{t('create_tournament')}
 						</Button>
 					</Link>
 					<Link href='/'>
@@ -184,7 +188,7 @@ export default function Tournaments() {
 							size='sm'
 						>
 							<ArrowLeft className='w-5 h-5' />
-							Назад
+							{t('back')}
 						</Button>
 					</Link>
 				</div>

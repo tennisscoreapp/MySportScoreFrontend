@@ -1,0 +1,225 @@
+{
+	"Index": {
+		"header": {
+			"subtitle": "Admin panel",
+			"system_active": "System is active"
+		},
+		"title": "Home",
+		"description_1": "Welcome to the tournament management system",
+		"description_2": "Here you can create a new tournament, view and edit existing tournaments and configure the system",
+		"quick_actions": {
+			"title": "Quick Actions",
+			"create_tournament": {
+				"title": "Create Tournament",
+				"description": "Set up a new tournament with groups and participants"
+			},
+			"tournament_management": {
+				"title": "Tournament Management",
+				"description": "View and edit existing tournaments"
+			},
+			"system_settings": {
+				"title": "System Settings",
+				"description": "Application configuration and parameters"
+			}
+		}
+	},
+	"Auth": {
+		"login": {
+			"title": "Enterence to the system",
+			"email": "Email",
+			"password": "Password",
+			"enter": "Enter",
+			"enter_loading": "Entering..."
+		},
+		"validation": {
+			"email_required": "Email is required",
+			"email_invalid": "Invalid email format",
+			"password_required": "Password is required",
+			"password_min_length": "Password must be at least 6 characters long"
+		}
+	},
+	"Restricted": {
+		"title": "Restricted Page",
+		"description": "You are not authorized to access this page",
+		"back_to_tournaments": "Back to tournaments"
+	},
+	"Tournaments": {
+		"title": "Tournaments",
+		"description": "Managing tennis tournaments",
+		"tournament_card": {
+			"year": "year",
+			"start_date": "Start date",
+			"end_date": "End date",
+			"active": "Active",
+			"completed": "Completed",
+			"cancelled": "Cancelled"
+		},
+		"tournament_loading": "Tournaments loading...",
+		"delete_tournament_confirmation": "Are you sure you want to delete this tournament?",
+		"error_loading": "Error loading tournaments",
+		"error_loading_message": "Failed to load tournaments",
+		"delete_tournament_title": "Delete tournament",
+		"no_tournaments": "No tournaments",
+		"create_tournament_message": "Create your first tournament to get started",
+		"create_tournament": "Create tournament",
+		"back": "Back",
+		"create_tournament_form": {
+			"name": "Tournament name",
+			"year": "Year",
+			"start_date": "Start date",
+			"end_date": "End date",
+			"create": "Create tournament",
+			"validation": {
+				"name_required": "Name is required",
+				"name_min_length": "Name must be at least 2 characters long",
+				"year_required": "Year is required",
+				"year_min": "Year must be at least {currentYear}",
+				"year_max": "Year must be less than {currentYear + 10}",
+				"start_date_required": "Start date is required",
+				"end_date_required": "End date is required",
+				"end_date_after_start_date": "End date must be after start date",
+				"creating": "Creating...",
+				"create": "Create tournament",
+				"cancel": "Cancel",
+				"error": "An error occurred while creating the tournament. Please try again."
+			}
+		}
+	},
+	"TournamentGroups": {
+		"title": "Tournament Groups",
+		"tournament_groups": "Tournament groups",
+		"group_loading": "Groups loading...",
+		"error_loading": "Error loading groups",
+		"delete_group_confirmation": "Are you sure you want to delete this group?",
+		"delete_group_title": "Delete group",
+		"no_groups": "No groups in this tournament yet",
+		"create_group": "Create group",
+		"back": "Get back to tournaments",
+		"group_card": {
+			"enter_group": "Enter group →"
+		},
+		"tournament_card": {
+			"active": "Active",
+			"completed": "Completed",
+			"cancelled": "Cancelled"
+		},
+		"tournament_start_date": "Start date",
+		"tournament_end_date": "End date",
+		"tournament_status": "Status"
+	},
+	"TournamentGroup": {
+		"no_data": "No data",
+		"group_loading": "Group loading...",
+		"error_loading": "Error loading group",
+		"table": {},
+		"matches_history": {
+			"title": "Matches history",
+			"game": {
+				"sets": "Sets",
+				"games": "Games",
+				"winner": "Winner",
+				"draw": "Draw"
+			}
+		},
+		"buttons": {
+			"add_match": "Add match",
+			"add_players": "Add players",
+			"back": "Back"
+		}
+	},
+	"Match": {
+		"titleAdd": "Add new match",
+		"titleEdit": "Edit match",
+		"loading": "Loading...",
+		"match_updated": "Match updated successfully",
+		"form": {
+			"player1": "Player 1",
+			"player2": "Player 2",
+			"select_player1": "Select player 1",
+			"select_player2": "Select player 2",
+			"match_date": "Match date",
+			"status": "Status",
+			"status_completed": "Completed",
+			"status_active": "Active",
+			"status_cancelled": "Cancelled",
+			"sets": "Sets",
+			"set": "Set",
+			"add_set": "Add set",
+			"delete_set": "Delete set",
+			"preview_result": "Preview result",
+			"winner": "Winner",
+			"draw": "Draw"
+		},
+		"validation": {
+			"player1_required": "Player 1 is required",
+			"player2_required": "Player 2 is required",
+			"match_date_required": "Match date is required",
+			"status_required": "Status is required",
+			"games_count_required": "Games count is required",
+			"games_count_min": "Games must be 0 or more"
+		},
+		"buttons": {
+			"create_match": "Create match",
+			"cancel": "Cancel",
+			"update_match": "Update match"
+		}
+	},
+	"AddPlayers": {
+		"title": "Group players",
+		"active_player": "Active",
+		"inactive_player": "Inactive",
+		"no_players": "No players in this group yet",
+		"confirm_delete": "Are you sure you want to delete this player?",
+		"delete_player": "Delete player",
+		"buttons": {
+			"add_player": "Add player",
+			"back": "Get back",
+			"add": "Add",
+			"cancel": "Cancel"
+		},
+		"form": {
+			"title": "Add a player",
+			"first_name": "First name",
+			"last_name": "Last name",
+			"email": "Email",
+			"phone": "Phone"
+		},
+		"validation": {
+			"first_name_required": "First name is required",
+			"last_name_required": "Last name is required",
+			"email_required": "Email is required",
+			"email_invalid": "Invalid email address"
+		}
+	},
+	"Global": {
+		"navbar": {
+			"logout": "Logout",
+			"login": "Login"
+		},
+		"loading": "Loading...",
+		"error": "Error",
+		"delete": "Delete",
+		"edit": "Edit",
+		"create": "Create",
+		"cancel": "Cancel",
+		"save": "Save",
+		"close": "Close"
+	},
+	"Settings": {
+		"title": "Settings",
+		"description": "Configure application settings",
+		"back": "Get back",
+		"language": {
+			"title": "Interface Language",
+			"description": "Choose the display language for the interface",
+			"russian": "Русский",
+			"english": "English",
+			"loading": "Loading new language..."
+		},
+		"info": {
+			"title": "Information",
+			"description": "Language changes will apply immediately. All interfaces will be translated to the selected language."
+		},
+		"save_success": "Settings saved"
+	}
+}

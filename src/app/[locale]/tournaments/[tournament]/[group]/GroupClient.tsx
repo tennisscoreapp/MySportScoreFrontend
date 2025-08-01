@@ -6,6 +6,7 @@ import { GroupResponse, Match, Player } from '@/interfaces/groupInterfaces'
 import { calculatePlayerStats, sortPlayers } from '@/utils/sortGroupTable'
 import { useQueryClient } from '@tanstack/react-query'
 import { SquarePen, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 function GroupClient({
@@ -16,7 +17,7 @@ function GroupClient({
 	tournamentId: string
 }) {
 	const queryClient = useQueryClient()
-
+	const t = useTranslations('TournamentGroup')
 	const groupId = typeof group === 'string' ? group : String(group)
 
 	const { data: groupData, isLoading, error } = useFetchGroupQuery(groupId)
@@ -29,9 +30,9 @@ function GroupClient({
 		}
 	}
 
-	if (isLoading) return <div className='p-6'>Загрузка...</div>
-	if (error) return <div className='p-6'>Ошибка загрузки данных</div>
-	if (!groupData) return <div className='p-6'>Нет данных</div>
+	if (isLoading) return <div className='p-6'>{t('group_loading')}</div>
+	if (error) return <div className='p-6'>{t('error_loading')}</div>
+	if (!groupData) return <div className='p-6'>{t('no_data')}</div>
 
 	return (
 		<div>
@@ -110,7 +111,7 @@ function GroupClient({
 						</div>
 						<div className='space-y-4'>
 							<h2 className='text-xl font-bold border-b pb-2'>
-								История матчей
+								{t('matches_history.title')}
 							</h2>
 							<div className='space-y-4'>
 								{group.group_data.matches
@@ -150,7 +151,8 @@ function GroupClient({
 															{match.player1_last_name}
 														</div>
 														<div className='text-sm text-gray-600'>
-															Сеты: {player1Sets} | Геймы: (
+															{t('matches_history.game.sets')}: {player1Sets} |{' '}
+															{t('matches_history.game.games')}: (
 															{match.sets
 																?.map(set => set.player1_games)
 																.join(' ')}
@@ -185,7 +187,8 @@ function GroupClient({
 															{match.player2_last_name}
 														</div>
 														<div className='text-sm text-gray-600'>
-															Сеты: {player2Sets} | Геймы: (
+															{t('matches_history.game.sets')}: {player2Sets} |{' '}
+															{t('matches_history.game.games')}: (
 															{match.sets
 																?.map(set => set.player2_games)
 																.join(' ')}
@@ -196,10 +199,10 @@ function GroupClient({
 												{/* победитель */}
 												<div className='mt-2 text-center'>
 													<span className='inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium'>
-														Победитель:{' '}
+														{t('matches_history.game.winner')}:{' '}
 														{match.winner_first_name
 															? `${match.winner_first_name} ${match.winner_last_name}`
-															: 'Ничья'}
+															: t('matches_history.game.draw')}
 													</span>
 												</div>
 												<div className='flex flex-row gap-4 justify-center mt-4'>
@@ -238,14 +241,14 @@ function GroupClient({
 				<div className='flex flex-row mt-10 justify-between'>
 					<div className='flex flex-row gap-4'>
 						<Link href={`/tournaments/${tournamentId}/${groupId}/addmatch`}>
-							<Button>Добавить матч</Button>
+							<Button>{t('buttons.add_match')}</Button>
 						</Link>
 						<Link href={`/tournaments/${tournamentId}/${groupId}/addplayers`}>
-							<Button>Добавить игроков</Button>
+							<Button>{t('buttons.add_players')}</Button>
 						</Link>
 					</div>
 					<Link href={`/tournaments/${tournamentId}`}>
-						<Button>Назад</Button>
+						<Button>{t('buttons.back')}</Button>
 					</Link>
 				</div>
 			</div>
