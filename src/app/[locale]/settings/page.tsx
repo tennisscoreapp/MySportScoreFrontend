@@ -98,7 +98,7 @@ export default function SettingsPage() {
 					</div>
 				</div>
 			</div>
-			<Link href='/'>
+			<Link href={`/${currentLocale}`}>
 				<Button variant='outline'>{t('back')}</Button>
 			</Link>
 
