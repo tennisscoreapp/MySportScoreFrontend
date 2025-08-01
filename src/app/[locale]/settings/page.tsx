@@ -9,6 +9,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { routing } from '@/i18n/routing'
+import { setLocale } from '@/utils/locale-actions'
 import { Globe, Settings as SettingsIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -29,8 +30,11 @@ export default function SettingsPage() {
 
 	let currentLocale = params.locale as string
 
-	const handleLanguageChange = (newLocale: string) => {
-		startTransition(() => {
+	const handleLanguageChange = async (newLocale: string) => {
+		startTransition(async () => {
+			// Устанавливаем cookie с локалью через серверное действие
+			await setLocale(newLocale)
+
 			const newPathname = pathname.replace(`/${currentLocale}`, `/${newLocale}`)
 			router.replace(newPathname)
 			currentLocale = newLocale
