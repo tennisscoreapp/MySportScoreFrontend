@@ -1,0 +1,21 @@
+{
+	"Index": {
+		"title": "Home",
+		"description_1": "Welcome to the tournament management system",
+		"description_2": "Here you can create a new tournament, view and edit existing tournaments and configure the system",
+		"quick_actions": {
+			"create_tournament": {
+				"title": "Create Tournament",
+				"description": "Set up a new tournament with groups and participants"
+			},
+			"tournament_management": {
+				"title": "Tournament Management",
+				"description": "View and edit existing tournaments"
+			},
+			"system_settings": {
+				"title": "System Settings",
+				"description": "Application configuration and parameters"
+			}
+		}
+	}
+}
