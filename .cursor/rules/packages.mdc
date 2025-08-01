@@ -1,5 +1,0 @@
----
-alwaysApply: true
----
-
-Before writing code check which libraries are available in package.json and use them if necessary
