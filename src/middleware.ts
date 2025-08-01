@@ -8,14 +8,16 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 const protectedRoutes = ['/tournaments']
 const authRoutes = ['/auth/login', '/auth/register']
 
-// Create the next-intl middleware
-const handleI18nRouting = createMiddleware(routing)
+// Create the next-intl middleware with locale detection from cookies
+const handleI18nRouting = createMiddleware({
+	...routing,
+	localeDetection: true,
+})
 
 async function checkResourceAccess(
 	pathname: string,
 	authToken: string
 ): Promise<boolean> {
-	// Remove locale prefix from pathname before matching
 	const pathWithoutLocale = pathname.replace(/^\/(en|ru)/, '') || '/'
 
 	const tournamentMatch = pathWithoutLocale.match(/^\/tournaments\/(\d+)/)
@@ -55,13 +57,10 @@ async function checkResourceAccess(
 }
 
 export async function middleware(request: NextRequest) {
-	// Step 1: Handle internationalization first
 	const response = handleI18nRouting(request)
 
-	// Step 2: Extract pathname and handle authentication
 	const { pathname } = request.nextUrl
 
-	// Remove locale prefix from pathname for route matching
 	const pathWithoutLocale = pathname.replace(/^\/(en|ru)/, '') || '/'
 
 	let authToken = request.cookies.get('auth_token')?.value
@@ -126,7 +125,6 @@ export async function middleware(request: NextRequest) {
 		}
 	}
 
-	// Return the response from i18n middleware
 	return response
 }
 
