@@ -27,12 +27,13 @@ export default function SettingsPage() {
 	const router = useRouter()
 	const [isPending, startTransition] = useTransition()
 
-	const currentLocale = params.locale as string
+	let currentLocale = params.locale as string
 
 	const handleLanguageChange = (newLocale: string) => {
 		startTransition(() => {
 			const newPathname = pathname.replace(`/${currentLocale}`, `/${newLocale}`)
 			router.replace(newPathname)
+			currentLocale = newLocale
 		})
 	}
 
