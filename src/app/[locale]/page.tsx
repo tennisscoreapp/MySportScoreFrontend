@@ -44,7 +44,7 @@ export default function Home() {
 								<h1 className='text-xl sm:text-2xl font-bold text-gray-900'>
 									Tournament Manager
 								</h1>
-								<p className='text-sm text-gray-600'>Панель администратора</p>
+								<p className='text-sm text-gray-600'>{t('header.subtitle')}</p>
 							</div>
 						</div>
 						<Badge
@@ -52,7 +52,7 @@ export default function Home() {
 							className='bg-green-100 text-green-800 border-green-200 '
 						>
 							<Zap className='w-4 h-4 mr-2' />
-							Система активна
+							{t('header.system_active')}
 						</Badge>
 					</div>
 				</div>

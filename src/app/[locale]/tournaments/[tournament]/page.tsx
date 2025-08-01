@@ -5,11 +5,17 @@ import { useFetchTournamentGroupsQuery } from '@/hooks/queries/useFetchTournamen
 import { useFetchTournamentQuery } from '@/hooks/queries/useFetchTournamentQuery'
 import { Tournament, TournamentGroup } from '@/interfaces/tournamentInterfaces'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
+import {
+	getStatusColor,
+	getStatusText,
+} from '@/utils/tournamentPageUtils/getStatus'
 import { X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
 export default function SingleTournamentPage() {
+	const t = useTranslations('TournamentGroups')
 	const params = useParams<{ tournament: string }>()
 	const tournament = params?.tournament ?? ''
 	const {
@@ -24,16 +30,16 @@ export default function SingleTournamentPage() {
 	} = useFetchTournamentGroupsQuery(tournament)
 	const deleteGroupMutation = useDeleteGroupMutation()
 	const handleDeleteGroup = (groupId: string) => {
-		if (confirm('Вы уверены, что хотите удалить эту группу?')) {
+		if (confirm(t('delete_group_confirmation'))) {
 			deleteGroupMutation.mutate(groupId)
 		}
 	}
 
 	if (isLoading || isLoadingGroups) {
-		return <div>Loading...</div>
+		return <div>{t('group_loading')}</div>
 	}
 	if (isError || isErrorGroups) {
-		return <div>Error</div>
+		return <div>{t('error_loading')}</div>
 	}
 
 	return (
@@ -48,30 +54,26 @@ export default function SingleTournamentPage() {
 						<div className='grid grid-cols-1 md:grid-cols-3 gap-1 sm:gap-4'>
 							<div>
 								<span className='font-semibold text-sm sm:text-base'>
-									Дата начала:
+									{t('tournament_start_date')}:
 								</span>
 								<p>{formatDateDDMMYYYY(tournamentInfo.start_date)}</p>
 							</div>
 							<div>
 								<span className='font-semibold text-sm sm:text-base'>
-									Дата окончания:
+									{t('tournament_end_date')}:
 								</span>
 								<p>{formatDateDDMMYYYY(tournamentInfo.end_date)}</p>
 							</div>
 							<div>
 								<span className='font-semibold text-sm sm:text-base'>
-									Статус:
+									{t('tournament_status')}:
 								</span>
 								<p
-									className={`inline-block px-1 sm:px-2 py-1 rounded text-xs sm:text-sm ${
-										tournamentInfo.status === 'active'
-											? 'bg-green-200 text-green-800'
-											: tournamentInfo.status === 'completed'
-											? 'bg-blue-200 text-blue-800'
-											: 'bg-red-200 text-red-800'
-									}`}
+									className={`inline-block px-1 sm:px-2 py-1 rounded text-xs sm:text-sm ${getStatusColor(
+										tournamentInfo.status
+									)}`}
 								>
-									{tournamentInfo.status}
+									{getStatusText(tournamentInfo.status, t)}
 								</p>
 							</div>
 						</div>
@@ -81,7 +83,9 @@ export default function SingleTournamentPage() {
 
 			{/* Список групп */}
 			<div>
-				<h2 className='text-lg sm:text-xl font-bold mb-4'>Группы турнира</h2>
+				<h2 className='text-lg sm:text-xl font-bold mb-4'>
+					{t('tournament_groups')}
+				</h2>
 				{tournamentGroups.length > 0 ? (
 					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 sm:gap-4'>
 						{tournamentGroups.map((group: TournamentGroup) => (
@@ -96,18 +100,14 @@ export default function SingleTournamentPage() {
 									</h3>
 									<div className='flex justify-between items-center'>
 										<span
-											className={`px-1 sm:px-2 py-1 rounded text-xs sm:text-sm ${
-												group.status === 'active'
-													? 'bg-green-200 text-green-800'
-													: group.status === 'completed'
-													? 'bg-blue-200 text-blue-800'
-													: 'bg-red-200 text-red-800'
-											}`}
+											className={`px-1 sm:px-2 py-1 rounded text-xs sm:text-sm ${getStatusColor(
+												group.status
+											)}`}
 										>
-											{group.status}
+											{getStatusText(group.status, t)}
 										</span>
 										<span className='text-blue-600 text-xs sm:text-sm'>
-											Перейти в группу →
+											{t('group_card.enter_group')}
 										</span>
 									</div>
 								</Link>
@@ -117,7 +117,7 @@ export default function SingleTournamentPage() {
 									size='sm'
 									className='absolute top-0 right-0 cursor-pointer hidden sm:block'
 									onClick={() => handleDeleteGroup(group.id.toString())}
-									title='Удалить турнир'
+									title={t('delete_group_title')}
 								>
 									<X />
 								</Button>
@@ -125,18 +125,16 @@ export default function SingleTournamentPage() {
 						))}
 					</div>
 				) : (
-					<p className='text-sm sm:text-base text-gray-600'>
-						В данном турнире пока нет групп
-					</p>
+					<p className='text-sm sm:text-base text-gray-600'>{t('no_groups')}</p>
 				)}
 			</div>
 			<div className='mt-2 sm:mt-10 flex gap-2 sm:gap-4'>
 				<Link href={`/tournaments/${tournament}/creategroup`}>
-					<Button size='sm'>Создать группу</Button>
+					<Button size='sm'>{t('create_group')}</Button>
 				</Link>
 				<Link href={`/tournaments`}>
 					<Button size='sm' variant='outline'>
-						Назад
+						{t('back')}
 					</Button>
 				</Link>
 			</div>

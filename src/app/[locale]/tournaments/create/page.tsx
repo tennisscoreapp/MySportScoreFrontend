@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useCreateTournamentMutation } from '@/hooks/mutations/useCreateTournamentMutation'
 import { useAuth } from '@/shared/contexts/AuthContext'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -19,6 +20,7 @@ interface TournamentForm {
 export default function CreateTournament() {
 	const router = useRouter()
 	const { user } = useAuth()
+	const t = useTranslations('Tournaments')
 	const {
 		register,
 		handleSubmit,
@@ -52,21 +54,21 @@ export default function CreateTournament() {
 
 	return (
 		<div className='max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md '>
-			<h1 className='text-2xl font-bold mb-6'>Создать турнир</h1>
+			<h1 className='text-2xl font-bold mb-6'>{t('create_tournament')}</h1>
 
 			<form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
 				<div>
 					<Label htmlFor='name' className='mb-2'>
-						Название турнира
+						{t('create_tournament_form.name')}
 					</Label>
 					<Input
 						id='name'
 						type='text'
 						{...register('name', {
-							required: 'Название турнира обязательно',
+							required: t('create_tournament_form.validation.name_required'),
 							minLength: {
 								value: 2,
-								message: 'Название должно содержать минимум 2 символа',
+								message: t('create_tournament_form.validation.name_min_length'),
 							},
 						})}
 						className={errors.name ? 'border-red-500' : ''}
@@ -78,20 +80,20 @@ export default function CreateTournament() {
 
 				<div>
 					<Label htmlFor='year' className='mb-2'>
-						Год
+						{t('create_tournament_form.year')}
 					</Label>
 					<Input
 						id='year'
 						type='number'
 						{...register('year', {
-							required: 'Год обязателен',
+							required: t('create_tournament_form.validation.year_required'),
 							min: {
 								value: currentYear,
-								message: `Год должен быть не меньше ${currentYear}`,
+								message: t('create_tournament_form.validation.year_min'),
 							},
 							max: {
 								value: currentYear + 10,
-								message: `Год должен быть не больше ${currentYear + 10}`,
+								message: t('create_tournament_form.validation.year_max'),
 							},
 							valueAsNumber: true,
 						})}
@@ -105,13 +107,15 @@ export default function CreateTournament() {
 
 				<div>
 					<Label htmlFor='start_date' className='mb-2'>
-						Дата начала
+						{t('create_tournament_form.start_date')}
 					</Label>
 					<Input
 						id='start_date'
 						type='date'
 						{...register('start_date', {
-							required: 'Дата начала обязательна',
+							required: t(
+								'create_tournament_form.validation.start_date_required'
+							),
 						})}
 						className={errors.start_date ? 'border-red-500' : ''}
 					/>
@@ -124,16 +128,20 @@ export default function CreateTournament() {
 
 				<div>
 					<Label htmlFor='end_date' className='mb-2'>
-						Дата окончания
+						{t('create_tournament_form.end_date')}
 					</Label>
 					<Input
 						id='end_date'
 						type='date'
 						{...register('end_date', {
-							required: 'Дата окончания обязательна',
+							required: t(
+								'create_tournament_form.validation.end_date_required'
+							),
 							validate: value => {
 								if (startDate && value < startDate) {
-									return 'Дата окончания должна быть позже даты начала'
+									return t(
+										'create_tournament_form.validation.end_date_after_start_date'
+									)
 								}
 								return true
 							},
@@ -153,12 +161,14 @@ export default function CreateTournament() {
 						disabled={mutation.isPending || isSubmitting}
 						className='flex-1'
 					>
-						{mutation.isPending ? 'Создание...' : 'Создать турнир'}
+						{mutation.isPending
+							? t('create_tournament_form.validation.creating')
+							: t('create_tournament_form.create')}
 					</Button>
 
 					<Link href='/tournaments' className='flex-1'>
 						<Button type='button' variant='outline' className='w-full'>
-							Отмена
+							{t('create_tournament_form.validation.cancel')}
 						</Button>
 					</Link>
 				</div>
@@ -166,7 +176,7 @@ export default function CreateTournament() {
 
 			{mutation.isError && (
 				<p className='text-red-500 text-sm mt-4'>
-					Произошла ошибка при создании турнира. Попробуйте еще раз.
+					{t('create_tournament_form.validation.error')}
 				</p>
 			)}
 		</div>
