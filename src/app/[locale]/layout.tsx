@@ -29,7 +29,10 @@ export default async function LocaleLayout({
 
 	return (
 		<html lang={locale}>
-			<body className={`${pressStart2P.variable} antialiased min-h-screen`}>
+			<body
+				className={`${pressStart2P.variable} antialiased min-h-screen`}
+				suppressHydrationWarning={true}
+			>
 				<NextIntlClientProvider messages={messages}>
 					<Providers>{children}</Providers>
 				</NextIntlClientProvider>

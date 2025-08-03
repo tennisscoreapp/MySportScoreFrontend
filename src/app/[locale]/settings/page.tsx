@@ -32,7 +32,6 @@ export default function SettingsPage() {
 
 	const handleLanguageChange = async (newLocale: string) => {
 		startTransition(async () => {
-			// Устанавливаем cookie с локалью через серверное действие
 			await setLocale(newLocale)
 
 			const newPathname = pathname.replace(`/${currentLocale}`, `/${newLocale}`)

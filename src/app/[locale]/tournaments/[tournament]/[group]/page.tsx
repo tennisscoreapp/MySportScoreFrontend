@@ -1,11 +1,9 @@
-import GroupClient from './GroupClient'
+'use client'
+import { useParams } from 'next/navigation'
+import ServerFetching from './ServerFetching'
 
-export default async function GroupPage({
-	params,
-}: {
-	params: Promise<{ group: string; tournament: string }>
-}) {
-	const { group, tournament } = await params
+export default function GroupPage() {
+	const params = useParams()
 
-	return <GroupClient group={group} tournamentId={tournament} />
+	return <ServerFetching params={params} />
 }

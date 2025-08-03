@@ -108,10 +108,9 @@
 		"tournament_status": "Status"
 	},
 	"TournamentGroup": {
-		"no_data": "No data",
 		"group_loading": "Group loading...",
 		"error_loading": "Error loading group",
-		"table": {},
+		"delete_match_confirmation": "Are you sure you want to delete this match?",
 		"matches_history": {
 			"title": "Matches history",
 			"game": {
@@ -125,6 +124,16 @@
 			"add_match": "Add match",
 			"add_players": "Add players",
 			"back": "Back"
+		},
+		"group_table": {
+			"no_data": "No data about players. Add players to start the tournament.",
+			"player": "Player",
+			"matches_played": "Matches played",
+			"matches_won": "Matches won",
+			"sets_played": "Sets (W - L)",
+			"sets_difference": "Sets difference",
+			"games_played": "Games (W - L)",
+			"games_difference": "Games difference"
 		}
 	},
 	"Match": {

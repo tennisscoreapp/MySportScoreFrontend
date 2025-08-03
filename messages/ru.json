@@ -108,10 +108,19 @@
 		"tournament_status": "Статус"
 	},
 	"TournamentGroup": {
-		"no_data": "Нет данных",
+		"delete_match_confirmation": "Вы уверены, что хотите удалить этот матч?",
 		"group_loading": "Загрузка группы...",
 		"error_loading": "Ошибка загрузки группы",
-		"table": {},
+		"group_table": {
+			"no_data": "Нет данных о игроках. Добавьте игроков, чтобы начать турнир.",
+			"player": "Игрок",
+			"matches_played": "Матчей сыграно",
+			"matches_won": "Матчей выиграно",
+			"sets_played": "Сеты (В - П)",
+			"sets_difference": "Разница сетов",
+			"games_played": "Геймы (В - П)",
+			"games_difference": "Разница геймов"
+		},
 		"matches_history": {
 			"title": "История матчей",
 			"game": {

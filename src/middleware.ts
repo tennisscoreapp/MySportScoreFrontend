@@ -11,6 +11,7 @@ const authRoutes = ['/auth/login', '/auth/register']
 // Create the next-intl middleware with locale detection from cookies
 const handleI18nRouting = createMiddleware({
 	...routing,
+
 	localeDetection: true,
 })
 
