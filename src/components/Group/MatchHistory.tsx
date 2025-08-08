@@ -68,7 +68,10 @@ export default function MatchHistory({
 			<div
 				className={`space-y-4 ${
 					view === 'compact'
-						? `gap-4 grid grid-cols-${Math.min(matches.length, 3)}`
+						? `gap-4 grid  grid-cols-1 md:grid-cols-${Math.min(
+								matches.length,
+								2
+						  )} lg:grid-cols-${Math.min(matches.length, 3)}`
 						: ''
 				}`}
 			>
@@ -84,7 +87,7 @@ export default function MatchHistory({
 						return (
 							<div
 								key={match.id}
-								className='print-card border rounded-lg p-4 bg-white shadow-sm h-full'
+								className='border rounded-lg p-4 bg-white shadow-sm h-full'
 							>
 								{view === 'detailed' ? (
 									<DetailedCard
@@ -102,8 +105,8 @@ export default function MatchHistory({
 								)}
 
 								<div
-									className={`flex flex-row gap-4 justify-center mt-4 ${
-										exportView ? 'hidden' : ''
+									className={`gap-4 justify-center mt-4 ${
+										exportView ? 'hidden' : 'flex flex-row'
 									}`}
 								>
 									<div className='text-center'>
@@ -231,13 +234,13 @@ function CompactCard({
 	player2Sets: number
 }) {
 	return (
-		<div className='grid grid-cols-[1fr_auto_1fr] items-center gap-4'>
+		<div className='flex flex-col items-center gap-4'>
 			<div
-				className={`text-right ${
+				className={`text-center ${
 					match.winner_id === match.player1_id ? 'font-bold text-green-600' : ''
 				}`}
 			>
-				<div className='text-base'>
+				<div className='text-sm lg:text-base'>
 					{match.player1_first_name} {match.player1_last_name}
 				</div>
 			</div>
@@ -251,11 +254,11 @@ function CompactCard({
 			</div>
 
 			<div
-				className={`text-left ${
+				className={`text-center ${
 					match.winner_id === match.player2_id ? 'font-bold text-green-600' : ''
 				}`}
 			>
-				<div className='text-base'>
+				<div className='text-xs md:text-sm lg:text-base'>
 					{match.player2_first_name} {match.player2_last_name}
 				</div>
 			</div>

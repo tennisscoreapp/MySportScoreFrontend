@@ -10,7 +10,7 @@
 		"quick_actions": {
 			"title": "Быстрые действия",
 			"create_tournament": {
-				"title": "Создать турнир",
+				"title": "Создать новый турнир",
 				"description": "Настроить новый турнир с группами и участниками"
 			},
 			"tournament_management": {

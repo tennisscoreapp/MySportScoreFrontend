@@ -10,7 +10,7 @@
 		"quick_actions": {
 			"title": "Quick Actions",
 			"create_tournament": {
-				"title": "Create Tournament",
+				"title": "Create new tournament",
 				"description": "Set up a new tournament with groups and participants"
 			},
 			"tournament_management": {

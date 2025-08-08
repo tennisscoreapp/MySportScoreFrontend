@@ -96,7 +96,7 @@ function GroupClient({
 				})}
 			</div>
 			<div className='no-print mt-10 pl-10 pr-10'>
-				<div className='flex flex-row mt-10 justify-between'>
+				<div className='flex gap-4 flex-col lg:flex-row lg:gap-0 mt-10 justify-between'>
 					<div className='flex flex-row gap-4'>
 						<Link
 							href={`/tournaments/${tournamentId}/groups/${groupId}/addmatch`}
@@ -110,14 +110,6 @@ function GroupClient({
 						</Link>
 					</div>
 					<div className='flex flex-row gap-4'>
-						<Button
-							onClick={handleDownloadPDF}
-							variant='secondary'
-							className='hover:bg-red-500 hover:text-white'
-						>
-							<Printer />
-							{t('buttons.export_pdf')}
-						</Button>
 						<Button onClick={() => setExportView(!exportView)}>
 							{t('buttons.toggle_export_view')}
 						</Button>
@@ -126,6 +118,14 @@ function GroupClient({
 						</Link>
 					</div>
 				</div>
+				<Button
+					onClick={handleDownloadPDF}
+					variant='secondary'
+					className='hover:bg-red-500 hover:text-white mt-4'
+				>
+					<Printer />
+					{t('buttons.export_pdf')}
+				</Button>
 			</div>
 		</div>
 	)
