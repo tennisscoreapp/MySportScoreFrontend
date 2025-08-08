@@ -172,7 +172,7 @@ function GroupClient({
 													<div className='flex flex-row gap-4 justify-center mt-4'>
 														<div className='text-center'>
 															<Link
-																href={`/tournaments/${tournamentId}/${groupId}/${match.id}`}
+																href={`/tournaments/${tournamentId}/groups/${groupId}/${match.id}`}
 															>
 																<Button
 																	variant='outline'
@@ -205,10 +205,14 @@ function GroupClient({
 			<div className='mt-10'>
 				<div className='flex flex-row mt-10 justify-between'>
 					<div className='flex flex-row gap-4'>
-						<Link href={`/tournaments/${tournamentId}/${groupId}/addmatch`}>
+						<Link
+							href={`/tournaments/${tournamentId}/groups/${groupId}/addmatch`}
+						>
 							<Button>{t('buttons.add_match')}</Button>
 						</Link>
-						<Link href={`/tournaments/${tournamentId}/${groupId}/addplayers`}>
+						<Link
+							href={`/tournaments/${tournamentId}/groups/${groupId}/addplayers`}
+						>
 							<Button>{t('buttons.add_players')}</Button>
 						</Link>
 					</div>

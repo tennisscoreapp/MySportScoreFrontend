@@ -199,7 +199,7 @@ function AddPlayers() {
 				)}
 			</div>
 			<div className='flex flex-row gap-4 mt-10'>
-				<Link href={`/tournaments/${tournamentId}/${groupId}/`}>
+				<Link href={`/tournaments/${tournamentId}/groups/${groupId}/`}>
 					<Button>{t('buttons.back')}</Button>
 				</Link>
 			</div>

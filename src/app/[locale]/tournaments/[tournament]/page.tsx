@@ -92,7 +92,7 @@ export default function SingleTournamentPage() {
 							<div key={group.id} className='relative'>
 								<Link
 									key={group.id}
-									href={`/tournaments/${tournament}/${group.id}`}
+									href={`/tournaments/${tournament}/groups/${group.id}`}
 									className='block p-1 sm:p-4 border border-gray-300 rounded-lg hover:shadow-lg transition-shadow bg-white hover:bg-gray-50'
 								>
 									<h3 className='text-sm sm:text-lg font-semibold mb-2'>

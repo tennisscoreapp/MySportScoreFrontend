@@ -13,8 +13,8 @@ const pressStart2P = Press_Start_2P({
 })
 
 export const metadata: Metadata = {
-	title: 'Tournament index page',
-	description: 'Tournament index page',
+	title: 'Tournament main page',
+	description: 'Tournament main page',
 }
 
 export default async function LocaleLayout({
