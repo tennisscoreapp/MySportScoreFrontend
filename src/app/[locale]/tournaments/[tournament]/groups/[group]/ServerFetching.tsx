@@ -2,7 +2,7 @@ import { useDeleteMatchMutation } from '@/hooks/mutations/useDeleteMatchMutation
 import { useFetchGroupQuery } from '@/hooks/queries/useFetchGroupQuery'
 import { useQueryClient } from '@tanstack/react-query'
 import { Params } from 'next/dist/server/request/params'
-import GroupClient from './GroupClient'
+import GroupClient from '../../../../../../components/Group/GroupClient'
 
 function ServerFetching({ params }: { params: Params }) {
 	const { group, tournament } = params
@@ -15,7 +15,7 @@ function ServerFetching({ params }: { params: Params }) {
 	return (
 		<GroupClient
 			groupId={groupId}
-			groupData={groupData}
+			groupData={groupData || []}
 			isLoading={isLoading}
 			error={error ? error.message : null}
 			deleteMatchMutation={deleteMatchMutation}

@@ -113,6 +113,11 @@
 		"delete_match_confirmation": "Are you sure you want to delete this match?",
 		"matches_history": {
 			"title": "Matches history",
+			"view": {
+				"view_mode": "View",
+				"detailed": "Detailed",
+				"compact": "Compact"
+			},
 			"game": {
 				"sets": "Sets",
 				"games": "Games",
@@ -123,7 +128,9 @@
 		"buttons": {
 			"add_match": "Add match",
 			"add_players": "Add players",
-			"back": "Back"
+			"back": "Back",
+			"export_pdf": "Export to PDF",
+			"toggle_export_view": "Toggle export view"
 		},
 		"group_table": {
 			"no_data": "No data about players. Add players to start the tournament.",

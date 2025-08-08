@@ -1,4 +1,4 @@
-import { Group } from '@/interfaces/groupInterfaces'
+import { Group, GroupResponse } from '@/interfaces/groupInterfaces'
 import { MatchData } from '@/interfaces/matchInterfaces'
 import { NewPlayerData } from '@/interfaces/playerInterfaces'
 
@@ -8,9 +8,11 @@ if (API_URL.includes('undefined')) {
 	console.error(' NEXT_PUBLIC_API_URL содержит undefined в groupApi!')
 }
 
-export async function fetchGroup(id: string) {
+export async function fetchGroup(
+	groupId: string
+): Promise<GroupResponse[] | []> {
 	try {
-		const res = await fetch(`${API_URL}/api/v1/groups/${id}`, {
+		const res = await fetch(`${API_URL}/api/v1/groups/${groupId}`, {
 			credentials: 'include',
 		})
 		if (!res.ok) {

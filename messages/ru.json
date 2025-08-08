@@ -123,6 +123,11 @@
 		},
 		"matches_history": {
 			"title": "История матчей",
+			"view": {
+				"view_mode": "Вид",
+				"detailed": "Детально",
+				"compact": "Компактно"
+			},
 			"game": {
 				"sets": "Сеты",
 				"games": "Игры",
@@ -133,7 +138,9 @@
 		"buttons": {
 			"add_match": "Добавить матч",
 			"add_players": "Добавить игроков",
-			"back": "Назад"
+			"back": "Назад",
+			"export_pdf": "Экспорт в PDF",
+			"toggle_export_view": "Переключить вид"
 		}
 	},
 	"Match": {

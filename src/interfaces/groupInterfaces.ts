@@ -5,6 +5,7 @@ export interface GroupResponse {
 export interface GroupData {
 	matches: Match[]
 	players: Player[]
+	group: Group
 }
 
 export interface Group {
