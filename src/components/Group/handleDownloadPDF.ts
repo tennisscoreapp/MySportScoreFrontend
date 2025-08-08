@@ -9,7 +9,8 @@ export const handleDownloadPDFUtil = async (inputData: HTMLDivElement) => {
 			useCORS: true,
 			allowTaint: true,
 			backgroundColor: '#ffffff',
-			scale: 3,
+			scale: 1.5,
+			logging: false,
 		})
 
 		const imgData = canvas.toDataURL('image/png')
@@ -19,6 +20,7 @@ export const handleDownloadPDFUtil = async (inputData: HTMLDivElement) => {
 			unit: 'mm',
 			format: 'a4',
 			putOnlyUsedFonts: true,
+			compress: true,
 		})
 
 		const imgWidth = pdf.internal.pageSize.getWidth()
