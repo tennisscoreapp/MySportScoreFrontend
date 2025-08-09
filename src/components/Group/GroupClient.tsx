@@ -6,9 +6,10 @@ import { UseMutationResult } from '@tanstack/react-query'
 import { Printer } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { DataTable } from '../ui/data-table'
 import { createColumns } from './columns'
+import GroupPagination from './GroupPagination'
 import { handleDownloadPDFUtil } from './handleDownloadPDF'
 import MatchHistory from './MatchHistory'
 
@@ -29,12 +30,27 @@ function GroupClient({
 }) {
 	const t = useTranslations('TournamentGroup')
 	const [exportView, setExportView] = useState(false)
+	const [page, setPage] = useState(1)
+	const [pageSize, setPageSize] = useState(6)
 	const pdfRef = useRef<HTMLDivElement>(null)
+
+	const firstGroupMatchesLength =
+		groupData?.[0]?.group_data?.matches?.length || 0
+	const totalPages = Math.max(1, Math.ceil(firstGroupMatchesLength / pageSize))
+
+	const selectOptions = [3, 6, 9, 12]
+
+	useEffect(() => {
+		if (page > totalPages) setPage(totalPages)
+	}, [totalPages, page])
 
 	const handleDownloadPDF = async () => {
 		const inputData = pdfRef.current
 		if (inputData) {
-			handleDownloadPDFUtil(inputData)
+			handleDownloadPDFUtil(
+				inputData,
+				groupData?.[0]?.group_data?.group.name || 'No_Name'
+			)
 		}
 	}
 
@@ -84,18 +100,41 @@ function GroupClient({
 									emptyMessage={t('group_table.no_data')}
 								/>
 							</div>
-							<MatchHistory
-								exportView={exportView}
-								matches={group?.group_data?.matches || []}
-								tournamentId={tournamentId}
-								groupId={groupId}
-								onDeleteMatch={deleteMatchMutation}
-							/>
+							{(() => {
+								const matches = group?.group_data?.matches || []
+								const sortedMatches = [...matches].sort(
+									(a, b) =>
+										new Date(a.match_date).getTime() -
+										new Date(b.match_date).getTime()
+								)
+								const start = (page - 1) * pageSize
+								const end = start + pageSize
+								const pageMatches = sortedMatches.slice(start, end)
+
+								return (
+									<MatchHistory
+										exportView={exportView}
+										matches={pageMatches}
+										tournamentId={tournamentId}
+										groupId={groupId}
+										onDeleteMatch={deleteMatchMutation}
+									/>
+								)
+							})()}
 						</div>
 					)
 				})}
 			</div>
 			<div className='no-print mt-10 pl-10 pr-10'>
+				<GroupPagination
+					pageSize={pageSize}
+					setPageSize={setPageSize}
+					page={page}
+					setPage={setPage}
+					totalPages={totalPages}
+					selectOptions={selectOptions}
+				/>
+
 				<div className='flex gap-4 flex-col lg:flex-row lg:gap-0 mt-10 justify-between'>
 					<div className='flex flex-row gap-4'>
 						<Link

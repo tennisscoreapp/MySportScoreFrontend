@@ -118,6 +118,13 @@
 				"detailed": "Detailed",
 				"compact": "Compact"
 			},
+			"pagination": {
+				"page": "Page",
+				"of": "of",
+				"previous": "Previous",
+				"next": "Next",
+				"page_size": "Per page"
+			},
 			"game": {
 				"sets": "Sets",
 				"games": "Games",
