@@ -1,5 +1,5 @@
-import { createMatch } from '@/api/groupApi'
 import { MatchData } from '@/interfaces/matchInterfaces'
+import { groupService } from '@/service/group.service'
 import { QueryClient, useMutation } from '@tanstack/react-query'
 
 export const useCreateMatchMutation = (
@@ -7,7 +7,7 @@ export const useCreateMatchMutation = (
 	queryClient: QueryClient
 ) =>
 	useMutation({
-		mutationFn: (matchData: MatchData) => createMatch(matchData),
+		mutationFn: (matchData: MatchData) => groupService.createMatch(matchData),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['matches', groupId] })
 		},

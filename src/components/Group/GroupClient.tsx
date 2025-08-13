@@ -31,7 +31,11 @@ function GroupClient({
 	const t = useTranslations('TournamentGroup')
 	const [exportView, setExportView] = useState(false)
 	const [page, setPage] = useState(1)
-	const [pageSize, setPageSize] = useState(6)
+	const [pageSize, setPageSize] = useState<number>(() => {
+		if (typeof window === 'undefined') return 6
+		const storedValue = Number(window.localStorage.getItem('pageSize'))
+		return Number.isFinite(storedValue) && storedValue > 0 ? storedValue : 6
+	})
 	const pdfRef = useRef<HTMLDivElement>(null)
 
 	const firstGroupMatchesLength =
@@ -39,6 +43,12 @@ function GroupClient({
 	const totalPages = Math.max(1, Math.ceil(firstGroupMatchesLength / pageSize))
 
 	const selectOptions = [3, 6, 9, 12]
+
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			window.localStorage.setItem('pageSize', String(pageSize))
+		}
+	}, [pageSize])
 
 	useEffect(() => {
 		if (page > totalPages) setPage(totalPages)
@@ -136,7 +146,7 @@ function GroupClient({
 				/>
 
 				<div className='flex gap-4 flex-col lg:flex-row lg:gap-0 mt-10 justify-between'>
-					<div className='flex flex-row gap-4'>
+					<div className='flex flex-col lg:flex-row gap-4'>
 						<Link
 							href={`/tournaments/${tournamentId}/groups/${groupId}/addmatch`}
 						>
@@ -148,7 +158,7 @@ function GroupClient({
 							<Button>{t('buttons.add_players')}</Button>
 						</Link>
 					</div>
-					<div className='flex flex-row gap-4'>
+					<div className='flex flex-col lg:flex-row gap-4'>
 						<Button onClick={() => setExportView(!exportView)}>
 							{t('buttons.toggle_export_view')}
 						</Button>

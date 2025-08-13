@@ -50,7 +50,7 @@ function GroupPagination({
 				</Select>
 			</div>
 
-			<div className='flex items-center gap-2'>
+			<div className='flex flex-col lg:flex-row items-center gap-2'>
 				<Button
 					variant='outline'
 					onClick={() => setPage(Math.max(1, page - 1))}

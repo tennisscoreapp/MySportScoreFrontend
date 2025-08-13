@@ -25,7 +25,6 @@ export default function EditMatchPage() {
 	const tournamentId = (params?.tournament as string) || ''
 
 	const { data: groupResponse, isLoading } = useFetchGroupQuery(groupId)
-	console.log('GroupResponse', groupResponse)
 
 	const match = groupResponse?.[0]?.group_data?.matches.find(
 		(match: Match) => match.id === Number(matchId)

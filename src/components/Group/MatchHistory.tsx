@@ -33,13 +33,27 @@ export default function MatchHistory({
 	exportView,
 }: MatchHistoryProps) {
 	const t = useTranslations('TournamentGroup')
-	const [view, setView] = useState<ViewMode>('compact')
+	const [view, setView] = useState<ViewMode>(() => {
+		// read once on mount and avoid ssr/hydration issues
+		if (typeof window === 'undefined') return 'compact'
+		const stored = window.localStorage.getItem(
+			'matchHistoryView'
+		) as ViewMode | null
+		return stored === 'detailed' || stored === 'compact' ? stored : 'compact'
+	})
+
+	const handleViewChange = (v: ViewMode) => {
+		setView(v)
+		if (typeof window !== 'undefined') {
+			window.localStorage.setItem('matchHistoryView', v)
+		}
+	}
 
 	if (!matches?.length) return null
 
 	return (
 		<div className='space-y-4'>
-			<div className='flex items-center justify-between'>
+			<div className='flex items-center justify-between flex-col lg:flex-row gap-4'>
 				<h2 className='text-xl font-bold border-b pb-2'>
 					{t('matches_history.title')}
 				</h2>
@@ -49,7 +63,7 @@ export default function MatchHistory({
 					<span className='text-sm text-muted-foreground'>
 						{t('matches_history.view.view_mode')}
 					</span>
-					<Select value={view} onValueChange={v => setView(v as ViewMode)}>
+					<Select value={view} onValueChange={handleViewChange}>
 						<SelectTrigger size='sm'>
 							<SelectValue />
 						</SelectTrigger>

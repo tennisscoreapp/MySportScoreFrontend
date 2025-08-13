@@ -3,15 +3,20 @@
 import { AuthContextType, User } from '@/interfaces/loginInterfaces'
 import { createContext, useContext, useEffect, useState } from 'react'
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<User | null>(null)
 	const [loading, setLoading] = useState(true)
+	const [initialized, setInitialized] = useState(false)
 
 	const checkAuth = async () => {
+		// prevent multiple simultaneous auth checks
+		if (loading && initialized) return
+
+		setLoading(true)
 		try {
 			const response = await fetch(`${API_BASE_URL}/api/v1/me`, {
 				credentials: 'include',
@@ -30,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			setUser(null)
 		} finally {
 			setLoading(false)
+			setInitialized(true)
 		}
 	}
 
@@ -78,8 +84,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	}
 
 	useEffect(() => {
-		checkAuth()
-	}, [])
+		if (!initialized) {
+			checkAuth()
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initialized])
 
 	const value = {
 		user,
