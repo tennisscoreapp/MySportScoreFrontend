@@ -21,6 +21,7 @@ export default function CreateTournament() {
 	const router = useRouter()
 	const { user } = useAuth()
 	const t = useTranslations('Tournaments')
+	const currentYear = new Date().getFullYear()
 	const {
 		register,
 		handleSubmit,
@@ -29,7 +30,7 @@ export default function CreateTournament() {
 	} = useForm<TournamentForm>({
 		defaultValues: {
 			name: '',
-			year: new Date().getFullYear(),
+			year: currentYear,
 			start_date: '',
 			end_date: '',
 		},
@@ -49,8 +50,6 @@ export default function CreateTournament() {
 			id: 0,
 		})
 	}
-
-	const currentYear = new Date().getFullYear()
 
 	return (
 		<div className='max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md '>

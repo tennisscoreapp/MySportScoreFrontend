@@ -3,8 +3,9 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useCreateMatchMutation } from '@/hooks/mutations/useCreateMatchMutation'
-import { useFetchGroupPlayers } from '@/hooks/queries/useFetchGroupPlayers'
+import { useUpdateMatchMutation } from '@/hooks/mutations/useUpdateMatchMutation'
+import { useFetchGroupQuery } from '@/hooks/queries/useFetchGroupQuery'
+import { Match } from '@/interfaces/groupInterfaces'
 import { MatchFormData } from '@/interfaces/matchInterfaces'
 import { determineWinner } from '@/utils/addMatchUtils/addMatchUtils'
 import { useQueryClient } from '@tanstack/react-query'
@@ -13,13 +14,21 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useFieldArray, useForm } from 'react-hook-form'
 
-export default function AddMatchPage() {
+export default function EditMatchPage() {
 	const params = useParams()
 	const router = useRouter()
-	const groupId = params?.group as string
-	const tournamentId = params?.tournament as string
 	const queryClient = useQueryClient()
 	const t = useTranslations('Match')
+
+	const groupId = (params?.group as string) || ''
+	const matchId = (params?.matchId as string) || ''
+	const tournamentId = (params?.tournament as string) || ''
+
+	const { data: groupResponse, isLoading } = useFetchGroupQuery(groupId)
+
+	const match = groupResponse?.[0]?.group_data?.matches.find(
+		(match: Match) => match.id === Number(matchId)
+	)
 	const {
 		register,
 		control,
@@ -28,14 +37,11 @@ export default function AddMatchPage() {
 		formState: { errors },
 	} = useForm<MatchFormData>({
 		defaultValues: {
-			player1_id: undefined,
-			player2_id: undefined,
-			match_date: new Date().toISOString().split('T')[0],
-			status: 'completed',
-			sets: [
-				{ set_number: 1, player1_games: 0, player2_games: 0 },
-				{ set_number: 2, player1_games: 0, player2_games: 0 },
-			],
+			player1_id: match?.player1_id,
+			player2_id: match?.player2_id,
+			match_date: match?.match_date.split('T')[0],
+			status: match?.status || 'completed',
+			sets: match?.sets || [],
 		},
 	})
 
@@ -44,11 +50,9 @@ export default function AddMatchPage() {
 		name: 'sets',
 	})
 
-	const watchedSets = watch('sets')
+	const watchedSets = watch('sets') || match?.sets
 
-	const { data: players, isLoading } = useFetchGroupPlayers(groupId)
-
-	const createMatchMutation = useCreateMatchMutation(groupId, queryClient)
+	const updateMatchMutation = useUpdateMatchMutation(matchId, queryClient)
 
 	const onSubmit = async (data: MatchFormData) => {
 		const winner = determineWinner(data.sets)
@@ -68,78 +72,55 @@ export default function AddMatchPage() {
 			match_date: data.match_date,
 			sets: data.sets,
 		}
-		createMatchMutation.mutate(matchData)
+		updateMatchMutation.mutate(matchData)
 
-		alert('Матч успешно добавлен!')
-		router.push(`/tournaments/${tournamentId}/${groupId}`)
+		alert(t('match_updated'))
+		router.push(`/tournaments/${tournamentId}/groups/${groupId}`)
 	}
 
 	if (isLoading) {
-		return <div className='p-6'>Загрузка...</div>
+		return <div className='p-6'>{t('loading')}</div>
 	}
 
 	return (
 		<div className='max-w-2xl mx-auto p-6'>
 			<div className='mb-6'>
-				<h1 className='text-2xl font-bold mb-2'>{t('titleAdd')}</h1>
+				<h1 className='text-2xl font-bold mb-2'>{t('titleEdit')}</h1>
 			</div>
 
 			<form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
-				{/* Выбор игроков */}
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 					<div className='space-y-2'>
 						<Label htmlFor='player1_id'>{t('form.player1')}</Label>
-						<select
-							{...register('player1_id', {
-								required: t('validation.player1_required'),
-								valueAsNumber: true,
-							})}
-							className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-transparent'
-						>
-							<option value=''>{t('form.select_player1')}</option>
-							{players?.map(player => (
-								<option key={player.id} value={player.id}>
-									{player.first_name} {player.last_name}
-								</option>
-							))}
-						</select>
-						{errors.player1_id && (
-							<p className='text-sm text-red-600'>
-								{errors.player1_id.message}
-							</p>
-						)}
+						<Input
+							type='hidden'
+							{...register('player1_id')}
+							defaultValue={match?.player1_id}
+						/>
+						<div className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-gray-100 flex items-center'>
+							{`${match?.player1_first_name} ${match?.player1_last_name}`}
+						</div>
 					</div>
 
 					<div className='space-y-2'>
 						<Label htmlFor='player2_id'>{t('form.player2')}</Label>
-						<select
-							{...register('player2_id', {
-								required: t('validation.player2_required'),
-								valueAsNumber: true,
-							})}
-							className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-transparent'
-						>
-							<option value=''>{t('form.select_player2')}</option>
-							{players?.map(player => (
-								<option key={player.id} value={player.id}>
-									{player.first_name} {player.last_name}
-								</option>
-							))}
-						</select>
-						{errors.player2_id && (
-							<p className='text-sm text-red-600'>
-								{errors.player2_id.message}
-							</p>
-						)}
+						<Input
+							type='hidden'
+							{...register('player2_id')}
+							defaultValue={match?.player2_id}
+						/>
+						<div className='w-full h-9 px-3 py-1 text-sm border border-input rounded-md bg-gray-100 flex items-center'>
+							{`${match?.player2_first_name} ${match?.player2_last_name}`}
+						</div>
 					</div>
 				</div>
 
-				{/* Дата и статус */}
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 					<div className='space-y-2'>
 						<Label htmlFor='match_date'>{t('form.match_date')}</Label>
 						<Input
 							type='date'
+							defaultValue={match?.match_date}
 							{...register('match_date', {
 								required: t('validation.match_date_required'),
 							})}
@@ -154,6 +135,7 @@ export default function AddMatchPage() {
 					<div className='space-y-2'>
 						<Label htmlFor='status'>{t('form.status')}</Label>
 						<select
+							defaultValue={match?.status}
 							{...register('status', {
 								required: t('validation.status_required'),
 							})}
@@ -209,6 +191,7 @@ export default function AddMatchPage() {
 									<Input
 										type='number'
 										min='0'
+										defaultValue={match?.sets[index]?.player1_games}
 										{...register(`sets.${index}.player1_games` as const, {
 											required: t('validation.games_count_required'),
 											valueAsNumber: true,
@@ -220,10 +203,11 @@ export default function AddMatchPage() {
 									/>
 								</div>
 								<div className='space-y-2'>
-									<Label>Игрок 2</Label>
+									<Label>{t('form.player2')}</Label>
 									<Input
 										type='number'
 										min='0'
+										defaultValue={match?.sets[index]?.player2_games}
 										{...register(`sets.${index}.player2_games` as const, {
 											required: t('validation.games_count_required'),
 											valueAsNumber: true,
@@ -242,7 +226,7 @@ export default function AddMatchPage() {
 				{/* Предварительный результат */}
 				{watchedSets && watchedSets.length > 0 && (
 					<div className='bg-gray-50 p-4 rounded-lg'>
-						<h3 className='font-medium mb-2'>{t('form.preview_result')}:</h3>
+						<h3 className='font-medium mb-2'>{t('form.preview_result')}</h3>
 						<div className='text-sm space-y-1'>
 							{watchedSets.map((set, index) => (
 								<div key={index}>
@@ -265,9 +249,9 @@ export default function AddMatchPage() {
 				{/* Кнопки действий */}
 				<div className='flex gap-4 pt-4'>
 					<Button type='submit' className='flex-1'>
-						{t('buttons.create_match')}
+						{t('buttons.update_match')}
 					</Button>
-					<Link href={`/tournaments/${tournamentId}/${groupId}`}>
+					<Link href={`/tournaments/${tournamentId}/groups/${groupId}`}>
 						<Button type='button' variant='outline'>
 							{t('buttons.cancel')}
 						</Button>

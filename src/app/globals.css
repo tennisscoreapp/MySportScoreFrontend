@@ -122,3 +122,15 @@
 		font-family: var(--font-press-start-2p), monospace;
 	}
 }
+
+/* PDF Export styles for html2canvas compatibility */
+@media print, html2canvas {
+	.no-print {
+		display: none !important;
+	}
+	.print-card {
+		break-inside: avoid;
+		page-break-inside: avoid;
+		margin-bottom: 1rem;
+	}
+}

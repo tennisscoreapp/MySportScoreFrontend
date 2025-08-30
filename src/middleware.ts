@@ -7,8 +7,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
 const protectedRoutes = ['/tournaments']
 const authRoutes = ['/auth/login', '/auth/register']
+const staticRoutes = ['/']
 
-// Create the next-intl middleware with locale detection from cookies
 const handleI18nRouting = createMiddleware({
 	...routing,
 	localeDetection: true,
@@ -19,6 +19,19 @@ async function checkResourceAccess(
 	authToken: string
 ): Promise<boolean> {
 	const pathWithoutLocale = pathname.replace(/^\/(en|ru)/, '') || '/'
+
+	// allow access to base tournaments routes without additional checks
+	if (
+		pathWithoutLocale === '/tournaments' ||
+		pathWithoutLocale.startsWith('/tournaments/create')
+	) {
+		return true
+	}
+
+	// for static routes, skip resource access checks
+	if (staticRoutes.includes(pathWithoutLocale)) {
+		return true
+	}
 
 	const tournamentMatch = pathWithoutLocale.match(/^\/tournaments\/(\d+)/)
 	const groupMatch = pathWithoutLocale.match(
@@ -60,8 +73,12 @@ export async function middleware(request: NextRequest) {
 	const response = handleI18nRouting(request)
 
 	const { pathname } = request.nextUrl
-
 	const pathWithoutLocale = pathname.replace(/^\/(en|ru)/, '') || '/'
+
+	// skip auth checks for static routes to allow static generation
+	if (staticRoutes.includes(pathWithoutLocale)) {
+		return response
+	}
 
 	let authToken = request.cookies.get('auth_token')?.value
 
@@ -82,7 +99,6 @@ export async function middleware(request: NextRequest) {
 
 	if (isProtectedRoute) {
 		if (!authToken) {
-			console.log('No auth token found, redirecting to login')
 			return NextResponse.redirect(new URL('/auth/login', request.url))
 		}
 
@@ -94,17 +110,16 @@ export async function middleware(request: NextRequest) {
 			})
 
 			if (!response.ok) {
-				console.log('Auth token is invalid, redirecting to login')
 				return NextResponse.redirect(new URL('/auth/login', request.url))
 			}
 
 			const hasResourceAccess = await checkResourceAccess(pathname, authToken)
+
 			if (!hasResourceAccess) {
 				return NextResponse.redirect(new URL('/restricted', request.url))
 			}
 		} catch (error) {
 			console.error('Middleware auth check failed:', error)
-			console.log('Redirecting to login due to error')
 			return NextResponse.redirect(new URL('/auth/login', request.url))
 		}
 	}
@@ -124,7 +139,6 @@ export async function middleware(request: NextRequest) {
 			console.error('Middleware auth check failed:', error)
 		}
 	}
-
 	return response
 }
 

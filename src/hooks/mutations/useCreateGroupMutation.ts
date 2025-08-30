@@ -1,4 +1,4 @@
-import { createGroup } from '@/api/groupApi'
+import { groupService } from '@/service/group.service'
 import { useMutation } from '@tanstack/react-query'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
@@ -7,7 +7,7 @@ export const useCreateGroupMutation = (
 	router: AppRouterInstance
 ) =>
 	useMutation({
-		mutationFn: createGroup,
+		mutationFn: groupService.createGroup.bind(groupService),
 		onSuccess: () => {
 			router.push(`/tournaments/${tournamentId}`)
 		},

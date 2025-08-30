@@ -1,5 +1,5 @@
-import { createPlayer } from '@/api/groupApi'
 import { NewPlayerData } from '@/interfaces/playerInterfaces'
+import { groupService } from '@/service/group.service'
 import { QueryClient, useMutation } from '@tanstack/react-query'
 
 export const useCreatePlayerMutation = (
@@ -8,7 +8,7 @@ export const useCreatePlayerMutation = (
 ) =>
 	useMutation({
 		mutationFn: (playerData: NewPlayerData) =>
-			createPlayer(groupId, playerData),
+			groupService.createPlayer(groupId, playerData),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['players', groupId] })
 		},

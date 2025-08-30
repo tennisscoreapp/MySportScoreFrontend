@@ -44,8 +44,7 @@ export default function SingleTournamentPage() {
 
 	return (
 		<div className='container mx-auto p-8 sm:p-12 min-h-screen'>
-			{/* информация о турнире */}
-			{tournamentData.map((tournamentInfo: Tournament) => (
+			{tournamentData?.map((tournamentInfo: Tournament) => (
 				<div key={tournamentInfo.id} className='mb-4 sm:mb-8'>
 					<h1 className='text-xl sm:text-2xl font-bold mb-4'>
 						{tournamentInfo.name}
@@ -81,18 +80,17 @@ export default function SingleTournamentPage() {
 				</div>
 			))}
 
-			{/* Список групп */}
 			<div>
 				<h2 className='text-lg sm:text-xl font-bold mb-4'>
 					{t('tournament_groups')}
 				</h2>
-				{tournamentGroups.length > 0 ? (
+				{tournamentGroups && tournamentGroups.length > 0 ? (
 					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 sm:gap-4'>
-						{tournamentGroups.map((group: TournamentGroup) => (
+						{tournamentGroups?.map((group: TournamentGroup) => (
 							<div key={group.id} className='relative'>
 								<Link
 									key={group.id}
-									href={`/tournaments/${tournament}/${group.id}`}
+									href={`/tournaments/${tournament}/groups/${group.id}`}
 									className='block p-1 sm:p-4 border border-gray-300 rounded-lg hover:shadow-lg transition-shadow bg-white hover:bg-gray-50'
 								>
 									<h3 className='text-sm sm:text-lg font-semibold mb-2'>

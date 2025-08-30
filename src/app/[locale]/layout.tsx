@@ -12,9 +12,14 @@ const pressStart2P = Press_Start_2P({
 	preload: true,
 })
 
+// generate static params for supported locales
+export async function generateStaticParams() {
+	return [{ locale: 'en' }, { locale: 'ru' }]
+}
+
 export const metadata: Metadata = {
-	title: 'Tournament index page',
-	description: 'Tournament index page',
+	title: 'Tournament main page',
+	description: 'Tournament main page',
 }
 
 export default async function LocaleLayout({
@@ -29,7 +34,10 @@ export default async function LocaleLayout({
 
 	return (
 		<html lang={locale}>
-			<body className={`${pressStart2P.variable} antialiased min-h-screen`}>
+			<body
+				className={`${pressStart2P.variable} antialiased min-h-screen`}
+				suppressHydrationWarning={true}
+			>
 				<NextIntlClientProvider messages={messages}>
 					<Providers>{children}</Providers>
 				</NextIntlClientProvider>

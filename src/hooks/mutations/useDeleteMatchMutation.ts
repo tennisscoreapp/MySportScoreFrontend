@@ -1,5 +1,5 @@
-import { deleteMatch } from '@/api/groupApi'
 import { GroupResponse } from '@/interfaces/groupInterfaces'
+import { groupService } from '@/service/group.service'
 import { QueryClient, useMutation } from '@tanstack/react-query'
 
 export const useDeleteMatchMutation = (
@@ -7,7 +7,7 @@ export const useDeleteMatchMutation = (
 	queryClient: QueryClient
 ) =>
 	useMutation({
-		mutationFn: (matchId: number) => deleteMatch(matchId),
+		mutationFn: (matchId: number) => groupService.deleteMatch(matchId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['group', groupId] })
 		},

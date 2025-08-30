@@ -11,7 +11,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog'
-import { cn } from '@/shared/lib/css'
+import { cn } from '@/utils/shadcn/css'
 
 function Command({
 	className,

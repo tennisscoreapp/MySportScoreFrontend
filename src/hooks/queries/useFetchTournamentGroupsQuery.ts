@@ -1,10 +1,11 @@
-import { fetchTournamentGroups } from '@/api/tournamentsApi'
+import { TournamentGroup } from '@/interfaces/tournamentInterfaces'
+import { tournamentService } from '@/service/tournament.service'
 import { useQuery } from '@tanstack/react-query'
 
 export const useFetchTournamentGroupsQuery = (tournament: string) => {
-	const { data, isLoading, isError } = useQuery({
+	const { data, isLoading, isError } = useQuery<TournamentGroup[]>({
 		queryKey: ['tournamentGroups', tournament],
-		queryFn: () => fetchTournamentGroups(tournament),
+		queryFn: () => tournamentService.fetchTournamentGroups(tournament),
 	})
 
 	return {

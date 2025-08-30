@@ -32,7 +32,6 @@ export default function Home() {
 
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'>
-			{/* Header */}
 			<div className='bg-white'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 					<div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 py-6'>
@@ -58,9 +57,7 @@ export default function Home() {
 				</div>
 			</div>
 
-			{/* Main Content */}
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8'>
-				{/* Welcome Section */}
 				<div className='mb-10'>
 					<h2 className='text-2xl sm:text-3xl font-bold text-gray-900 mb-2'>
 						{t('description_1')}
@@ -70,7 +67,6 @@ export default function Home() {
 					</p>
 				</div>
 
-				{/* Quick Actions */}
 				<div className='mb-4 sm:mb-10'>
 					<h3 className='text-lg sm:text-xl font-semibold text-gray-900 mb-6'>
 						{t('quick_actions.title')}
@@ -79,7 +75,7 @@ export default function Home() {
 						{quickActions.map((action, index) => (
 							<Link key={index} href={action.href} className='group'>
 								<div
-									className={`${action.color} border-2 rounded-2xl p-6 transition-all duration-200 group-hover:scale-105 group-hover:shadow-lg`}
+									className={`${action.color} border-2 rounded-2xl p-6 transition-all duration-200 group-hover:scale-105 group-hover:shadow-lg h-full`}
 								>
 									<div className='flex items-center mb-2 sm:mb-4'>
 										<div className='bg-white p-2 rounded-lg shadow-sm mr-3'>
