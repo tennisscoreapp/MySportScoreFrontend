@@ -188,8 +188,9 @@ function DetailedCard({
 					match.winner_id === match.player1_id ? 'font-bold text-green-600' : ''
 				}`}
 			>
-				<div className='text-lg'>
-					{match.player1_first_name} {match.player1_last_name}
+				<div className='flex flex-col items-end'>
+					<div className='text-lg'>{match.player1_first_name}</div>
+					<div className='text-lg'> {match.player1_last_name}</div>
 				</div>
 				<div className='text-sm text-gray-600'>
 					{t('matches_history.game.sets')}: {player1Sets} |{' '}
@@ -216,8 +217,9 @@ function DetailedCard({
 					match.winner_id === match.player2_id ? 'font-bold text-green-600' : ''
 				}`}
 			>
-				<div className='text-lg'>
-					{match.player2_first_name} {match.player2_last_name}
+				<div className='flex flex-col items-start'>
+					<div className='text-lg'>{match.player2_first_name}</div>
+					<div className='text-lg'> {match.player2_last_name}</div>
 				</div>
 				<div className='text-sm text-gray-600'>
 					{t('matches_history.game.sets')}: {player2Sets} |{' '}
@@ -255,7 +257,8 @@ function CompactCard({
 				}`}
 			>
 				<div className='text-sm lg:text-base'>
-					{match.player1_first_name} {match.player1_last_name}
+					<div>{match.player1_first_name}</div>
+					<div>{match.player1_last_name}</div>
 				</div>
 			</div>
 
@@ -273,7 +276,8 @@ function CompactCard({
 				}`}
 			>
 				<div className='text-xs md:text-sm lg:text-base'>
-					{match.player2_first_name} {match.player2_last_name}
+					<div>{match.player2_first_name}</div>
+					<div>{match.player2_last_name}</div>
 				</div>
 			</div>
 		</div>

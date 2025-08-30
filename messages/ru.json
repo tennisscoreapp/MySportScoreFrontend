@@ -188,6 +188,7 @@
 		}
 	},
 	"AddPlayers": {
+		"loading": "Загрузка...",
 		"title": "Игроки группы",
 		"active_player": "Активный",
 		"inactive_player": "Неактивный",
@@ -198,18 +199,18 @@
 			"add_player": "Добавить игрока",
 			"back": "Вернуться",
 			"add": "Добавить",
-			"cancel": "Отмена"
+			"cancel": "Отмена",
+			"couple_player": "Парный игрок"
 		},
 		"form": {
 			"title": "Добавить игрока",
-			"first_name": "Имя",
-			"last_name": "Фамилия",
+			"first_player": "Имя игрока",
+			"second_player": "Второй игрок (если нужен)",
 			"email": "Email",
 			"phone": "Телефон"
 		},
 		"validation": {
-			"first_name_required": "Имя обязательно",
-			"last_name_required": "Фамилия обязательна",
+			"first_player_required": "Имя игрока обязательно",
 			"email_required": "Email обязателен",
 			"email_invalid": "Неверный email адрес"
 		}
