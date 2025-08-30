@@ -82,9 +82,9 @@ function GroupClient({
 								group.group_data?.matches
 							)
 							return {
-								player_name: `${index + 1}. ${player.first_name} ${
-									player.last_name
-								}`,
+								index: index + 1,
+								player_name: player.first_name,
+								player_last_name: player.last_name,
 								matches_played: stats.matchesPlayed,
 								matches_won: stats.matchesWon,
 								sets_played: `${stats.setsWon} - ${stats.setsLost}`,

@@ -2,7 +2,9 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useTranslations } from 'next-intl'
 
 interface GroupPlayer {
+	index: number
 	player_name: string
+	player_last_name: string
 	matches_played: number
 	matches_won: number
 	sets_played: string
@@ -21,7 +23,14 @@ export const createColumns = (
 		},
 		enableResizing: true,
 		cell: ({ row }) => {
-			return <div className='text-left'>{row.original.player_name}</div>
+			return (
+				<div className='flex flex-col'>
+					<div className='text-left'>
+						{row.original.index}. {row.original.player_name}
+					</div>
+					<div className='ml-11'>{row.original.player_last_name}</div>
+				</div>
+			)
 		},
 	},
 	{

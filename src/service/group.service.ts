@@ -5,7 +5,7 @@ import {
 	Player,
 } from '@/interfaces/groupInterfaces'
 import { MatchData } from '@/interfaces/matchInterfaces'
-import { NewPlayerData } from '@/interfaces/playerInterfaces'
+import { PlayerSendData } from '@/interfaces/playerInterfaces'
 import { BaseService } from './base.service'
 
 class GroupService extends BaseService {
@@ -31,7 +31,7 @@ class GroupService extends BaseService {
 
 	async createPlayer(
 		groupId: string,
-		playerData: NewPlayerData
+		playerData: PlayerSendData
 	): Promise<Player> {
 		return this.post<Player>(`/api/v1/groups/${groupId}/players`, playerData)
 	}

@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { useCreatePlayerMutation } from '@/hooks/mutations/useCreatePlayerMutation'
 import { useRemovePlayer } from '@/hooks/mutations/useRemovePlayer'
 import { useFetchGroupPlayers } from '@/hooks/queries/useFetchGroupPlayers'
-import { NewPlayerData } from '@/interfaces/playerInterfaces'
+import { NewPlayerData, PlayerSendData } from '@/interfaces/playerInterfaces'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -21,6 +21,7 @@ function AddPlayers() {
 	const groupId = params?.group as string
 	const tournamentId = params?.tournament as string
 	const [showAddForm, setShowAddForm] = useState(false)
+	const [isCouple, setIsCouple] = useState(false)
 
 	const {
 		register,
@@ -29,8 +30,8 @@ function AddPlayers() {
 		reset,
 	} = useForm<NewPlayerData>({
 		defaultValues: {
-			first_name: '',
-			last_name: '',
+			player_name: '',
+			second_player: '',
 			email: '',
 			phone: '',
 			status: 'active',
@@ -44,7 +45,12 @@ function AddPlayers() {
 	const removePlayerMutation = useRemovePlayer(groupId, queryClient)
 
 	const onSubmit: SubmitHandler<NewPlayerData> = async data => {
-		createPlayerMutation.mutate(data)
+		const playerData: PlayerSendData = {
+			...data,
+			first_name: data.player_name,
+			last_name: data.second_player || '',
+		}
+		createPlayerMutation.mutate(playerData)
 		reset()
 		setShowAddForm(false)
 	}
@@ -84,42 +90,50 @@ function AddPlayers() {
 						className='grid grid-cols-1 md:grid-cols-2 gap-4'
 					>
 						<div>
-							<label className='block text-sm font-medium mb-1'>
-								{t('form.first_name')} *
+							<label
+								htmlFor='first_player'
+								className='block text-sm font-medium mb-1'
+							>
+								{t('form.first_player')} *
 							</label>
 							<Input
+								id='first_player'
 								type='text'
-								{...register('first_name', {
-									required: t('validation.first_name_required'),
+								{...register('player_name', {
+									required: t('validation.first_player_required'),
 								})}
 							/>
-							{errors.first_name && (
+							{errors.player_name && (
 								<p className='text-red-500 text-sm mt-1'>
-									{errors.first_name.message}
+									{errors.player_name.message}
 								</p>
 							)}
 						</div>
 						<div>
-							<Label className='block text-sm font-medium mb-1'>
-								{t('form.last_name')} *
+							<Label
+								htmlFor='second_player'
+								className='block text-sm font-medium mb-1'
+							>
+								{t('form.second_player')}
 							</Label>
 							<Input
+								id='second_player'
 								type='text'
-								{...register('last_name', {
-									required: t('validation.last_name_required'),
-								})}
+								{...register('second_player')}
+								disabled={!isCouple}
 							/>
-							{errors.last_name && (
+							{errors.second_player && (
 								<p className='text-red-500 text-sm mt-1'>
-									{errors.last_name.message}
+									{errors.second_player.message}
 								</p>
 							)}
 						</div>
 						<div>
-							<Label className='block text-sm font-medium mb-1'>
+							<Label htmlFor='email' className='block text-sm font-medium mb-1'>
 								{t('form.email')} *
 							</Label>
 							<Input
+								id='email'
 								type='email'
 								{...register('email', {
 									required: t('validation.email_required'),
@@ -136,10 +150,24 @@ function AddPlayers() {
 							)}
 						</div>
 						<div>
-							<Label className='block text-sm font-medium mb-1'>
+							<Label htmlFor='phone' className='block text-sm font-medium mb-1'>
 								{t('form.phone')}
 							</Label>
-							<Input type='tel' {...register('phone')} />
+							<Input id='phone' type='tel' {...register('phone')} />
+						</div>
+						<div className='flex flex-row items-center max-w-fit gap-2'>
+							<Label
+								htmlFor='couple_player'
+								className='text-sm font-medium mb-1'
+							>
+								{t('buttons.couple_player')}
+							</Label>
+							<Input
+								id='couple_player'
+								type='checkbox'
+								onChange={() => setIsCouple(!isCouple)}
+								className='w-4 h-4'
+							/>
 						</div>
 						<div className='md:col-span-2 flex gap-2'>
 							<Button
@@ -168,7 +196,8 @@ function AddPlayers() {
 							>
 								<div className='flex items-center space-x-3'>
 									<div className='font-medium text-gray-900'>
-										{player.first_name} {player.last_name}
+										<div>{player.first_name}</div>
+										<div>{player.last_name}</div>
 									</div>
 									<div className='text-sm text-gray-500'>{player.email}</div>
 									{player.phone && (
