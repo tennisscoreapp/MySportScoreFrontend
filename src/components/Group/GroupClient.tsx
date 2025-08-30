@@ -1,13 +1,17 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { GroupResponse, Player } from '@/interfaces/groupInterfaces'
+import { Tournament } from '@/interfaces/tournamentInterfaces'
 import { calculatePlayerStats, sortPlayers } from '@/utils/sortGroupTable'
+import { Label } from '@radix-ui/react-label'
 import { UseMutationResult } from '@tanstack/react-query'
 import { Printer } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { HexColorPicker } from 'react-colorful'
 import { DataTable } from '../ui/data-table'
+import { Input } from '../ui/input'
 import { createColumns } from './columns'
 import GroupPagination from './GroupPagination'
 import { handleDownloadPDFUtil } from './handleDownloadPDF'
@@ -17,6 +21,7 @@ function GroupClient({
 	groupData,
 	isLoading,
 	error,
+	tournamentData,
 	deleteMatchMutation,
 	tournamentId,
 	groupId,
@@ -25,11 +30,14 @@ function GroupClient({
 	isLoading: boolean
 	error: string | null
 	deleteMatchMutation: UseMutationResult<void, Error, number>
+	tournamentData: Tournament[]
 	tournamentId: string
 	groupId: string
 }) {
 	const t = useTranslations('TournamentGroup')
 	const [exportView, setExportView] = useState(false)
+	const [tournamentColor, setTournamentColor] = useState('#ffffff')
+	const [numberOfWinners, setNumberOfWinners] = useState(0)
 	const [page, setPage] = useState(1)
 	const [pageSize, setPageSize] = useState<number>(() => {
 		if (typeof window === 'undefined') return 6
@@ -101,11 +109,17 @@ function GroupClient({
 							ref={pdfRef}
 						>
 							<div className='text-2xl font-bold text-center'>
+								{tournamentData[0]?.name}
+							</div>
+							<div
+								className='text-2xl font-bold text-center'
+								style={{ color: tournamentColor }}
+							>
 								{group.group_data.group.name}
 							</div>
 							<div className='overflow-x-auto'>
 								<DataTable
-									columns={createColumns(t)}
+									columns={createColumns(t, numberOfWinners, tournamentColor)}
 									data={groupPlayersData}
 									emptyMessage={t('group_table.no_data')}
 								/>
@@ -167,14 +181,32 @@ function GroupClient({
 						</Link>
 					</div>
 				</div>
-				<Button
-					onClick={handleDownloadPDF}
-					variant='secondary'
-					className='hover:bg-red-500 hover:text-white mt-4'
-				>
-					<Printer />
-					{t('buttons.export_pdf')}
-				</Button>
+				<div className='flex items-center justify-center gap-4 mt-10'>
+					<Button
+						onClick={handleDownloadPDF}
+						variant='secondary'
+						className='hover:bg-red-500 hover:text-white mt-4'
+					>
+						<Printer />
+						{t('buttons.export_pdf')}
+					</Button>
+					<HexColorPicker
+						color={tournamentColor}
+						onChange={setTournamentColor}
+					/>
+					<div className='w-fit'>
+						<Label htmlFor='number-of-winners'>
+							Number of winners in a group
+						</Label>
+						<Input
+							id='number-of-winners'
+							type='number'
+							placeholder='Number of winners in group'
+							value={numberOfWinners}
+							onChange={e => setNumberOfWinners(Number(e.target.value))}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	)

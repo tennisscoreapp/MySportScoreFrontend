@@ -4,8 +4,17 @@ import {
 	ColumnDef,
 	flexRender,
 	getCoreRowModel,
+	Row,
 	useReactTable,
 } from '@tanstack/react-table'
+import React from 'react'
+
+declare module '@tanstack/react-table' {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	interface ColumnMeta<TData, TValue> {
+		getStyles?: (row: Row<TData>) => React.CSSProperties
+	}
+}
 
 import {
 	Table,
@@ -64,11 +73,22 @@ export function DataTable<TData, TValue>({
 								key={row.id}
 								data-state={row.getIsSelected() && 'selected'}
 							>
-								{row.getVisibleCells().map(cell => (
-									<TableCell key={cell.id} className='border-r border-gray-200'>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</TableCell>
-								))}
+								{row.getVisibleCells().map(cell => {
+									const cellStyles =
+										cell.column.columnDef.meta?.getStyles?.(row)
+									return (
+										<TableCell
+											key={cell.id}
+											className='border-r border-gray-200'
+											style={cellStyles}
+										>
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext()
+											)}
+										</TableCell>
+									)
+								})}
 							</TableRow>
 						))
 					) : (
