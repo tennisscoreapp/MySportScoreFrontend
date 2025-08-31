@@ -19,11 +19,13 @@ export const createColumns = (
 	tournamentColor: string
 ): ColumnDef<GroupPlayer>[] => [
 	{
-		accessorKey: 'player_name',
+		accessorKey: 'index',
 		header: () => {
-			return <div className='text-center'>{t('group_table.player')}</div>
+			return <div className='text-center'>Place</div>
 		},
-		enableResizing: true,
+		cell: ({ row }) => {
+			return <div className='text-center'>{row.original.index}</div>
+		},
 		meta: {
 			getStyles: (row: Row<GroupPlayer>) => {
 				const isWinner = row.original.index <= numberOfWinners
@@ -32,12 +34,17 @@ export const createColumns = (
 				}
 			},
 		},
+	},
+	{
+		accessorKey: 'player_name',
+		header: () => {
+			return <div className='text-center'>{t('group_table.player')}</div>
+		},
+		enableResizing: true,
 		cell: ({ row }) => {
 			return (
 				<div className='flex flex-col'>
-					<div className='text-left'>
-						{row.original.index}. {row.original.player_name}
-					</div>
+					<div className='text-left'>{row.original.player_name}</div>
 					<div className='ml-11'>{row.original.player_last_name}</div>
 				</div>
 			)

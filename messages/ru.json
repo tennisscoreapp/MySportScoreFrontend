@@ -147,7 +147,8 @@
 			"add_players": "Добавить игроков",
 			"back": "Назад",
 			"export_pdf": "Экспорт в PDF",
-			"toggle_export_view": "Переключить вид"
+			"toggle_export_view": "Переключить вид",
+			"number_of_winners": "Количество победителей в группе"
 		}
 	},
 	"Match": {

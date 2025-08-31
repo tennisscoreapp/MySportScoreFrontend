@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { GroupResponse, Player } from '@/interfaces/groupInterfaces'
 import { Tournament } from '@/interfaces/tournamentInterfaces'
+import { useColorStore } from '@/store/useColorStore'
 import { calculatePlayerStats, sortPlayers } from '@/utils/sortGroupTable'
 import { Label } from '@radix-ui/react-label'
 import { UseMutationResult } from '@tanstack/react-query'
@@ -10,6 +11,7 @@ import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
+import { useStore } from 'zustand'
 import { DataTable } from '../ui/data-table'
 import { Input } from '../ui/input'
 import { createColumns } from './columns'
@@ -36,9 +38,20 @@ function GroupClient({
 }) {
 	const t = useTranslations('TournamentGroup')
 	const [exportView, setExportView] = useState(false)
-	const [tournamentColor, setTournamentColor] = useState('#ffffff')
-	const [numberOfWinners, setNumberOfWinners] = useState(0)
 	const [page, setPage] = useState(1)
+
+	// use group-specific color store
+	const colorStore = useColorStore(groupId)
+	const tournamentColor = useStore(colorStore, state => state.tournamentColor)
+	const setTournamentColor = useStore(
+		colorStore,
+		state => state.setTournamentColor
+	)
+	const numberOfWinners = useStore(colorStore, state => state.numberOfWinners)
+	const setNumberOfWinners = useStore(
+		colorStore,
+		state => state.setNumberOfWinners
+	)
 	const [pageSize, setPageSize] = useState<number>(() => {
 		if (typeof window === 'undefined') return 6
 		const storedValue = Number(window.localStorage.getItem('pageSize'))
@@ -196,12 +209,12 @@ function GroupClient({
 					/>
 					<div className='w-fit'>
 						<Label htmlFor='number-of-winners'>
-							Number of winners in a group
+							{t('buttons.number_of_winners')}
 						</Label>
 						<Input
 							id='number-of-winners'
 							type='number'
-							placeholder='Number of winners in group'
+							placeholder={t('buttons.number_of_winners')}
 							value={numberOfWinners}
 							onChange={e => setNumberOfWinners(Number(e.target.value))}
 						/>
