@@ -1,4 +1,4 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, Row } from '@tanstack/react-table'
 import { useTranslations } from 'next-intl'
 
 interface GroupPlayer {
@@ -14,8 +14,27 @@ interface GroupPlayer {
 }
 
 export const createColumns = (
-	t: ReturnType<typeof useTranslations>
+	t: ReturnType<typeof useTranslations>,
+	numberOfWinners: number,
+	tournamentColor: string
 ): ColumnDef<GroupPlayer>[] => [
+	{
+		accessorKey: 'index',
+		header: () => {
+			return <div className='text-center'>Place</div>
+		},
+		cell: ({ row }) => {
+			return <div className='text-center'>{row.original.index}</div>
+		},
+		meta: {
+			getStyles: (row: Row<GroupPlayer>) => {
+				const isWinner = row.original.index <= numberOfWinners
+				return {
+					backgroundColor: isWinner ? tournamentColor : 'transparent',
+				}
+			},
+		},
+	},
 	{
 		accessorKey: 'player_name',
 		header: () => {
@@ -25,9 +44,7 @@ export const createColumns = (
 		cell: ({ row }) => {
 			return (
 				<div className='flex flex-col'>
-					<div className='text-left'>
-						{row.original.index}. {row.original.player_name}
-					</div>
+					<div className='text-left'>{row.original.player_name}</div>
 					<div className='ml-11'>{row.original.player_last_name}</div>
 				</div>
 			)

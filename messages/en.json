@@ -137,7 +137,8 @@
 			"add_players": "Add players",
 			"back": "Back",
 			"export_pdf": "Export to PDF",
-			"toggle_export_view": "Toggle export view"
+			"toggle_export_view": "Toggle export view",
+			"number_of_winners": "Number of winners in a group"
 		},
 		"group_table": {
 			"no_data": "No data about players. Add players to start the tournament.",
