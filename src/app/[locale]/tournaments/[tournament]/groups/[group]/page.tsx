@@ -1,9 +1,6 @@
-'use client'
-import { useParams } from 'next/navigation'
+import { Params } from 'next/dist/server/request/params'
 import ServerFetching from './ServerFetching'
 
-export default function GroupPage() {
-	const params = useParams()
-
+export default async function GroupPage({ params }: { params: Params }) {
 	return <ServerFetching params={params} />
 }

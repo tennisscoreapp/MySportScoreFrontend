@@ -1,4 +1,5 @@
-export interface NewPlayerData {
+export interface NewPlayerFormData {
+	is_couple: boolean
 	player_name: string
 	second_player: string
 	email: string
@@ -7,7 +8,7 @@ export interface NewPlayerData {
 }
 
 export interface PlayerSendData
-	extends Omit<NewPlayerData, 'second_player' | 'player_name'> {
+	extends Omit<NewPlayerFormData, 'second_player' | 'player_name'> {
 	first_name: string
 	last_name: string
 }
