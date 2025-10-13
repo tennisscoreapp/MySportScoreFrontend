@@ -138,10 +138,13 @@
 			"back": "Back",
 			"export_pdf": "Export to PDF",
 			"toggle_export_view": "Toggle export view",
+			"toggle_swiss_view": "Swiss System",
+			"toggle_group_table_view": "Group table view",
 			"number_of_winners": "Number of winners in a group"
 		},
 		"group_table": {
 			"no_data": "No data about players. Add players to start the tournament.",
+			"place": "Place",
 			"player": "Player",
 			"matches_played": "Matches played",
 			"matches_won": "Matches won",

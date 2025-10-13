@@ -55,10 +55,22 @@ export const handleDownloadPDFUtil = async (
 			compress: true,
 		})
 
-		const imgWidth = pdf.internal.pageSize.getWidth()
-		const imgHeight = (canvas.height * imgWidth) / canvas.width
+		// calculate scaled image size to fit into page and center vertically
+		const pageWidth = pdf.internal.pageSize.getWidth()
+		const pageHeight = pdf.internal.pageSize.getHeight()
+		const imagePixelWidth = canvas.width
+		const imagePixelHeight = canvas.height
+		// choose the smaller ratio to contain the image within the page
+		const widthRatio = pageWidth / imagePixelWidth
+		const heightRatio = pageHeight / imagePixelHeight
+		const renderRatio = Math.min(widthRatio, heightRatio)
+		const renderWidth = imagePixelWidth * renderRatio
+		const renderHeight = imagePixelHeight * renderRatio
+		// center both horizontally and vertically
+		const offsetX = (pageWidth - renderWidth) / 2
+		const offsetY = (pageHeight - renderHeight) / 2 - 15
 
-		pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight)
+		pdf.addImage(imgData, 'PNG', offsetX, offsetY, renderWidth, renderHeight)
 
 		pdf.save(`Group_${groupName}.pdf`)
 	} catch (error) {

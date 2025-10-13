@@ -113,12 +113,13 @@
 		"error_loading": "Ошибка загрузки группы",
 		"group_table": {
 			"no_data": "Нет данных о игроках. Добавьте игроков, чтобы начать турнир.",
+			"place": "Место",
 			"player": "Игрок",
 			"matches_played": "Матчей сыграно",
 			"matches_won": "Матчей выиграно",
-			"sets_played": "Сеты (В - П)",
+			"sets_played": "Сеты <winlose>(В - П)</winlose>",
 			"sets_difference": "Разница сетов",
-			"games_played": "Геймы (В - П)",
+			"games_played": "Геймы <winlose>(В - П)</winlose>",
 			"games_difference": "Разница геймов"
 		},
 		"matches_history": {
@@ -148,6 +149,8 @@
 			"back": "Назад",
 			"export_pdf": "Экспорт в PDF",
 			"toggle_export_view": "Переключить вид",
+			"toggle_swiss_view": "Швейцарская система",
+			"toggle_group_table_view": "Групповой вид",
 			"number_of_winners": "Количество победителей в группе"
 		}
 	},

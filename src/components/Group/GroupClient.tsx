@@ -18,6 +18,12 @@ import { createColumns } from './columns'
 import GroupPagination from './GroupPagination'
 import { handleDownloadPDFUtil } from './handleDownloadPDF'
 import MatchHistory from './MatchHistory'
+import SwissSystemTable from './SwissSystemTable'
+
+export enum TableView {
+	SWISS_SYSTEM = 'swiss_system',
+	GROUP_TABLE = 'group_table',
+}
 
 function GroupClient({
 	groupData,
@@ -38,6 +44,16 @@ function GroupClient({
 }) {
 	const t = useTranslations('TournamentGroup')
 	const [exportView, setExportView] = useState(false)
+	const [swissView, setSwissView] = useState<TableView>(() => {
+		if (typeof window === 'undefined') return TableView.SWISS_SYSTEM
+		const storedValue = window.localStorage.getItem(
+			'swissView'
+		) as TableView | null
+		return storedValue === TableView.SWISS_SYSTEM ||
+			storedValue === TableView.GROUP_TABLE
+			? storedValue
+			: TableView.SWISS_SYSTEM
+	})
 	const [page, setPage] = useState(1)
 
 	// use group-specific color store
@@ -68,8 +84,9 @@ function GroupClient({
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
 			window.localStorage.setItem('pageSize', String(pageSize))
+			window.localStorage.setItem('swissView', swissView)
 		}
-	}, [pageSize])
+	}, [pageSize, swissView])
 
 	useEffect(() => {
 		if (page > totalPages) setPage(totalPages)
@@ -131,11 +148,20 @@ function GroupClient({
 								{group.group_data.group.name}
 							</div>
 							<div className='overflow-x-auto'>
-								<DataTable
-									columns={createColumns(t, numberOfWinners, tournamentColor)}
-									data={groupPlayersData}
-									emptyMessage={t('group_table.no_data')}
-								/>
+								{swissView === TableView.SWISS_SYSTEM ? (
+									<SwissSystemTable
+										players={group.group_data?.players || []}
+										matches={group.group_data?.matches || []}
+										tournamentColor={tournamentColor}
+										numberOfWinners={numberOfWinners}
+									/>
+								) : (
+									<DataTable
+										columns={createColumns(t, numberOfWinners, tournamentColor)}
+										data={groupPlayersData}
+										emptyMessage={t('group_table.no_data')}
+									/>
+								)}
 							</div>
 							{(() => {
 								const matches = group?.group_data?.matches || []
@@ -149,13 +175,15 @@ function GroupClient({
 								const pageMatches = sortedMatches.slice(start, end)
 
 								return (
-									<MatchHistory
-										exportView={exportView}
-										matches={pageMatches}
-										tournamentId={tournamentId}
-										groupId={groupId}
-										onDeleteMatch={deleteMatchMutation}
-									/>
+									swissView !== TableView.SWISS_SYSTEM && (
+										<MatchHistory
+											exportView={exportView}
+											matches={pageMatches}
+											tournamentId={tournamentId}
+											groupId={groupId}
+											onDeleteMatch={deleteMatchMutation}
+										/>
+									)
 								)
 							})()}
 						</div>
@@ -163,14 +191,16 @@ function GroupClient({
 				})}
 			</div>
 			<div className='no-print mt-10 pl-10 pr-10'>
-				<GroupPagination
-					pageSize={pageSize}
-					setPageSize={setPageSize}
-					page={page}
-					setPage={setPage}
-					totalPages={totalPages}
-					selectOptions={selectOptions}
-				/>
+				{swissView !== TableView.SWISS_SYSTEM && (
+					<GroupPagination
+						pageSize={pageSize}
+						setPageSize={setPageSize}
+						page={page}
+						setPage={setPage}
+						totalPages={totalPages}
+						selectOptions={selectOptions}
+					/>
+				)}
 
 				<div className='flex gap-4 flex-col lg:flex-row lg:gap-0 mt-10 justify-between'>
 					<div className='flex flex-col lg:flex-row gap-4'>
@@ -186,9 +216,24 @@ function GroupClient({
 						</Link>
 					</div>
 					<div className='flex flex-col lg:flex-row gap-4'>
-						<Button onClick={() => setExportView(!exportView)}>
-							{t('buttons.toggle_export_view')}
+						<Button
+							onClick={() =>
+								setSwissView(
+									swissView === TableView.SWISS_SYSTEM
+										? TableView.GROUP_TABLE
+										: TableView.SWISS_SYSTEM
+								)
+							}
+						>
+							{swissView === TableView.SWISS_SYSTEM
+								? t('buttons.toggle_group_table_view')
+								: t('buttons.toggle_swiss_view')}
 						</Button>
+						{swissView !== TableView.SWISS_SYSTEM && (
+							<Button onClick={() => setExportView(!exportView)}>
+								{t('buttons.toggle_export_view')}
+							</Button>
+						)}
 						<Link href={`/tournaments/${tournamentId}`}>
 							<Button>{t('buttons.back')}</Button>
 						</Link>
