@@ -21,7 +21,7 @@ export const createColumns = (
 	{
 		accessorKey: 'index',
 		header: () => {
-			return <div className='text-center'>Place</div>
+			return <div className='text-center'>{t('group_table.place')}</div>
 		},
 		cell: ({ row }) => {
 			return <div className='text-center'>{row.original.index}</div>
@@ -73,7 +73,18 @@ export const createColumns = (
 	{
 		accessorKey: 'sets_played',
 		header: () => {
-			return <div className='text-center'>{t('group_table.sets_played')}</div>
+			return (
+				<div className='text-center'>
+					{t.rich('group_table.sets_played', {
+						winlose: chunks => (
+							<>
+								<br />
+								{chunks}
+							</>
+						),
+					})}
+				</div>
+			)
 		},
 		cell: ({ row }) => {
 			return <div className='text-center'>{row.original.sets_played}</div>
@@ -93,7 +104,18 @@ export const createColumns = (
 	{
 		accessorKey: 'games_played',
 		header: () => {
-			return <div className='text-center'>{t('group_table.games_played')}</div>
+			return (
+				<div className='text-center'>
+					{t.rich('group_table.games_played', {
+						winlose: chunks => (
+							<>
+								<br />
+								{chunks}
+							</>
+						),
+					})}
+				</div>
+			)
 		},
 		cell: ({ row }) => {
 			return <div className='text-center'>{row.original.games_played}</div>

@@ -1,3 +1,4 @@
+'use client'
 import GroupClient from '@/components/Group/GroupClient'
 import { useDeleteMatchMutation } from '@/hooks/mutations/useDeleteMatchMutation'
 import { useFetchGroupQuery } from '@/hooks/queries/useFetchGroupQuery'
