@@ -156,7 +156,7 @@ function SwissSystemTable({
 								{t('group_table.matches_won')}
 							</div>
 						</th>
-						<th className='border border-gray-950 p-2 w-[80px]  max-w-[100px]'>
+						<th className='border border-gray-950 p-2 w-[90px]  max-w-[100px]'>
 							<div className='text-[10px] font-bold'>
 								{t.rich('group_table.sets_played', {
 									winlose: chunks => (
@@ -173,7 +173,7 @@ function SwissSystemTable({
 								{t('group_table.sets_difference')}
 							</div>
 						</th>
-						<th className='border border-gray-950 p-2 w-[80px] min-w-[60px] max-w-[100px]'>
+						<th className='border border-gray-950 p-2 w-[90px] min-w-[60px] max-w-[100px]'>
 							<div className='text-[10px] font-bold'>
 								{t.rich('group_table.games_played', {
 									winlose: chunks => (
@@ -233,7 +233,7 @@ function SwissSystemTable({
 								<td className='border border-gray-950 text-center min-w-[60px] '>
 									<div className='text-xs'>{stats.matchesWon}</div>
 								</td>
-								<td className='border border-gray-950 text-center min-w-[60px]'>
+								<td className='border border-gray-950 text-center min-w-[60px] p-2'>
 									<div className='text-xs'>
 										{stats.setsWon} - {stats.setsLost}
 									</div>
@@ -241,7 +241,7 @@ function SwissSystemTable({
 								<td className='border border-gray-950 text-center min-w-[60px] '>
 									<div className='text-xs'>{stats.setsDifference}</div>
 								</td>
-								<td className='border border-gray-950 text-center min-w-[60px]'>
+								<td className='border border-gray-950 text-center min-w-[60px]p-2'>
 									<div className='text-xs'>
 										{stats.gamesWon} - {stats.gamesLost}
 									</div>
