@@ -7,6 +7,10 @@ interface ColorStore {
 	setTournamentColor: (color: string) => void
 	numberOfWinners: number
 	setNumberOfWinners: (numberOfWinners: number) => void
+	secondaryTournamentColor: string
+	setSecondaryTournamentColor: (color: string) => void
+	numberOfSecondaryWinners: number
+	setNumberOfSecondaryWinners: (count: number) => void
 }
 
 // store instances cache to avoid creating multiple stores for the same group
@@ -21,6 +25,12 @@ function createColorStore(groupId: string) {
 				numberOfWinners: 0,
 				setNumberOfWinners: (numberOfWinners: number) =>
 					set({ numberOfWinners }),
+				secondaryTournamentColor: '#ff4444',
+				setSecondaryTournamentColor: (color: string) =>
+					set({ secondaryTournamentColor: color }),
+				numberOfSecondaryWinners: 0,
+				setNumberOfSecondaryWinners: (count: number) =>
+					set({ numberOfSecondaryWinners: count }),
 			})),
 			{
 				name: `color-group-${groupId}`,

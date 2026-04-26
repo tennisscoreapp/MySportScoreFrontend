@@ -86,6 +86,7 @@
 		}
 	},
 	"TournamentGroups": {
+		"group_not_found": "Group not found",
 		"title": "Tournament Groups",
 		"tournament_groups": "Tournament groups",
 		"group_loading": "Groups loading...",
@@ -140,7 +141,10 @@
 			"toggle_export_view": "Toggle export view",
 			"toggle_swiss_view": "Swiss System",
 			"toggle_group_table_view": "Group table view",
-			"number_of_winners": "Number of winners in a group"
+			"number_of_winners": "Number of winners in a group",
+			"primary_color_label": "Primary color",
+			"secondary_color_label": "Secondary color",
+			"number_of_secondary_winners": "Number of secondary places"
 		},
 		"group_table": {
 			"no_data": "No data about players. Add players to start the tournament.",

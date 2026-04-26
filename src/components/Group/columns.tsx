@@ -1,3 +1,4 @@
+import { getPlaceColor } from '@/utils/placeColor'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { useTranslations } from 'next-intl'
 
@@ -16,7 +17,9 @@ interface GroupPlayer {
 export const createColumns = (
 	t: ReturnType<typeof useTranslations>,
 	numberOfWinners: number,
-	tournamentColor: string
+	tournamentColor: string,
+	numberOfSecondaryWinners: number,
+	secondaryTournamentColor: string
 ): ColumnDef<GroupPlayer>[] => [
 	{
 		accessorKey: 'index',
@@ -27,12 +30,16 @@ export const createColumns = (
 			return <div className='text-center'>{row.original.index}</div>
 		},
 		meta: {
-			getStyles: (row: Row<GroupPlayer>) => {
-				const isWinner = row.original.index <= numberOfWinners
-				return {
-					backgroundColor: isWinner ? tournamentColor : 'transparent',
-				}
-			},
+			getStyles: (row: Row<GroupPlayer>) => ({
+				backgroundColor:
+					getPlaceColor(
+						row.original.index,
+						numberOfWinners,
+						tournamentColor,
+						numberOfSecondaryWinners,
+						secondaryTournamentColor
+					) ?? 'transparent',
+			}),
 		},
 	},
 	{

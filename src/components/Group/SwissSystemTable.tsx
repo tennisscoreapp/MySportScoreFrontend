@@ -2,6 +2,7 @@
 
 import { Match, Player } from '@/interfaces/groupInterfaces'
 import { calculatePlayerStats, sortPlayers } from '@/utils/sortGroupTable'
+import { getPlaceColor } from '@/utils/placeColor'
 import { useTranslations } from 'next-intl'
 
 interface SwissSystemTableProps {
@@ -9,6 +10,8 @@ interface SwissSystemTableProps {
 	matches: Match[]
 	tournamentColor: string
 	numberOfWinners: number
+	secondaryTournamentColor: string
+	numberOfSecondaryWinners: number
 }
 
 interface MatchResult {
@@ -24,6 +27,8 @@ function SwissSystemTable({
 	matches,
 	tournamentColor,
 	numberOfWinners,
+	secondaryTournamentColor,
+	numberOfSecondaryWinners,
 }: SwissSystemTableProps) {
 	const t = useTranslations('TournamentGroup')
 	// uniform row height for header and body rows
@@ -213,7 +218,13 @@ function SwissSystemTable({
 									className='border border-gray-950 p-2 text-center sticky left-0 z-10 bg-background min-w-[50px]'
 									style={{
 										backgroundColor:
-											numberOfWinners > rowIndex ? tournamentColor : 'white',
+											getPlaceColor(
+												rowIndex + 1,
+												numberOfWinners,
+												tournamentColor,
+												numberOfSecondaryWinners,
+												secondaryTournamentColor
+											) ?? 'white',
 									}}
 								>
 									<div className='font-semibold text-sm text-center'>
