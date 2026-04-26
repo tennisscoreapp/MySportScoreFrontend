@@ -2,6 +2,7 @@
 
 import { Match, Player } from '@/interfaces/groupInterfaces'
 import { calculatePlayerStats, sortPlayers } from '@/utils/sortGroupTable'
+import { getPlaceColor } from '@/utils/placeColor'
 import { useTranslations } from 'next-intl'
 
 interface SwissSystemTableProps {
@@ -9,6 +10,8 @@ interface SwissSystemTableProps {
 	matches: Match[]
 	tournamentColor: string
 	numberOfWinners: number
+	secondaryTournamentColor: string
+	numberOfSecondaryWinners: number
 }
 
 interface MatchResult {
@@ -24,6 +27,8 @@ function SwissSystemTable({
 	matches,
 	tournamentColor,
 	numberOfWinners,
+	secondaryTournamentColor,
+	numberOfSecondaryWinners,
 }: SwissSystemTableProps) {
 	const t = useTranslations('TournamentGroup')
 	// uniform row height for header and body rows
@@ -156,7 +161,7 @@ function SwissSystemTable({
 								{t('group_table.matches_won')}
 							</div>
 						</th>
-						<th className='border border-gray-950 p-2 w-[80px]  max-w-[100px]'>
+						<th className='border border-gray-950 p-2 w-[90px]  max-w-[100px]'>
 							<div className='text-[10px] font-bold'>
 								{t.rich('group_table.sets_played', {
 									winlose: chunks => (
@@ -173,7 +178,7 @@ function SwissSystemTable({
 								{t('group_table.sets_difference')}
 							</div>
 						</th>
-						<th className='border border-gray-950 p-2 w-[80px] min-w-[60px] max-w-[100px]'>
+						<th className='border border-gray-950 p-2 w-[90px] min-w-[60px] max-w-[100px]'>
 							<div className='text-[10px] font-bold'>
 								{t.rich('group_table.games_played', {
 									winlose: chunks => (
@@ -213,7 +218,13 @@ function SwissSystemTable({
 									className='border border-gray-950 p-2 text-center sticky left-0 z-10 bg-background min-w-[50px]'
 									style={{
 										backgroundColor:
-											numberOfWinners > rowIndex ? tournamentColor : 'white',
+											getPlaceColor(
+												rowIndex + 1,
+												numberOfWinners,
+												tournamentColor,
+												numberOfSecondaryWinners,
+												secondaryTournamentColor
+											) ?? 'white',
 									}}
 								>
 									<div className='font-semibold text-sm text-center'>
@@ -233,7 +244,7 @@ function SwissSystemTable({
 								<td className='border border-gray-950 text-center min-w-[60px] '>
 									<div className='text-xs'>{stats.matchesWon}</div>
 								</td>
-								<td className='border border-gray-950 text-center min-w-[60px]'>
+								<td className='border border-gray-950 text-center min-w-[60px] p-2'>
 									<div className='text-xs'>
 										{stats.setsWon} - {stats.setsLost}
 									</div>
@@ -241,7 +252,7 @@ function SwissSystemTable({
 								<td className='border border-gray-950 text-center min-w-[60px] '>
 									<div className='text-xs'>{stats.setsDifference}</div>
 								</td>
-								<td className='border border-gray-950 text-center min-w-[60px]'>
+								<td className='border border-gray-950 text-center min-w-[60px]p-2'>
 									<div className='text-xs'>
 										{stats.gamesWon} - {stats.gamesLost}
 									</div>

@@ -86,6 +86,7 @@
 		}
 	},
 	"TournamentGroups": {
+		"group_not_found": "Группа не найдена",
 		"title": "Группы турнира",
 		"tournament_groups": "Группы турнира",
 		"group_loading": "Загрузка групп...",
@@ -151,7 +152,10 @@
 			"toggle_export_view": "Переключить вид",
 			"toggle_swiss_view": "Швейцарская система",
 			"toggle_group_table_view": "Групповой вид",
-			"number_of_winners": "Количество победителей в группе"
+			"number_of_winners": "Количество победителей в группе",
+			"primary_color_label": "Основной цвет (Primary)",
+			"secondary_color_label": "Вторичный цвет (Secondary)",
+			"number_of_secondary_winners": "Количество вторичных мест"
 		}
 	},
 	"Match": {

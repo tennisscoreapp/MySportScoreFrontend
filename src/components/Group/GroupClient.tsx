@@ -68,6 +68,22 @@ function GroupClient({
 		colorStore,
 		state => state.setNumberOfWinners
 	)
+	const secondaryTournamentColor = useStore(
+		colorStore,
+		state => state.secondaryTournamentColor
+	)
+	const setSecondaryTournamentColor = useStore(
+		colorStore,
+		state => state.setSecondaryTournamentColor
+	)
+	const numberOfSecondaryWinners = useStore(
+		colorStore,
+		state => state.numberOfSecondaryWinners
+	)
+	const setNumberOfSecondaryWinners = useStore(
+		colorStore,
+		state => state.setNumberOfSecondaryWinners
+	)
 	const [pageSize, setPageSize] = useState<number>(() => {
 		if (typeof window === 'undefined') return 6
 		const storedValue = Number(window.localStorage.getItem('pageSize'))
@@ -154,10 +170,18 @@ function GroupClient({
 										matches={group.group_data?.matches || []}
 										tournamentColor={tournamentColor}
 										numberOfWinners={numberOfWinners}
+										secondaryTournamentColor={secondaryTournamentColor}
+										numberOfSecondaryWinners={numberOfSecondaryWinners}
 									/>
 								) : (
 									<DataTable
-										columns={createColumns(t, numberOfWinners, tournamentColor)}
+										columns={createColumns(
+											t,
+											numberOfWinners,
+											tournamentColor,
+											numberOfSecondaryWinners,
+											secondaryTournamentColor
+										)}
 										data={groupPlayersData}
 										emptyMessage={t('group_table.no_data')}
 									/>
@@ -239,30 +263,60 @@ function GroupClient({
 						</Link>
 					</div>
 				</div>
-				<div className='flex items-center justify-center gap-4 mt-10'>
+				<div className='flex flex-wrap items-start justify-center gap-6 mt-10'>
 					<Button
 						onClick={handleDownloadPDF}
 						variant='secondary'
-						className='hover:bg-red-500 hover:text-white mt-4'
+						className='hover:bg-red-500 hover:text-white mt-4 self-center'
 					>
 						<Printer />
 						{t('buttons.export_pdf')}
 					</Button>
-					<HexColorPicker
-						color={tournamentColor}
-						onChange={setTournamentColor}
-					/>
-					<div className='w-fit'>
-						<Label htmlFor='number-of-winners'>
-							{t('buttons.number_of_winners')}
-						</Label>
-						<Input
-							id='number-of-winners'
-							type='number'
-							placeholder={t('buttons.number_of_winners')}
-							value={numberOfWinners}
-							onChange={e => setNumberOfWinners(Number(e.target.value))}
+
+					<div className='flex flex-col items-center gap-2'>
+						<span className='text-sm font-medium'>
+							{t('buttons.primary_color_label')}
+						</span>
+						<HexColorPicker
+							color={tournamentColor}
+							onChange={setTournamentColor}
 						/>
+						<div className='w-full'>
+							<Label htmlFor='number-of-winners'>
+								{t('buttons.number_of_winners')}
+							</Label>
+							<Input
+								id='number-of-winners'
+								type='number'
+								placeholder={t('buttons.number_of_winners')}
+								value={numberOfWinners}
+								onChange={e => setNumberOfWinners(Number(e.target.value))}
+							/>
+						</div>
+					</div>
+
+					<div className='flex flex-col items-center gap-2'>
+						<span className='text-sm font-medium'>
+							{t('buttons.secondary_color_label')}
+						</span>
+						<HexColorPicker
+							color={secondaryTournamentColor}
+							onChange={setSecondaryTournamentColor}
+						/>
+						<div className='w-full'>
+							<Label htmlFor='number-of-secondary-winners'>
+								{t('buttons.number_of_secondary_winners')}
+							</Label>
+							<Input
+								id='number-of-secondary-winners'
+								type='number'
+								placeholder={t('buttons.number_of_secondary_winners')}
+								value={numberOfSecondaryWinners}
+								onChange={e =>
+									setNumberOfSecondaryWinners(Number(e.target.value))
+								}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
