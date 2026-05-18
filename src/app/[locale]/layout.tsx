@@ -3,10 +3,10 @@ import Providers from '@/utils/provider'
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
-import { Press_Start_2P } from 'next/font/google'
+import { Commissioner } from 'next/font/google'
 
-const pressStart2P = Press_Start_2P({
-	variable: '--font-press-start-2p',
+const pressStart2P = Commissioner({
+	variable: '--font-сommissioner',
 	subsets: ['cyrillic', 'latin'],
 	weight: ['400'],
 	preload: true,
