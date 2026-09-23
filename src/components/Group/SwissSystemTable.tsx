@@ -1,6 +1,7 @@
 'use client'
+import { hasWonSet } from '@/utils/tennisScore'
 
-import { Match, Player } from '@/interfaces/groupInterfaces'
+import { Match, Player, PlayerStanding } from '@/interfaces/groupInterfaces'
 import { getPlaceColor } from '@/utils/placeColor'
 import { cn } from '@/utils/shadcn/css'
 import { calculatePlayerStats, sortPlayers } from '@/utils/sortGroupTable'
@@ -8,6 +9,7 @@ import { useTranslations } from 'next-intl'
 import { type ReactNode, useMemo } from 'react'
 
 interface SwissSystemTableProps {
+	standings?: PlayerStanding[]
 	players: Player[]
 	matches: Match[]
 	tournamentColor: string
@@ -131,6 +133,7 @@ function ScoreCell({ result }: { result: MatchResult | null }) {
 }
 
 function SwissSystemTable({
+	standings,
 	players,
 	matches,
 	tournamentColor,
@@ -142,8 +145,8 @@ function SwissSystemTable({
 	const tablePlayers = players ?? EMPTY_PLAYERS
 
 	const sortedPlayers = useMemo(
-		() => sortPlayers([...tablePlayers], matches) || [...tablePlayers],
-		[tablePlayers, matches],
+		() => sortPlayers(tablePlayers, matches, standings),
+		[tablePlayers, matches, standings],
 	)
 
 	const matchByPlayerPair = useMemo(() => {
@@ -155,10 +158,10 @@ function SwissSystemTable({
 
 	const statsByPlayerId = useMemo(() => {
 		return sortedPlayers.reduce((acc, player) => {
-			acc.set(player.id, calculatePlayerStats(player.id, matches))
+			acc.set(player.id, standings?.find(row => row.player_id === player.id) ?? calculatePlayerStats(player.id, matches))
 			return acc
 		}, new Map<number, PlayerStats>())
-	}, [matches, sortedPlayers])
+	}, [matches, sortedPlayers, standings])
 
 	const getMatchResult = (
 		playerId: number,
@@ -185,13 +188,14 @@ function SwissSystemTable({
 			gamesWon += playerGames
 			gamesLost += opponentGames
 
-			if (playerGames > opponentGames) setsWon++
-			else if (opponentGames > playerGames) setsLost++
+			if (hasWonSet(playerGames, opponentGames, match.legacy)) setsWon++
+			else if (hasWonSet(opponentGames, playerGames, match.legacy)) setsLost++
 		})
 
 		let status: MatchResult['status'] = 'draw'
-		if (setsWon > setsLost) status = 'win'
-		else if (setsLost > setsWon) status = 'loss'
+		if (match.status === 'completed' && match.winner_id === playerId) status = 'win'
+		else if (match.status === 'completed' && match.winner_id === opponentId) status = 'loss'
+		if (match.legacy) status = setsWon > setsLost ? 'win' : setsLost > setsWon ? 'loss' : 'draw'
 
 		return {
 			setsWon,

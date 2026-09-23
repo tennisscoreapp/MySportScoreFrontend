@@ -15,6 +15,7 @@ class TournamentService extends BaseService {
 	}
 
 	async createTournament(tournament: {
+		scoring_mode?: 'tennis' | 'legacy'
 		name: string
 		year: number
 		start_date: string

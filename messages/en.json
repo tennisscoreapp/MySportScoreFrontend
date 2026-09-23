@@ -44,6 +44,9 @@
 		"back_to_tournaments": "Back to tournaments"
 	},
 	"Tournaments": {
+		"scoring_format": "Scoring format",
+		"format_tennis": "Tennis · best of three sets",
+		"format_legacy": "Original format · unrestricted set scores",
 		"title": "Tournaments",
 		"description": "Managing tennis tournaments",
 		"tournament_card": {
@@ -159,6 +162,18 @@
 		}
 	},
 	"Match": {
+		"legacy_format": "Original tournament format. Scores and number of sets follow the existing rules.",
+		"legacy_score_range": "Enter a non-negative whole number.",
+		"tennis_format": "First to {count} sets. Enter each set's final score directly: 7:6 after a tiebreak, or 10:8 in the deciding set.",
+		"saving": "Saving...",
+		"save_failed": "Could not save. Your entries are still here; try again.",
+		"load_failed": "Could not load the group. Refresh the page to try again.",
+		"match_not_found": "Match not found.",
+		"version_conflict": "Another organizer changed this match. Your entries have not been saved. Reload the latest result before editing again.",
+		"reload_match": "Discard my edits and load latest result",
+		"status_scheduled": "Scheduled",
+		"games_range": "Enter a whole number of games between 0 and 7.",
+		"deciding_score_range": "Enter a whole number between 0 and 1000.",
 		"titleAdd": "Add new match",
 		"titleEdit": "Edit match",
 		"loading": "Loading...",
@@ -196,6 +211,7 @@
 		}
 	},
 	"AddPlayers": {
+		"save_failed": "The player change could not be saved. Your entries have been kept.",
 		"loading": "Loading...",
 		"title": "Group players",
 		"active_player": "Active",

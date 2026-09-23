@@ -9,6 +9,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { Match } from '@/interfaces/groupInterfaces'
+import { hasWonSet } from '@/utils/tennisScore'
 import { UseMutationResult } from '@tanstack/react-query'
 import { SquarePen, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -160,11 +161,11 @@ export default function MatchHistory({
 
 function summarizeSets(match: Match) {
 	const player1Sets = match.sets.reduce(
-		(acc, set) => acc + (set.player1_games > set.player2_games ? 1 : 0),
+		(acc, set) => acc + (hasWonSet(set.player1_games, set.player2_games, match.legacy) ? 1 : 0),
 		0
 	)
 	const player2Sets = match.sets.reduce(
-		(acc, set) => acc + (set.player2_games > set.player1_games ? 1 : 0),
+		(acc, set) => acc + (hasWonSet(set.player2_games, set.player1_games, match.legacy) ? 1 : 0),
 		0
 	)
 	return { player1Sets, player2Sets }
@@ -306,6 +307,7 @@ function ScoreGrid({
 							className='border border-gray-400 px-2 py-1 text-center w-12'
 						>
 							{s.player1_games}
+							{s.tiebreak_player1 != null && <sup className='ml-1'>{s.tiebreak_player1}</sup>}
 						</td>
 					))}
 				</tr>
@@ -319,6 +321,7 @@ function ScoreGrid({
 							className='border border-gray-400 px-2 py-1 text-center w-12'
 						>
 							{s.player2_games}
+							{s.tiebreak_player2 != null && <sup className='ml-1'>{s.tiebreak_player2}</sup>}
 						</td>
 					))}
 				</tr>

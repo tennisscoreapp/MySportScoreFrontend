@@ -54,9 +54,13 @@ function AddPlayers() {
 			first_name: data.player_name,
 			last_name: data.second_player || '',
 		}
-		createPlayerMutation.mutate(playerData)
-		methods.reset()
-		setShowAddForm(false)
+		try {
+			await createPlayerMutation.mutateAsync(playerData)
+			methods.reset()
+			setShowAddForm(false)
+		} catch {
+			// Keep entered data; the mutation error is rendered below.
+		}
 	}
 
 	const handleRemovePlayer = async (playerId: number) => {
@@ -74,6 +78,7 @@ function AddPlayers() {
 	}
 	return (
 		<div className='max-w-4xl mx-auto p-6'>
+			{(createPlayerMutation.isError || removePlayerMutation.isError) && <p role='alert' className='text-red-600 mb-4'>{t('save_failed')}</p>}
 			<div className='flex justify-between items-center mb-6'>
 				<h1 className='text-2xl font-bold'>
 					{t('title')} ({players?.length || 0})

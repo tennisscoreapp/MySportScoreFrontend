@@ -4,14 +4,14 @@ import { QueryClient, useMutation } from '@tanstack/react-query'
 
 export const useUpdateMatchMutation = (
 	matchId: string,
-	queryClient: QueryClient
+	queryClient: QueryClient,
+	groupId: string
 ) =>
 	useMutation({
 		mutationFn: (matchData: MatchData) =>
 			groupService.updateMatch(Number(matchId), matchData),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['match', matchId] })
-		},
+		onSuccess: () =>
+			queryClient.invalidateQueries({ queryKey: ['group', groupId] }),
 		onError: error => {
 			console.error('Error updating match:', error)
 		},
