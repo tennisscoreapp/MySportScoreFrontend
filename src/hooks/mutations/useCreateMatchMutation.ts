@@ -8,9 +8,8 @@ export const useCreateMatchMutation = (
 ) =>
 	useMutation({
 		mutationFn: (matchData: MatchData) => groupService.createMatch(matchData),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['matches', groupId] })
-		},
+		onSuccess: () =>
+			queryClient.invalidateQueries({ queryKey: ['group', groupId] }),
 		onError: error => {
 			console.error('Error creating match:', error)
 		},

@@ -9,9 +9,10 @@ export const useCreatePlayerMutation = (
 	useMutation({
 		mutationFn: (playerData: PlayerSendData) =>
 			groupService.createPlayer(groupId, playerData),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['players', groupId] })
-		},
+		onSuccess: () => Promise.all([
+			queryClient.invalidateQueries({ queryKey: ['players', groupId] }),
+			queryClient.invalidateQueries({ queryKey: ['group', groupId] }),
+		]),
 		onError: error => {
 			console.error('Error creating player:', error)
 		},

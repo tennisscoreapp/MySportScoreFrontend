@@ -1,4 +1,5 @@
 export interface Tournament {
+	scoring_mode?: 'tennis' | 'legacy'
 	id: number
 	user_id: number
 	name: string

@@ -18,22 +18,25 @@ class GroupService extends BaseService {
 	}
 
 	async createGroup(groupData: Group): Promise<Group> {
-		return this.post<Group>('/api/v1/groups', groupData)
+		return this.post<Group>('/api/v1/groups', { tournament_id: groupData.tournament_id, name: groupData.name })
 	}
 
 	async deleteGroup(groupId: string): Promise<unknown> {
 		return this.delete(`/api/v1/groups/${groupId}`)
 	}
 
-	async createMatch(matchData: MatchData): Promise<Match> {
-		return this.post<Match>('/api/v1/matches', matchData)
+	async createMatch(matchData: MatchData): Promise<SavedMatch> {
+		return this.post<SavedMatch>('/api/v1/matches', matchData)
 	}
 
 	async createPlayer(
 		groupId: string,
 		playerData: PlayerSendData
 	): Promise<Player> {
-		return this.post<Player>(`/api/v1/groups/${groupId}/players`, playerData)
+		const { first_name, last_name, email, phone, status } = playerData
+		return this.post<Player>(`/api/v1/groups/${groupId}/players`, {
+			first_name, last_name, email, phone, status: status === 'inactive' ? 'withdrawn' : status,
+		})
 	}
 
 	async removePlayer(groupId: string, playerId: number): Promise<unknown> {
@@ -48,9 +51,16 @@ class GroupService extends BaseService {
 		return this.get<Match>(`/api/v1/matches/${matchId}`)
 	}
 
-	async updateMatch(matchId: number, matchData: MatchData): Promise<Match> {
-		return this.put<Match>(`/api/v1/matches/${matchId}`, matchData)
+	async updateMatch(matchId: number, matchData: MatchData): Promise<SavedMatch> {
+		return this.put<SavedMatch>(`/api/v1/matches/${matchId}`, matchData)
 	}
+}
+
+export interface SavedMatch {
+	success: boolean
+	match_id?: number
+	version?: number
+	winner_id?: number | null
 }
 
 export const groupService = new GroupService()

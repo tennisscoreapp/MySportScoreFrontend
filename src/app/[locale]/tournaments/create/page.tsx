@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
 interface TournamentForm {
+	scoring_mode: 'tennis' | 'legacy'
 	name: string
 	year: number
 	start_date: string
@@ -29,6 +30,7 @@ export default function CreateTournament() {
 		watch,
 	} = useForm<TournamentForm>({
 		defaultValues: {
+			scoring_mode: 'tennis',
 			name: '',
 			year: currentYear,
 			start_date: '',
@@ -56,6 +58,13 @@ export default function CreateTournament() {
 			<h1 className='text-2xl font-bold mb-6'>{t('create_tournament')}</h1>
 
 			<form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+				<div className='space-y-2'>
+					<Label htmlFor='scoring_mode'>{t('scoring_format')}</Label>
+					<select id='scoring_mode' {...register('scoring_mode')} className='w-full h-9 px-3 border border-input rounded-md bg-background'>
+						<option value='tennis'>{t('format_tennis')}</option>
+						<option value='legacy'>{t('format_legacy')}</option>
+					</select>
+				</div>
 				<div>
 					<Label htmlFor='name' className='mb-2'>
 						{t('create_tournament_form.name')}

@@ -129,9 +129,10 @@ function GroupClient({
 					const groupPlayersData =
 						sortPlayers(
 							group.group_data?.players,
-							group.group_data?.matches
+							group.group_data?.matches,
+							group.group_data?.standings
 						)?.map((player: Player, index: number) => {
-							const stats = calculatePlayerStats(
+							const stats = group.group_data?.standings?.find(row => row.player_id === player.id) ?? calculatePlayerStats(
 								player?.id,
 								group.group_data?.matches
 							)
@@ -150,7 +151,7 @@ function GroupClient({
 
 					return (
 						<div
-							key={group.group_data.matches?.[0]?.id}
+							key={`${group.group_data.group.tournament_id}:${group.group_data.group.name}`}
 							className='flex flex-col gap-10 p-10'
 							ref={pdfRef}
 						>
@@ -168,6 +169,7 @@ function GroupClient({
 									<SwissSystemTable
 										players={group.group_data?.players || []}
 										matches={group.group_data?.matches || []}
+										standings={group.group_data?.standings}
 										tournamentColor={tournamentColor}
 										numberOfWinners={numberOfWinners}
 										secondaryTournamentColor={secondaryTournamentColor}

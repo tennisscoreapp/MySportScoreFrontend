@@ -6,21 +6,38 @@ export interface GroupData {
 	matches: Match[]
 	players: Player[]
 	group: Group
+	standings?: PlayerStanding[]
+}
+
+export interface PlayerStanding {
+	player_id: number
+	matchesPlayed: number
+	matchesWon: number
+	setsWon: number
+	setsLost: number
+	setsDifference: number
+	gamesWon: number
+	gamesLost: number
+	gamesDifference: number
 }
 
 export interface Group {
 	tournament_id: number
 	name: string
 	status: 'active' | 'completed'
+	sets_to_win?: number
+	scoring_mode?: 'tennis' | 'legacy'
 }
 
 export interface Match {
+	legacy?: boolean
 	id: number
 	group_id: number
 	player1_id: number
 	player2_id: number
-	winner_id: number
-	status: 'active' | 'completed' | 'cancelled'
+	winner_id: number | null
+	status: 'active' | 'scheduled' | 'in_progress' | 'completed' | 'cancelled'
+	version?: number
 	match_date: string
 	created_at: string
 	player1_first_name: string
@@ -36,6 +53,8 @@ export interface Set {
 	set_number: number
 	player1_games: number
 	player2_games: number
+	tiebreak_player1?: number | null
+	tiebreak_player2?: number | null
 }
 
 export interface Player {

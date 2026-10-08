@@ -1,10 +1,14 @@
-import { Match, Player } from '@/interfaces/groupInterfaces'
+import { Match, Player, PlayerStanding } from '@/interfaces/groupInterfaces'
 
 // Функция сортировки игроков по критериям
-export function sortPlayers(players: Player[], matches: Match[]) {
-	return players?.sort((a, b) => {
-		const statsA = calculatePlayerStats(a.id, matches)
-		const statsB = calculatePlayerStats(b.id, matches)
+export function sortPlayers(players: Player[], matches: Match[], standings?: PlayerStanding[]) {
+	const stats = new Map(standings?.map(row => [row.player_id, row]))
+	for (const player of players || []) {
+		if (!stats.has(player.id)) stats.set(player.id, { player_id: player.id, ...calculatePlayerStats(player.id, matches) })
+	}
+	return [...(players || [])].sort((a, b) => {
+		const statsA = stats.get(a.id)!
+		const statsB = stats.get(b.id)!
 
 		// 1. Сначала по количеству выигранных матчей (по убыванию)
 		if (statsA.matchesWon !== statsB.matchesWon) {
@@ -23,7 +27,7 @@ export function sortPlayers(players: Player[], matches: Match[]) {
 
 export function calculatePlayerStats(playerId: number, matches: Match[]) {
 	const playerMatches = matches?.filter(
-		match => match.player1_id === playerId || match.player2_id === playerId
+		match => match.status === 'completed' && (match.player1_id === playerId || match.player2_id === playerId)
 	)
 
 	let matchesWon = 0
@@ -46,7 +50,7 @@ export function calculatePlayerStats(playerId: number, matches: Match[]) {
 
 			if (playerGames > opponentGames) {
 				matchSetsWon++
-			} else {
+			} else if (playerGames < opponentGames) {
 				matchSetsLost++
 			}
 		})
