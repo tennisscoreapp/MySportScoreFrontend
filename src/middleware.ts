@@ -3,7 +3,11 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { routing } from './i18n/routing'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+// server-side checks call the Go API directly instead of going through the proxy
+const API_BASE_URL =
+	process.env.API_PROXY_TARGET ||
+	process.env.NEXT_PUBLIC_API_URL ||
+	'http://localhost:5000'
 
 const protectedRoutes = ['/tournaments']
 const authRoutes = ['/auth/login', '/auth/register']
