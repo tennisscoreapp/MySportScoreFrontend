@@ -31,7 +31,9 @@ export default function LoginForm() {
 
 		try {
 			await login(data.email, data.password)
-			router.push('/')
+			// drop router cache entries prefetched while logged out (cached redirects to login)
+			router.replace('/')
+			router.refresh()
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Ошибка входа')
 		} finally {

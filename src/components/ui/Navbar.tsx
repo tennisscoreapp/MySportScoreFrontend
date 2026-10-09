@@ -15,7 +15,9 @@ export default function Navbar() {
 	const handleLogout = async () => {
 		try {
 			await logout()
-			router.push('/auth/login')
+			// drop router cache entries fetched while logged in
+			router.replace('/auth/login')
+			router.refresh()
 		} catch (error) {
 			console.error('Logout error:', error)
 		}
