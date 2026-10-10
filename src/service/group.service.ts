@@ -1,6 +1,7 @@
 import {
 	Group,
 	GroupResponse,
+	GroupSettings,
 	Match,
 	Player,
 } from '@/interfaces/groupInterfaces'
@@ -19,6 +20,13 @@ class GroupService extends BaseService {
 
 	async createGroup(groupData: Group): Promise<Group> {
 		return this.post<Group>('/api/v1/groups', { tournament_id: groupData.tournament_id, name: groupData.name })
+	}
+
+	async updateGroupSettings(
+		groupId: string,
+		settings: Partial<GroupSettings>
+	): Promise<GroupSettings> {
+		return this.put<GroupSettings>(`/api/v1/groups/${groupId}/settings`, settings)
 	}
 
 	async deleteGroup(groupId: string): Promise<unknown> {

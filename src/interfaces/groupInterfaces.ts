@@ -5,7 +5,7 @@ export interface GroupResponse {
 export interface GroupData {
 	matches: Match[]
 	players: Player[]
-	group: Group
+	group: Group & GroupSettings
 	standings?: PlayerStanding[]
 }
 
@@ -19,6 +19,14 @@ export interface PlayerStanding {
 	gamesWon: number
 	gamesLost: number
 	gamesDifference: number
+}
+
+export interface GroupSettings {
+	is_public: boolean
+	primary_color: string
+	primary_winners: number
+	secondary_color: string
+	secondary_winners: number
 }
 
 export interface Group {

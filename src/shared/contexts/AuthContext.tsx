@@ -1,5 +1,6 @@
 'use client'
 
+import { PUBLIC_QUERY_KEYS } from '@/hooks/queries/usePublicQueries'
 import { AuthContextType, User } from '@/interfaces/loginInterfaces'
 import { useQueryClient } from '@tanstack/react-query'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
@@ -14,6 +15,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<User | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [initialized, setInitialized] = useState(false)
+
+	// public standings are readable without a session, so a failed check must
+	// not drop them while they load
+	const clearPrivateQueries = () => {
+		queryClient.getMutationCache().clear()
+		queryClient.removeQueries({
+			predicate: query =>
+				!PUBLIC_QUERY_KEYS.includes(String(query.queryKey[0])),
+		})
+	}
 
 	const checkAuth = async () => {
 		const generation = authGeneration.current
@@ -34,13 +45,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 					setUser(data.user)
 				}
 			} else {
-				queryClient.clear()
+				clearPrivateQueries()
 				setUser(null)
 			}
 		} catch (error) {
 			if (generation !== authGeneration.current) return
 			console.error('Auth check failed:', error)
-			queryClient.clear()
+			clearPrivateQueries()
 			setUser(null)
 		} finally {
 			if (generation === authGeneration.current) {

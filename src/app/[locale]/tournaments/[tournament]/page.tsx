@@ -1,17 +1,20 @@
 'use client'
+import CopyLinkButton from '@/components/Public/CopyLinkButton'
 import { Button } from '@/components/ui/button'
 import { useDeleteGroupMutation } from '@/hooks/mutations/useDeleteGroupMutation'
 import { useFetchTournamentGroupsQuery } from '@/hooks/queries/useFetchTournamentGroupsQuery'
 import { useFetchTournamentQuery } from '@/hooks/queries/useFetchTournamentQuery'
 import { Tournament, TournamentGroup } from '@/interfaces/tournamentInterfaces'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
+import { publicPath } from '@/utils/publicLinks'
 import { X } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
 export default function SingleTournamentPage() {
 	const t = useTranslations('TournamentGroups')
+	const locale = useLocale()
 	const params = useParams<{ tournament: string }>()
 	const tournament = params?.tournament ?? ''
 	const {
@@ -37,6 +40,9 @@ export default function SingleTournamentPage() {
 	if (isError || isErrorGroups) {
 		return <div>{t('error_loading')}</div>
 	}
+	// the shared tournament page exists only while at least one group is public
+	const publicToken = tournamentData?.[0]?.public_token
+	const hasPublicGroups = tournamentGroups?.some(group => group.is_public)
 
 	return (
 		<div className='container mx-auto p-8 sm:p-12 min-h-screen'>
@@ -103,10 +109,17 @@ export default function SingleTournamentPage() {
 					<p className='text-sm sm:text-base text-gray-600'>{t('no_groups')}</p>
 				)}
 			</div>
-			<div className='mt-2 sm:mt-10 flex gap-2 sm:gap-4'>
+			<div className='mt-2 sm:mt-10 flex flex-wrap gap-2 sm:gap-4'>
 				<Link href={`/tournaments/${tournament}/creategroup`}>
 					<Button size='sm'>{t('create_group')}</Button>
 				</Link>
+				{publicToken && hasPublicGroups && (
+					<CopyLinkButton
+						size='sm'
+						path={publicPath(locale, publicToken)}
+						label={t('copy_public_link')}
+					/>
+				)}
 				<Link href={`/tournaments`}>
 					<Button size='sm' variant='outline'>
 						{t('back')}

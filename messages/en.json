@@ -99,7 +99,8 @@
 			"enter_group": "Enter group →"
 		},
 		"tournament_start_date": "Start date",
-		"tournament_end_date": "End date"
+		"tournament_end_date": "End date",
+		"copy_public_link": "Copy public link"
 	},
 	"TournamentGroup": {
 		"group_loading": "Group loading...",
@@ -149,6 +150,12 @@
 			"sets_difference": "Sets difference",
 			"games_played": "Games (W - L)",
 			"games_difference": "Games difference"
+		},
+		"public_access": {
+			"label": "Public page",
+			"enabled_hint": "Anyone with the link can view these standings. Nothing can be edited from the public page.",
+			"disabled_hint": "Only club members can see this group. Turn this on to share the standings with a read-only link.",
+			"copy_link": "Copy public link"
 		}
 	},
 	"Match": {
@@ -256,5 +263,12 @@
 			"description": "Language changes will apply immediately. All interfaces will be translated to the selected language."
 		},
 		"save_success": "Settings saved"
+	},
+	"PublicPages": {
+		"loading": "Loading...",
+		"unavailable_title": "This page isn't available",
+		"unavailable_description": "The link may be wrong, or the organizer has stopped sharing these standings.",
+		"link_copied": "Link copied",
+		"copy_manually": "Copy this link:"
 	}
 }

@@ -8,6 +8,7 @@ export interface Tournament {
 	end_date: string
 	status: 'active' | 'completed' | 'cancelled'
 	created_at: string
+	public_token: string
 }
 
 export interface TournamentGroup {
@@ -16,4 +17,5 @@ export interface TournamentGroup {
 	name: string
 	status: 'active' | 'completed' | 'cancelled'
 	created_at: string
+	is_public: boolean
 }

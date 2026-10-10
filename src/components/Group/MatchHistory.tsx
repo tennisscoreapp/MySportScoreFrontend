@@ -22,8 +22,9 @@ interface MatchHistoryProps {
 	matches: Match[]
 	tournamentId: string
 	groupId: string
-	onDeleteMatch: UseMutationResult<void, Error, number>
+	onDeleteMatch?: UseMutationResult<void, Error, number>
 	exportView: boolean
+	readOnly?: boolean
 }
 
 export default function MatchHistory({
@@ -32,6 +33,7 @@ export default function MatchHistory({
 	groupId,
 	onDeleteMatch,
 	exportView,
+	readOnly = false,
 }: MatchHistoryProps) {
 	const t = useTranslations('TournamentGroup')
 	const [view, setView] = useState<ViewMode>(() => {
@@ -119,38 +121,40 @@ export default function MatchHistory({
 									/>
 								)}
 
-								<div
-									className={`gap-4 justify-center mt-4 ${
-										exportView ? 'hidden' : 'flex flex-row'
-									}`}
-								>
-									<div className='text-center'>
-										<Link
-											href={`/tournaments/${tournamentId}/groups/${groupId}/${match.id}`}
-										>
-											<Button
-												variant='outline'
-												size='icon'
-												className='hover:bg-blue-500 hover:text-white'
+								{!readOnly && (
+									<div
+										className={`gap-4 justify-center mt-4 ${
+											exportView ? 'hidden' : 'flex flex-row'
+										}`}
+									>
+										<div className='text-center'>
+											<Link
+												href={`/tournaments/${tournamentId}/groups/${groupId}/${match.id}`}
 											>
-												<SquarePen strokeWidth={2.25} />
+												<Button
+													variant='outline'
+													size='icon'
+													className='hover:bg-blue-500 hover:text-white'
+												>
+													<SquarePen strokeWidth={2.25} />
+												</Button>
+											</Link>
+										</div>
+										<div className='text-center'>
+											<Button
+												variant='destructive'
+												size='icon'
+												onClick={() => {
+													if (confirm(t('delete_match_confirmation'))) {
+														onDeleteMatch?.mutate(match.id)
+													}
+												}}
+											>
+												<X strokeWidth={2.25} />
 											</Button>
-										</Link>
+										</div>
 									</div>
-									<div className='text-center'>
-										<Button
-											variant='destructive'
-											size='icon'
-											onClick={() => {
-												if (confirm(t('delete_match_confirmation'))) {
-													onDeleteMatch.mutate(match.id)
-												}
-											}}
-										>
-											<X strokeWidth={2.25} />
-										</Button>
-									</div>
-								</div>
+								)}
 							</div>
 						)
 					})}

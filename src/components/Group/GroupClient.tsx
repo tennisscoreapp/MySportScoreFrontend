@@ -1,8 +1,12 @@
 'use client'
+import CopyLinkButton from '@/components/Public/CopyLinkButton'
 import { Button } from '@/components/ui/button'
-import { GroupResponse, Player } from '@/interfaces/groupInterfaces'
-import { Tournament } from '@/interfaces/tournamentInterfaces'
-import { useColorStore } from '@/store/useColorStore'
+import { clampPlaces } from '@/hooks/useGroupSettings'
+import {
+	GroupResponse,
+	GroupSettings,
+	Player,
+} from '@/interfaces/groupInterfaces'
 import { calculatePlayerStats, sortPlayers } from '@/utils/sortGroupTable'
 import { Label } from '@radix-ui/react-label'
 import { UseMutationResult } from '@tanstack/react-query'
@@ -11,7 +15,6 @@ import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
-import { useStore } from 'zustand'
 import { DataTable } from '../ui/data-table'
 import { Input } from '../ui/input'
 import { createColumns } from './columns'
@@ -25,22 +28,41 @@ export enum TableView {
 	GROUP_TABLE = 'group_table',
 }
 
+const DEFAULT_SETTINGS: GroupSettings = {
+	is_public: false,
+	primary_color: '#ffffff',
+	primary_winners: 0,
+	secondary_color: '#ff4444',
+	secondary_winners: 0,
+}
+
+// readOnly renders the public standings page: no editing, settings or export
 function GroupClient({
 	groupData,
 	isLoading,
 	error,
-	tournamentData,
+	tournamentName,
 	deleteMatchMutation,
 	tournamentId,
 	groupId,
+	backHref,
+	readOnly = false,
+	settings = DEFAULT_SETTINGS,
+	onSettingsChange,
+	publicGroupPath,
 }: {
 	groupData: GroupResponse[]
 	isLoading: boolean
 	error: string | null
-	deleteMatchMutation: UseMutationResult<void, Error, number>
-	tournamentData: Tournament[]
+	deleteMatchMutation?: UseMutationResult<void, Error, number>
+	tournamentName: string
 	tournamentId: string
 	groupId: string
+	backHref: string
+	readOnly?: boolean
+	settings?: GroupSettings
+	onSettingsChange?: (patch: Partial<GroupSettings>, immediate?: boolean) => void
+	publicGroupPath?: string
 }) {
 	const t = useTranslations('TournamentGroup')
 	const [exportView, setExportView] = useState(false)
@@ -56,34 +78,14 @@ function GroupClient({
 	})
 	const [page, setPage] = useState(1)
 
-	// use group-specific color store
-	const colorStore = useColorStore(groupId)
-	const tournamentColor = useStore(colorStore, state => state.tournamentColor)
-	const setTournamentColor = useStore(
-		colorStore,
-		state => state.setTournamentColor
-	)
-	const numberOfWinners = useStore(colorStore, state => state.numberOfWinners)
-	const setNumberOfWinners = useStore(
-		colorStore,
-		state => state.setNumberOfWinners
-	)
-	const secondaryTournamentColor = useStore(
-		colorStore,
-		state => state.secondaryTournamentColor
-	)
-	const setSecondaryTournamentColor = useStore(
-		colorStore,
-		state => state.setSecondaryTournamentColor
-	)
-	const numberOfSecondaryWinners = useStore(
-		colorStore,
-		state => state.numberOfSecondaryWinners
-	)
-	const setNumberOfSecondaryWinners = useStore(
-		colorStore,
-		state => state.setNumberOfSecondaryWinners
-	)
+	const {
+		primary_color: tournamentColor,
+		primary_winners: numberOfWinners,
+		secondary_color: secondaryTournamentColor,
+		secondary_winners: numberOfSecondaryWinners,
+	} = settings
+	const canEdit = !readOnly && onSettingsChange !== undefined
+	const changeSettings = onSettingsChange ?? (() => {})
 	const [pageSize, setPageSize] = useState<number>(() => {
 		if (typeof window === 'undefined') return 6
 		const storedValue = Number(window.localStorage.getItem('pageSize'))
@@ -156,7 +158,7 @@ function GroupClient({
 							ref={pdfRef}
 						>
 							<div className='text-2xl font-bold text-center'>
-								{tournamentData[0]?.name}
+								{tournamentName}
 							</div>
 							<div
 								className='text-2xl font-bold text-center'
@@ -204,6 +206,7 @@ function GroupClient({
 									swissView !== TableView.SWISS_SYSTEM && (
 										<MatchHistory
 											exportView={exportView}
+											readOnly={readOnly}
 											matches={pageMatches}
 											tournamentId={tournamentId}
 											groupId={groupId}
@@ -230,16 +233,20 @@ function GroupClient({
 
 				<div className='flex gap-4 flex-col lg:flex-row lg:gap-0 mt-10 justify-between'>
 					<div className='flex flex-col lg:flex-row gap-4'>
-						<Link
-							href={`/tournaments/${tournamentId}/groups/${groupId}/addmatch`}
-						>
-							<Button>{t('buttons.add_match')}</Button>
-						</Link>
-						<Link
-							href={`/tournaments/${tournamentId}/groups/${groupId}/addplayers`}
-						>
-							<Button>{t('buttons.add_players')}</Button>
-						</Link>
+						{!readOnly && (
+							<>
+								<Link
+									href={`/tournaments/${tournamentId}/groups/${groupId}/addmatch`}
+								>
+									<Button>{t('buttons.add_match')}</Button>
+								</Link>
+								<Link
+									href={`/tournaments/${tournamentId}/groups/${groupId}/addplayers`}
+								>
+									<Button>{t('buttons.add_players')}</Button>
+								</Link>
+							</>
+						)}
 					</div>
 					<div className='flex flex-col lg:flex-row gap-4'>
 						<Button
@@ -255,16 +262,45 @@ function GroupClient({
 								? t('buttons.toggle_group_table_view')
 								: t('buttons.toggle_swiss_view')}
 						</Button>
-						{swissView !== TableView.SWISS_SYSTEM && (
+						{!readOnly && swissView !== TableView.SWISS_SYSTEM && (
 							<Button onClick={() => setExportView(!exportView)}>
 								{t('buttons.toggle_export_view')}
 							</Button>
 						)}
-						<Link href={`/tournaments/${tournamentId}`}>
+						<Link href={backHref}>
 							<Button>{t('buttons.back')}</Button>
 						</Link>
 					</div>
 				</div>
+				{canEdit && (
+					<div className='mt-10 flex flex-col gap-3 rounded-lg border p-4'>
+						<label className='flex items-center gap-3 font-medium cursor-pointer'>
+							<input
+								type='checkbox'
+								className='h-4 w-4 cursor-pointer'
+								checked={settings.is_public}
+								onChange={e =>
+									changeSettings({ is_public: e.target.checked }, true)
+								}
+							/>
+							{t('public_access.label')}
+						</label>
+						<p className='text-sm text-muted-foreground'>
+							{settings.is_public
+								? t('public_access.enabled_hint')
+								: t('public_access.disabled_hint')}
+						</p>
+						{settings.is_public && publicGroupPath && (
+							<div>
+								<CopyLinkButton
+									path={publicGroupPath}
+									label={t('public_access.copy_link')}
+								/>
+							</div>
+						)}
+					</div>
+				)}
+				{canEdit && (
 				<div className='flex flex-wrap items-start justify-center gap-6 mt-10'>
 					<Button
 						onClick={handleDownloadPDF}
@@ -281,7 +317,7 @@ function GroupClient({
 						</span>
 						<HexColorPicker
 							color={tournamentColor}
-							onChange={setTournamentColor}
+							onChange={color => changeSettings({ primary_color: color })}
 						/>
 						<div className='w-full'>
 							<Label htmlFor='number-of-winners'>
@@ -292,7 +328,11 @@ function GroupClient({
 								type='number'
 								placeholder={t('buttons.number_of_winners')}
 								value={numberOfWinners}
-								onChange={e => setNumberOfWinners(Number(e.target.value))}
+								onChange={e =>
+									changeSettings({
+										primary_winners: clampPlaces(Number(e.target.value)),
+									})
+								}
 							/>
 						</div>
 					</div>
@@ -303,7 +343,7 @@ function GroupClient({
 						</span>
 						<HexColorPicker
 							color={secondaryTournamentColor}
-							onChange={setSecondaryTournamentColor}
+							onChange={color => changeSettings({ secondary_color: color })}
 						/>
 						<div className='w-full'>
 							<Label htmlFor='number-of-secondary-winners'>
@@ -315,12 +355,15 @@ function GroupClient({
 								placeholder={t('buttons.number_of_secondary_winners')}
 								value={numberOfSecondaryWinners}
 								onChange={e =>
-									setNumberOfSecondaryWinners(Number(e.target.value))
+									changeSettings({
+										secondary_winners: clampPlaces(Number(e.target.value)),
+									})
 								}
 							/>
 						</div>
 					</div>
 				</div>
+				)}
 			</div>
 		</div>
 	)
