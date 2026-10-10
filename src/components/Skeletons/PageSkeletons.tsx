@@ -113,11 +113,22 @@ export function TournamentSkeleton({
 			</div>
 
 			{withActions && (
-				<div className='mt-2 sm:mt-10 flex flex-wrap gap-2 sm:gap-4'>
-					<Skeleton className='h-8 w-32' />
-					<Skeleton className='h-8 w-44' />
-					<Skeleton className='h-8 w-20' />
-				</div>
+				<>
+					<div className='mt-2 sm:mt-10 flex flex-wrap gap-2 sm:gap-4'>
+						<Skeleton className='h-8 w-32' />
+						<Skeleton className='h-8 w-44' />
+						<Skeleton className='h-8 w-20' />
+					</div>
+					<div className='mt-6 sm:mt-10 flex flex-col gap-3 rounded-lg border p-4'>
+						<Skeleton className='h-6 w-32' />
+						<Skeleton className='h-4 w-3/4' />
+						<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+							<FieldSkeleton labelClassName='w-28' />
+							<FieldSkeleton labelClassName='w-24' />
+						</div>
+						<Skeleton className='h-8 w-24' />
+					</div>
+				</>
 			)}
 		</SkeletonPage>
 	)

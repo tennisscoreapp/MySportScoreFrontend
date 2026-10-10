@@ -100,7 +100,20 @@
 		},
 		"tournament_start_date": "Start date",
 		"tournament_end_date": "End date",
-		"copy_public_link": "Copy public link"
+		"copy_public_link": "Copy public link",
+		"drive": {
+			"title": "Google Drive",
+			"description": "Group PDFs are uploaded to this folder. Exporting a group again replaces its file, so the link stays the same.",
+			"folder_label": "Folder link",
+			"file_name_label": "File name",
+			"file_name_hint": "{tournament} and {group} are replaced with the tournament and group names.",
+			"save": "Save",
+			"saving": "Saving...",
+			"saved": "Saved",
+			"invalid": "Check the folder link. It should look like https://drive.google.com/drive/folders/…",
+			"save_failed": "Could not save the settings. Try again.",
+			"open_folder": "Open folder"
+		}
 	},
 	"TournamentGroup": {
 		"group_loading": "Group loading...",
@@ -156,6 +169,17 @@
 			"enabled_hint": "Anyone with the link can view these standings. Nothing can be edited from the public page.",
 			"disabled_hint": "Only club members can see this group. Turn this on to share the standings with a read-only link.",
 			"copy_link": "Copy public link"
+		},
+		"drive_export": {
+			"button": "Export PDF to Google Drive",
+			"uploading": "Uploading...",
+			"uploaded": "Uploaded to Google Drive",
+			"open_file": "Open in Drive",
+			"folder_missing": "Set a Google Drive folder on the tournament page first.",
+			"tournament_settings": "Open tournament page",
+			"not_configured": "Google Drive export is not set up on the server.",
+			"folder_unavailable": "The Google Drive folder was not found or the export account cannot edit it.",
+			"failed": "Upload to Google Drive failed. Try again."
 		}
 	},
 	"Match": {

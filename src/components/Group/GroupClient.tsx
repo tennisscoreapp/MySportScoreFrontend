@@ -19,6 +19,7 @@ import { HexColorPicker } from 'react-colorful'
 import { DataTable } from '../ui/data-table'
 import { Input } from '../ui/input'
 import { createColumns } from './columns'
+import DriveExportButton from './DriveExportButton'
 import GroupPagination from './GroupPagination'
 import { handleDownloadPDFUtil } from './handleDownloadPDF'
 import MatchHistory from './MatchHistory'
@@ -303,14 +304,21 @@ function GroupClient({
 				)}
 				{canEdit && (
 				<div className='flex flex-wrap items-start justify-center gap-6 mt-10'>
-					<Button
-						onClick={handleDownloadPDF}
-						variant='secondary'
-						className='hover:bg-red-500 hover:text-white mt-4 self-center'
-					>
-						<Printer />
-						{t('buttons.export_pdf')}
-					</Button>
+					<div className='flex flex-col items-center gap-3 mt-4 self-center'>
+						<Button
+							onClick={handleDownloadPDF}
+							variant='secondary'
+							className='hover:bg-red-500 hover:text-white'
+						>
+							<Printer />
+							{t('buttons.export_pdf')}
+						</Button>
+						<DriveExportButton
+							groupId={groupId}
+							tournamentId={tournamentId}
+							getExportRoot={() => pdfRef.current}
+						/>
+					</div>
 
 					<div className='flex flex-col items-center gap-2'>
 						<span className='text-sm font-medium'>

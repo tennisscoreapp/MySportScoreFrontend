@@ -6,7 +6,10 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 export const useCreateTournamentMutation = (router: AppRouterInstance) => {
 	const queryClient = useQueryClient()
 	return useMutation({
-		mutationFn: (tournament: Omit<Tournament, 'public_token'>) =>
+		mutationFn: (tournament: Omit<
+			Tournament,
+			'public_token' | 'drive_folder_id' | 'drive_file_name'
+		>) =>
 			tournamentService.createTournament({
 				name: tournament.name,
 				year: tournament.year,

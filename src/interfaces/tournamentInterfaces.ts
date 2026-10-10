@@ -9,7 +9,18 @@ export interface Tournament {
 	status: 'active' | 'completed' | 'cancelled'
 	created_at: string
 	public_token: string
+	// null until a Google Drive folder is set for PDF export
+	drive_folder_id: string | null
+	drive_file_name: string
 }
+
+export interface DriveSettings {
+	drive_folder_id: string | null
+	drive_file_name: string
+}
+
+export const driveFolderUrl = (folderId: string) =>
+	`https://drive.google.com/drive/folders/${folderId}`
 
 export interface TournamentGroup {
 	id: number

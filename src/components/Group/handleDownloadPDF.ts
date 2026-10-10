@@ -10,7 +10,21 @@ export const handleDownloadPDFUtil = async (
 ) => {
 	try {
 		if (!inputData) return
+		const pdf = await createGroupPDF(inputData)
+		pdf.save(`Group_${groupName}.pdf`)
+	} catch (error) {
+		console.error('Error generating PDF:', error)
+	}
+}
 
+// the same PDF as base64, for uploading instead of downloading
+export const createGroupPDFBase64 = async (inputData: HTMLDivElement) => {
+	const pdf = await createGroupPDF(inputData)
+	return pdf.output('datauristring').split(',')[1]
+}
+
+const createGroupPDF = async (inputData: HTMLDivElement) => {
+	try {
 		if (typeof document !== 'undefined' && 'fonts' in document) {
 			try {
 				await (document as Document).fonts.ready
@@ -86,9 +100,7 @@ export const handleDownloadPDFUtil = async (
 
 		pdf.addImage(imgData, 'PNG', offsetX, offsetY, renderWidth, renderHeight)
 
-		pdf.save(`Group_${groupName}.pdf`)
-	} catch (error) {
-		console.error('Error generating PDF:', error)
+		return pdf
 	} finally {
 		if (inputData?.hasAttribute('data-pdf-export-root')) {
 			inputData.removeAttribute('data-pdf-export-root')

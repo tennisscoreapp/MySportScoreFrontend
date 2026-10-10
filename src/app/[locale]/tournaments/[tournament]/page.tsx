@@ -1,6 +1,7 @@
 'use client'
 import { TournamentSkeleton } from '@/components/Skeletons/PageSkeletons'
 import CopyLinkButton from '@/components/Public/CopyLinkButton'
+import DriveSettingsForm from '@/components/Tournament/DriveSettingsForm'
 import { Button } from '@/components/ui/button'
 import { useDeleteGroupMutation } from '@/hooks/mutations/useDeleteGroupMutation'
 import { useFetchTournamentGroupsQuery } from '@/hooks/queries/useFetchTournamentGroupsQuery'
@@ -127,6 +128,14 @@ export default function SingleTournamentPage() {
 					</Button>
 				</Link>
 			</div>
+			{tournamentData?.[0] && (
+				<DriveSettingsForm
+					key={tournamentData[0].id}
+					tournamentId={tournament}
+					folderId={tournamentData[0].drive_folder_id}
+					fileName={tournamentData[0].drive_file_name}
+				/>
+			)}
 		</div>
 	)
 }

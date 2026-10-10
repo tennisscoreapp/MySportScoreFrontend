@@ -29,6 +29,13 @@ class GroupService extends BaseService {
 		return this.put<GroupSettings>(`/api/v1/groups/${groupId}/settings`, settings)
 	}
 
+	// the first export creates the file in the tournament's folder, later ones overwrite it
+	async exportToDrive(groupId: string, pdfBase64: string): Promise<DriveExport> {
+		return this.post<DriveExport>(`/api/v1/groups/${groupId}/drive-export`, {
+			pdf: pdfBase64,
+		})
+	}
+
 	async deleteGroup(groupId: string): Promise<unknown> {
 		return this.delete(`/api/v1/groups/${groupId}`)
 	}
@@ -69,6 +76,12 @@ export interface SavedMatch {
 	match_id?: number
 	version?: number
 	winner_id?: number | null
+}
+
+export interface DriveExport {
+	file_id: string
+	url: string
+	name: string
 }
 
 export const groupService = new GroupService()
