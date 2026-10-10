@@ -2,13 +2,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
 import { useCreateGroupMutation } from '@/hooks/mutations/useCreateGroupMutation'
 import { Group } from '@/interfaces/groupInterfaces'
 import Link from 'next/link'
@@ -65,28 +58,6 @@ export default function CreateGroupClient({
 					/>
 					{errors.name && (
 						<p className='text-red-500 text-sm mt-1'>{errors.name.message}</p>
-					)}
-				</div>
-
-				<div>
-					<Label htmlFor='status' className='mb-2'>
-						Статус
-					</Label>
-					<Select
-						{...register('status', {
-							required: 'Статус обязателен',
-						})}
-					>
-						<SelectTrigger>
-							<SelectValue placeholder='Выберите статус' />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value='active'>Активная</SelectItem>
-							<SelectItem value='completed'>Завершенная</SelectItem>
-						</SelectContent>
-					</Select>
-					{errors.status && (
-						<p className='text-red-500 text-sm mt-1'>{errors.status.message}</p>
 					)}
 				</div>
 

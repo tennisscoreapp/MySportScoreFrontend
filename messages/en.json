@@ -1,8 +1,7 @@
 {
 	"Index": {
 		"header": {
-			"subtitle": "Admin panel",
-			"system_active": "System is active"
+			"subtitle": "Admin panel"
 		},
 		"title": "Home",
 		"description_1": "Welcome to the tournament management system",
@@ -52,10 +51,7 @@
 		"tournament_card": {
 			"year": "year",
 			"start_date": "Start date",
-			"end_date": "End date",
-			"active": "Active",
-			"completed": "Completed",
-			"cancelled": "Cancelled"
+			"end_date": "End date"
 		},
 		"tournament_loading": "Tournaments loading...",
 		"delete_tournament_confirmation": "Are you sure you want to delete this tournament?",
@@ -102,14 +98,8 @@
 		"group_card": {
 			"enter_group": "Enter group →"
 		},
-		"tournament_card": {
-			"active": "Active",
-			"completed": "Completed",
-			"cancelled": "Cancelled"
-		},
 		"tournament_start_date": "Start date",
-		"tournament_end_date": "End date",
-		"tournament_status": "Status"
+		"tournament_end_date": "End date"
 	},
 	"TournamentGroup": {
 		"group_loading": "Group loading...",
@@ -186,7 +176,7 @@
 			"match_date": "Match date",
 			"status": "Status",
 			"status_completed": "Completed",
-			"status_active": "Active",
+			"status_active": "In progress",
 			"status_cancelled": "Cancelled",
 			"sets": "Sets",
 			"set": "Set",
@@ -214,8 +204,6 @@
 		"save_failed": "The player change could not be saved. Your entries have been kept.",
 		"loading": "Loading...",
 		"title": "Group players",
-		"active_player": "Active",
-		"inactive_player": "Inactive",
 		"no_players": "No players in this group yet",
 		"confirm_delete": "Are you sure you want to delete this player?",
 		"delete_player": "Delete player",
@@ -235,7 +223,6 @@
 		},
 		"validation": {
 			"first_player_required": "Name of the player is required",
-			"email_required": "Email is required",
 			"email_invalid": "Invalid email address"
 		}
 	},

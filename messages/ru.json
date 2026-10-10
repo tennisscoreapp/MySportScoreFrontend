@@ -1,8 +1,7 @@
 {
 	"Index": {
 		"header": {
-			"subtitle": "Админ панель",
-			"system_active": "Система активна"
+			"subtitle": "Админ панель"
 		},
 		"title": "Главная",
 		"description_1": "Добро пожаловать в систему управления турнирами",
@@ -52,10 +51,7 @@
 		"tournament_card": {
 			"year": "год",
 			"start_date": "Дата начала",
-			"end_date": "Дата окончания",
-			"active": "Активный",
-			"completed": "Завершен",
-			"cancelled": "Отменен"
+			"end_date": "Дата окончания"
 		},
 		"tournament_loading": "Загрузка турниров...",
 		"delete_tournament_confirmation": "Вы уверены, что хотите удалить этот турнир?",
@@ -102,14 +98,8 @@
 		"group_card": {
 			"enter_group": "Войти в группу →"
 		},
-		"tournament_card": {
-			"active": "Активный",
-			"completed": "Завершен",
-			"cancelled": "Отменен"
-		},
 		"tournament_start_date": "Дата начала",
-		"tournament_end_date": "Дата окончания",
-		"tournament_status": "Статус"
+		"tournament_end_date": "Дата окончания"
 	},
 	"TournamentGroup": {
 		"delete_match_confirmation": "Вы уверены, что хотите удалить этот матч?",
@@ -186,7 +176,7 @@
 			"match_date": "Дата матча",
 			"status": "Статус",
 			"status_completed": "Завершен",
-			"status_active": "Активный",
+			"status_active": "В процессе",
 			"status_cancelled": "Отменен",
 			"sets": "Сеты",
 			"set": "Сет",
@@ -214,8 +204,6 @@
 		"save_failed": "Не удалось сохранить изменение игрока. Введённые данные сохранены в форме.",
 		"loading": "Загрузка...",
 		"title": "Игроки группы",
-		"active_player": "Активный",
-		"inactive_player": "Неактивный",
 		"no_players": "В этой группе пока нет игроков",
 		"confirm_delete": "Вы уверены, что хотите удалить этого игрока?",
 		"delete_player": "Удалить игрока",
@@ -235,7 +223,6 @@
 		},
 		"validation": {
 			"first_player_required": "Имя игрока обязательно",
-			"email_required": "Email обязателен",
 			"email_invalid": "Неверный email адрес"
 		}
 	},

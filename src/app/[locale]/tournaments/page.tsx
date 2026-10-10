@@ -4,11 +4,6 @@ import { Button } from '@/components/ui/button'
 import { useDeleteTournamentMutation } from '@/hooks/mutations/useDeleteTournamentMutation'
 import { useFetchTournamentsQuery } from '@/hooks/queries/useFetchTournamentsQuery'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
-import {
-	getStatusColor,
-	getStatusIcon,
-	getStatusText,
-} from '@/utils/tournamentPageUtils/getStatus'
 import { ArrowLeft, Calendar, Loader2, Plus, Trophy, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -105,14 +100,6 @@ export default function Tournaments() {
 												<p className='text-xs sm:text-sm text-gray-500 mt-1'>
 													{tournament.year} {t('tournament_card.year')}
 												</p>
-											</div>
-											<div
-												className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium border ml-3 ${getStatusColor(
-													tournament.status
-												)}`}
-											>
-												{getStatusIcon(tournament.status)}
-												{getStatusText(tournament.status, t)}
 											</div>
 										</div>
 

@@ -142,13 +142,12 @@ function AddPlayers() {
 										htmlFor='email'
 										className='block text-sm font-medium mb-1'
 									>
-										{t('form.email')} *
+										{t('form.email')}
 									</Label>
 									<Controller
 										control={methods.control}
 										name='email'
 										rules={{
-											required: t('validation.email_required'),
 											pattern: {
 												value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
 												message: t('validation.email_invalid'),
@@ -216,21 +215,12 @@ function AddPlayers() {
 										<div>{player.first_name}</div>
 										<div>{player.last_name}</div>
 									</div>
-									<div className='text-sm text-gray-500'>{player.email}</div>
+									{player.email && (
+										<div className='text-sm text-gray-500'>{player.email}</div>
+									)}
 									{player.phone && (
 										<div className='text-sm text-gray-500'>{player.phone}</div>
 									)}
-									<span
-										className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-											player.status === 'active'
-												? 'bg-green-100 text-green-800'
-												: 'bg-gray-100 text-gray-800'
-										}`}
-									>
-										{player.status === 'active'
-											? t('active_player')
-											: t('inactive_player')}
-									</span>
 								</div>
 								<Button
 									onClick={() => handleRemovePlayer(player.id)}

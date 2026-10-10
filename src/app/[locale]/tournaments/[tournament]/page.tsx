@@ -5,10 +5,6 @@ import { useFetchTournamentGroupsQuery } from '@/hooks/queries/useFetchTournamen
 import { useFetchTournamentQuery } from '@/hooks/queries/useFetchTournamentQuery'
 import { Tournament, TournamentGroup } from '@/interfaces/tournamentInterfaces'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
-import {
-	getStatusColor,
-	getStatusText,
-} from '@/utils/tournamentPageUtils/getStatus'
 import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -63,18 +59,6 @@ export default function SingleTournamentPage() {
 								</span>
 								<p>{formatDateDDMMYYYY(tournamentInfo.end_date)}</p>
 							</div>
-							<div>
-								<span className='font-semibold text-sm sm:text-base'>
-									{t('tournament_status')}:
-								</span>
-								<p
-									className={`inline-block px-1 sm:px-2 py-1 rounded text-xs sm:text-sm ${getStatusColor(
-										tournamentInfo.status
-									)}`}
-								>
-									{getStatusText(tournamentInfo.status, t)}
-								</p>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -96,14 +80,7 @@ export default function SingleTournamentPage() {
 									<h3 className='text-sm sm:text-lg font-semibold mb-2'>
 										{group.name}
 									</h3>
-									<div className='flex justify-between items-center'>
-										<span
-											className={`px-1 sm:px-2 py-1 rounded text-xs sm:text-sm ${getStatusColor(
-												group.status
-											)}`}
-										>
-											{getStatusText(group.status, t)}
-										</span>
+									<div className='flex justify-end items-center'>
 										<span className='text-blue-600 text-xs sm:text-sm'>
 											{t('group_card.enter_group')}
 										</span>

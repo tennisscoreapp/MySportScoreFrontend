@@ -1,5 +1,4 @@
-import { Badge } from '@/components/ui/badge'
-import { Plus, Settings, Trophy, Zap } from 'lucide-react'
+import { Plus, Settings, Trophy } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
@@ -46,13 +45,6 @@ export default function Home() {
 								<p className='text-sm text-gray-600'>{t('header.subtitle')}</p>
 							</div>
 						</div>
-						<Badge
-							variant='secondary'
-							className='bg-green-100 text-green-800 border-green-200 '
-						>
-							<Zap className='w-4 h-4 mr-2' />
-							{t('header.system_active')}
-						</Badge>
 					</div>
 				</div>
 			</div>
