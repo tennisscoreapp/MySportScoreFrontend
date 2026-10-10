@@ -2,7 +2,8 @@ import axios from 'axios'
 
 export class BaseService {
 	private client = axios.create({
-		baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
+		// empty means same origin (production proxy)
+		baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000',
 		withCredentials: true,
 	})
 

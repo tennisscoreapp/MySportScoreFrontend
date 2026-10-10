@@ -8,7 +8,8 @@ const apiProxyTarget = process.env.API_PROXY_TARGET
 
 const nextConfig: NextConfig = {
 	env: {
-		NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+		// behind the proxy the browser calls its own origin, whatever the domain
+		NEXT_PUBLIC_API_URL: apiProxyTarget ? '' : process.env.NEXT_PUBLIC_API_URL,
 	},
 	async rewrites() {
 		if (!apiProxyTarget) return []

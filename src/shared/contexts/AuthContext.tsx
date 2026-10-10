@@ -7,7 +7,8 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+// empty means same origin (production proxy)
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const queryClient = useQueryClient()
