@@ -1,6 +1,9 @@
 import html2canvas from 'html2canvas-pro'
 import jsPDF from 'jspdf'
 
+// render the export at desktop width regardless of the user's screen size
+const EXPORT_WINDOW_WIDTH = 1440
+
 export const handleDownloadPDFUtil = async (
 	inputData: HTMLDivElement,
 	groupName: string
@@ -27,11 +30,22 @@ export const handleDownloadPDFUtil = async (
 			backgroundColor: '#ffffff',
 			scale: 1.5,
 			logging: false,
+			// cloned iframe gets desktop width so lg:/md: breakpoints apply on mobile too
+			windowWidth: EXPORT_WINDOW_WIDTH,
 			onclone: clonedDocument => {
 				try {
 					const style = clonedDocument.createElement('style')
+					// grow the root to fit the whole table and stop scroll containers from clipping it
 					style.textContent = `
 						.force-font, .force-font * { font-family: ${resolvedFamily} !important; }
+						[data-pdf-export-root="1"] {
+							width: max-content !important;
+							min-width: ${EXPORT_WINDOW_WIDTH}px !important;
+						}
+						[data-pdf-export-root="1"] .overflow-x-auto,
+						[data-pdf-export-root="1"] .overflow-hidden {
+							overflow: visible !important;
+						}
 					`
 					clonedDocument.head.appendChild(style)
 					const root = clonedDocument.querySelector(
