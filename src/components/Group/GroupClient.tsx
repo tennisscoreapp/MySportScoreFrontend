@@ -1,4 +1,5 @@
 'use client'
+import { GroupSkeleton } from '@/components/Skeletons/PageSkeletons'
 import CopyLinkButton from '@/components/Public/CopyLinkButton'
 import { Button } from '@/components/ui/button'
 import { clampPlaces } from '@/hooks/useGroupSettings'
@@ -120,7 +121,7 @@ function GroupClient({
 		}
 	}
 
-	if (isLoading) return <div className='p-6'>{t('group_loading')}</div>
+	if (isLoading) return <GroupSkeleton readOnly={readOnly} />
 	if (error) return <div className='p-6'>{t('error_loading')}</div>
 	if (!groupData) return <div className='p-6'>{t('no_data')}</div>
 

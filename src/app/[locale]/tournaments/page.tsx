@@ -1,13 +1,13 @@
 'use client'
+import { TournamentsListSkeleton } from '@/components/Skeletons/PageSkeletons'
 
 import { Button } from '@/components/ui/button'
 import { useDeleteTournamentMutation } from '@/hooks/mutations/useDeleteTournamentMutation'
 import { useFetchTournamentsQuery } from '@/hooks/queries/useFetchTournamentsQuery'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
-import { ArrowLeft, Calendar, Loader2, Plus, Trophy, X } from 'lucide-react'
+import { ArrowLeft, Calendar, Plus, Trophy, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { Suspense } from 'react'
 
 export default function Tournaments() {
 	const { data, isLoading, isError, error } = useFetchTournamentsQuery()
@@ -21,18 +21,7 @@ export default function Tournaments() {
 	}
 
 	if (isLoading) {
-		return (
-			<div className='min-h-screen bg-gray-50 p-6'>
-				<div className='max-w-7xl mx-auto'>
-					<div className='flex items-center justify-center h-64'>
-						<div className='flex flex-col items-center gap-4'>
-							<Loader2 className='w-8 h-8 animate-spin text-blue-600' />
-							<p className='text-lg text-gray-600'>{t('tournament_loading')}</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		)
+		return <TournamentsListSkeleton />
 	}
 
 	if (isError) {
@@ -63,7 +52,6 @@ export default function Tournaments() {
 		<div className='min-h-screen bg-gray-50 p-6'>
 			<div className='max-w-7xl mx-auto'>
 				{/* Header */}
-				<Suspense fallback={<div>Loading...</div>}>
 					<div className='mb-4 sm:mb-8'>
 						<div className='flex items-center gap-3 mb-4'>
 							<div className='w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-lg flex items-center justify-center'>
@@ -79,7 +67,6 @@ export default function Tournaments() {
 							</div>
 						</div>
 					</div>
-				</Suspense>
 
 				{/* Tournaments Grid */}
 				{data && data.length > 0 ? (

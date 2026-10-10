@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from './button'
+import { Skeleton } from './skeleton'
 
 export default function Navbar() {
 	const { user, logout, loading } = useAuth()
@@ -37,7 +38,7 @@ export default function Navbar() {
 							</Link>
 						</div>
 						<div className='flex items-center'>
-							<div className='animate-pulse bg-gray-200 h-8 w-20 rounded'></div>
+							<Skeleton className='h-8 w-20' />
 						</div>
 					</div>
 				</div>

@@ -1,4 +1,5 @@
 ﻿'use client'
+import { MatchEditorSkeleton } from '@/components/Skeletons/PageSkeletons'
 
 import MatchEditor from '@/components/Match/MatchEditor'
 import { useFetchGroupQuery } from '@/hooks/queries/useFetchGroupQuery'
@@ -9,7 +10,7 @@ export default function EditMatchPage() {
  const { group, tournament, matchId } = useParams<{ group: string; tournament: string; matchId: string }>()
  const { data, isLoading, error } = useFetchGroupQuery(group)
  const t = useTranslations('Match')
- if (isLoading) return <p className='p-6'>{t('loading')}</p>
+ if (isLoading) return <MatchEditorSkeleton />
  if (error || !data?.[0]) return <p role='alert' className='p-6'>{t('load_failed')}</p>
  const info = data[0].group_data
  const match = info.matches?.find(item => item.id === Number(matchId))

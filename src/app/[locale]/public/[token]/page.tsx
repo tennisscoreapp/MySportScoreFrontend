@@ -1,4 +1,5 @@
 'use client'
+import { TournamentSkeleton } from '@/components/Skeletons/PageSkeletons'
 import PublicUnavailable from '@/components/Public/PublicUnavailable'
 import { usePublicTournamentQuery } from '@/hooks/queries/usePublicQueries'
 import { formatDateDDMMYYYY } from '@/utils/dateutils/dateFormats'
@@ -8,11 +9,10 @@ import { useParams } from 'next/navigation'
 
 export default function PublicTournamentPage() {
 	const t = useTranslations('TournamentGroups')
-	const tPublic = useTranslations('PublicPages')
 	const { token } = useParams<{ token: string }>()
 	const { data, isLoading, isError } = usePublicTournamentQuery(token)
 
-	if (isLoading) return <div className='p-6'>{tPublic('loading')}</div>
+	if (isLoading) return <TournamentSkeleton withActions={false} />
 	if (isError || !data) return <PublicUnavailable />
 
 	return (

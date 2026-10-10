@@ -1,4 +1,5 @@
 'use client'
+import { AddPlayersSkeleton } from '@/components/Skeletons/PageSkeletons'
 
 import ToggledRow from '@/components/AddPlayer/ToggledRow'
 import { Button } from '@/components/ui/button'
@@ -70,11 +71,7 @@ function AddPlayers() {
 	}
 
 	if (isLoading) {
-		return (
-			<div className='flex justify-center items-center min-h-screen'>
-				<div className='text-lg'>{t('loading')}</div>
-			</div>
-		)
+		return <AddPlayersSkeleton />
 	}
 	return (
 		<div className='max-w-4xl mx-auto p-6'>

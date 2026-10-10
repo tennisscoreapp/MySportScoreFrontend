@@ -1,4 +1,5 @@
 'use client';
+import { GroupSkeleton } from '@/components/Skeletons/PageSkeletons'
 import GroupClient from '@/components/Group/GroupClient';
 import { useDeleteMatchMutation } from '@/hooks/mutations/useDeleteMatchMutation';
 import { useFetchGroupQuery } from '@/hooks/queries/useFetchGroupQuery';
@@ -17,7 +18,8 @@ function ServerFetching({ params }: { params: Params }) {
 	const queryClient = useQueryClient();
 	const locale = useLocale();
 	const { data: groupData, isLoading, error } = useFetchGroupQuery(groupId);
-	const { data: tournamentData } = useFetchTournamentQuery(tournamentId);
+	const { data: tournamentData, isLoading: isLoadingTournament } =
+		useFetchTournamentQuery(tournamentId);
 	const deleteMatchMutation = useDeleteMatchMutation(groupId, queryClient);
 	const { settings, update } = useGroupSettings(
 		groupId,
@@ -26,6 +28,9 @@ function ServerFetching({ params }: { params: Params }) {
 
 	const tTournament = useTranslations('TournamentGroup');
 
+	if (isLoadingTournament) {
+		return <GroupSkeleton />;
+	}
 	if (!tournamentData) {
 		return <div>{tTournament('group_not_found')}</div>;
 	}

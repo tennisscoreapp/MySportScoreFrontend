@@ -1,4 +1,5 @@
 'use client'
+import { TournamentSkeleton } from '@/components/Skeletons/PageSkeletons'
 import CopyLinkButton from '@/components/Public/CopyLinkButton'
 import { Button } from '@/components/ui/button'
 import { useDeleteGroupMutation } from '@/hooks/mutations/useDeleteGroupMutation'
@@ -35,7 +36,7 @@ export default function SingleTournamentPage() {
 	}
 
 	if (isLoading || isLoadingGroups) {
-		return <div>{t('group_loading')}</div>
+		return <TournamentSkeleton />
 	}
 	if (isError || isErrorGroups) {
 		return <div>{t('error_loading')}</div>
