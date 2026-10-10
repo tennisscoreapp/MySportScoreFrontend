@@ -1,3 +1,3 @@
 
-DEPLOYED VERSION - https://e-tenniscore.xyz
+DEPLOYED VERSION - https://locomotiv-777-scoreboard.vercel.app/
 
