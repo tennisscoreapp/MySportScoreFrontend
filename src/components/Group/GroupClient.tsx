@@ -15,9 +15,9 @@ import { Printer } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { HexColorPicker } from 'react-colorful'
 import { DataTable } from '../ui/data-table'
 import { Input } from '../ui/input'
+import ColorPickerField from './ColorPickerField'
 import { createColumns } from './columns'
 import DriveExportButton from './DriveExportButton'
 import GroupPagination from './GroupPagination'
@@ -321,10 +321,9 @@ function GroupClient({
 					</div>
 
 					<div className='flex flex-col items-center gap-2'>
-						<span className='text-sm font-medium'>
-							{t('buttons.primary_color_label')}
-						</span>
-						<HexColorPicker
+						<ColorPickerField
+							id='primary-color'
+							label={t('buttons.primary_color_label')}
 							color={tournamentColor}
 							onChange={color => changeSettings({ primary_color: color })}
 						/>
@@ -347,10 +346,9 @@ function GroupClient({
 					</div>
 
 					<div className='flex flex-col items-center gap-2'>
-						<span className='text-sm font-medium'>
-							{t('buttons.secondary_color_label')}
-						</span>
-						<HexColorPicker
+						<ColorPickerField
+							id='secondary-color'
+							label={t('buttons.secondary_color_label')}
 							color={secondaryTournamentColor}
 							onChange={color => changeSettings({ secondary_color: color })}
 						/>

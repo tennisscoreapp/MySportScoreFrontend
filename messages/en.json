@@ -153,6 +153,13 @@
 			"secondary_color_label": "Secondary color",
 			"number_of_secondary_winners": "Number of secondary places"
 		},
+		"color_picker": {
+			"hex_hint": "Type or paste a HEX code, e.g. #1E90FF or #F00",
+			"copy": "Copy {code}",
+			"copied": "{code} copied",
+			"copy_manually": "Copy this color code:",
+			"invalid": "Use 3 or 6 characters: 0–9, A–F"
+		},
 		"group_table": {
 			"no_data": "No data about players. Add players to start the tournament.",
 			"place": "Place",
