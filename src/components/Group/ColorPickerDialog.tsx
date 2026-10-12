@@ -53,9 +53,7 @@ export default function ColorPickerDialog({
 	}
 
 	return (
-		// not modal: the page stays scrollable and undimmed so the whole table
-		// can be checked while trying colors
-		<Dialog open={open} onOpenChange={handleOpenChange} modal={false}>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<div className='flex w-full flex-col gap-2'>
 				<span className='text-sm font-medium'>{label}</span>
 				<DialogTrigger asChild>
@@ -75,9 +73,11 @@ export default function ColorPickerDialog({
 					</Button>
 				</DialogTrigger>
 			</div>
-			{/* clicking the page to look at it must not throw the edit away */}
+			{/* no dimming, so the page behind shows the real colors; clicking the
+			    page to look at it must not throw the edit away */}
 			<DialogContent
 				className='sm:max-w-sm'
+				overlayClassName='bg-transparent'
 				onInteractOutside={e => e.preventDefault()}
 			>
 				<DialogHeader>
