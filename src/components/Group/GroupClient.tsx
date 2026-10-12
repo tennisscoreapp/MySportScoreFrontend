@@ -17,7 +17,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { DataTable } from '../ui/data-table'
 import { Input } from '../ui/input'
-import ColorPickerField from './ColorPickerField'
+import ColorPickerDialog from './ColorPickerDialog'
 import { createColumns } from './columns'
 import DriveExportButton from './DriveExportButton'
 import GroupPagination from './GroupPagination'
@@ -320,12 +320,13 @@ function GroupClient({
 						/>
 					</div>
 
-					<div className='flex flex-col items-center gap-2'>
-						<ColorPickerField
+					<div className='flex w-72 flex-col gap-4'>
+						<ColorPickerDialog
 							id='primary-color'
 							label={t('buttons.primary_color_label')}
+							buttonLabel={t('buttons.change_primary_color')}
 							color={tournamentColor}
-							onChange={color => changeSettings({ primary_color: color })}
+							onSave={color => changeSettings({ primary_color: color }, true)}
 						/>
 						<div className='w-full'>
 							<Label htmlFor='number-of-winners'>
@@ -345,12 +346,13 @@ function GroupClient({
 						</div>
 					</div>
 
-					<div className='flex flex-col items-center gap-2'>
-						<ColorPickerField
+					<div className='flex w-72 flex-col gap-4'>
+						<ColorPickerDialog
 							id='secondary-color'
 							label={t('buttons.secondary_color_label')}
+							buttonLabel={t('buttons.change_secondary_color')}
 							color={secondaryTournamentColor}
-							onChange={color => changeSettings({ secondary_color: color })}
+							onSave={color => changeSettings({ secondary_color: color }, true)}
 						/>
 						<div className='w-full'>
 							<Label htmlFor='number-of-secondary-winners'>

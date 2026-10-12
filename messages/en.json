@@ -151,9 +151,15 @@
 			"number_of_winners": "Number of winners in a group",
 			"primary_color_label": "Primary color",
 			"secondary_color_label": "Secondary color",
+			"change_primary_color": "Change primary color",
+			"change_secondary_color": "Change secondary color",
 			"number_of_secondary_winners": "Number of secondary places"
 		},
 		"color_picker": {
+			"dialog_description": "Pick a color or enter its HEX code. The change applies after you save.",
+			"hex_label": "{label}: HEX code",
+			"save": "Save",
+			"cancel": "Cancel",
 			"hex_hint": "Type or paste a HEX code, e.g. #1E90FF or #F00",
 			"copy": "Copy {code}",
 			"copied": "{code} copied",

@@ -162,9 +162,15 @@
 			"number_of_winners": "Количество победителей в группе",
 			"primary_color_label": "Основной цвет (Primary)",
 			"secondary_color_label": "Вторичный цвет (Secondary)",
+			"change_primary_color": "Изменить основной цвет",
+			"change_secondary_color": "Изменить вторичный цвет",
 			"number_of_secondary_winners": "Количество вторичных мест"
 		},
 		"color_picker": {
+			"dialog_description": "Выберите цвет или введите его HEX-код. Изменение применится после сохранения.",
+			"hex_label": "{label}: HEX-код",
+			"save": "Сохранить",
+			"cancel": "Отмена",
 			"hex_hint": "Введите или вставьте HEX-код, например #1E90FF или #F00",
 			"copy": "Скопировать {code}",
 			"copied": "{code} скопирован",

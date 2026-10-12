@@ -22,7 +22,8 @@ function toColor(draft: string): string | null {
 		: `#${digits}`
 }
 
-// Color picker with a HEX field: type or paste a code, or drag and copy it
+// Color picker with a HEX field: type or paste a code, or drag and copy it.
+// label names the field for screen readers; the dialog title shows it.
 export default function ColorPickerField({
 	id,
 	label,
@@ -110,11 +111,12 @@ export default function ColorPickerField({
 	}
 
 	return (
-		<div className='flex w-[200px] flex-col items-center gap-2'>
-			<label htmlFor={id} className='text-sm font-medium'>
-				{label}
-			</label>
-			<HexColorPicker color={color} onChange={onChange} />
+		<div className='flex w-full flex-col gap-2'>
+			<HexColorPicker
+				color={color}
+				onChange={onChange}
+				style={{ width: '100%', height: 220 }}
+			/>
 			<div className='flex w-full items-center gap-2'>
 				<div className='relative flex-1'>
 					<span
@@ -134,6 +136,7 @@ export default function ColorPickerField({
 						placeholder='RRGGBB'
 						autoComplete='off'
 						spellCheck={false}
+						aria-label={t('hex_label', { label })}
 						aria-invalid={invalid || undefined}
 						aria-describedby={`${id}-status`}
 						title={t('hex_hint')}
