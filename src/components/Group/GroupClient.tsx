@@ -79,13 +79,16 @@ function GroupClient({
 			: TableView.SWISS_SYSTEM
 	})
 	const [page, setPage] = useState(1)
+	// colors being tried in the color dialogs; shown on the page, not saved
+	const [primaryPreview, setPrimaryPreview] = useState<string | null>(null)
+	const [secondaryPreview, setSecondaryPreview] = useState<string | null>(null)
 
 	const {
-		primary_color: tournamentColor,
 		primary_winners: numberOfWinners,
-		secondary_color: secondaryTournamentColor,
 		secondary_winners: numberOfSecondaryWinners,
 	} = settings
+	const tournamentColor = primaryPreview ?? settings.primary_color
+	const secondaryTournamentColor = secondaryPreview ?? settings.secondary_color
 	const canEdit = !readOnly && onSettingsChange !== undefined
 	const changeSettings = onSettingsChange ?? (() => {})
 	const [pageSize, setPageSize] = useState<number>(() => {
@@ -325,7 +328,8 @@ function GroupClient({
 							id='primary-color'
 							label={t('buttons.primary_color_label')}
 							buttonLabel={t('buttons.change_primary_color')}
-							color={tournamentColor}
+							color={settings.primary_color}
+							onPreview={setPrimaryPreview}
 							onSave={color => changeSettings({ primary_color: color }, true)}
 						/>
 						<div className='w-full'>
@@ -351,7 +355,8 @@ function GroupClient({
 							id='secondary-color'
 							label={t('buttons.secondary_color_label')}
 							buttonLabel={t('buttons.change_secondary_color')}
-							color={secondaryTournamentColor}
+							color={settings.secondary_color}
+							onPreview={setSecondaryPreview}
 							onSave={color => changeSettings({ secondary_color: color }, true)}
 						/>
 						<div className='w-full'>
