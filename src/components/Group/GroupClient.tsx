@@ -15,9 +15,9 @@ import { Printer } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { HexColorPicker } from 'react-colorful'
 import { DataTable } from '../ui/data-table'
 import { Input } from '../ui/input'
+import ColorPickerDialog from './ColorPickerDialog'
 import { createColumns } from './columns'
 import DriveExportButton from './DriveExportButton'
 import GroupPagination from './GroupPagination'
@@ -79,13 +79,16 @@ function GroupClient({
 			: TableView.SWISS_SYSTEM
 	})
 	const [page, setPage] = useState(1)
+	// colors being tried in the color dialogs; shown on the page, not saved
+	const [primaryPreview, setPrimaryPreview] = useState<string | null>(null)
+	const [secondaryPreview, setSecondaryPreview] = useState<string | null>(null)
 
 	const {
-		primary_color: tournamentColor,
 		primary_winners: numberOfWinners,
-		secondary_color: secondaryTournamentColor,
 		secondary_winners: numberOfSecondaryWinners,
 	} = settings
+	const tournamentColor = primaryPreview ?? settings.primary_color
+	const secondaryTournamentColor = secondaryPreview ?? settings.secondary_color
 	const canEdit = !readOnly && onSettingsChange !== undefined
 	const changeSettings = onSettingsChange ?? (() => {})
 	const [pageSize, setPageSize] = useState<number>(() => {
@@ -320,13 +323,14 @@ function GroupClient({
 						/>
 					</div>
 
-					<div className='flex flex-col items-center gap-2'>
-						<span className='text-sm font-medium'>
-							{t('buttons.primary_color_label')}
-						</span>
-						<HexColorPicker
-							color={tournamentColor}
-							onChange={color => changeSettings({ primary_color: color })}
+					<div className='flex w-72 flex-col gap-4'>
+						<ColorPickerDialog
+							id='primary-color'
+							label={t('buttons.primary_color_label')}
+							buttonLabel={t('buttons.change_primary_color')}
+							color={settings.primary_color}
+							onPreview={setPrimaryPreview}
+							onSave={color => changeSettings({ primary_color: color }, true)}
 						/>
 						<div className='w-full'>
 							<Label htmlFor='number-of-winners'>
@@ -346,13 +350,14 @@ function GroupClient({
 						</div>
 					</div>
 
-					<div className='flex flex-col items-center gap-2'>
-						<span className='text-sm font-medium'>
-							{t('buttons.secondary_color_label')}
-						</span>
-						<HexColorPicker
-							color={secondaryTournamentColor}
-							onChange={color => changeSettings({ secondary_color: color })}
+					<div className='flex w-72 flex-col gap-4'>
+						<ColorPickerDialog
+							id='secondary-color'
+							label={t('buttons.secondary_color_label')}
+							buttonLabel={t('buttons.change_secondary_color')}
+							color={settings.secondary_color}
+							onPreview={setSecondaryPreview}
+							onSave={color => changeSettings({ secondary_color: color }, true)}
 						/>
 						<div className='w-full'>
 							<Label htmlFor='number-of-secondary-winners'>
