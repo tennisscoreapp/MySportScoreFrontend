@@ -1,0 +1,7 @@
+# Not written by hand: GitHub collapses these in diffs and the pre-commit size check skips them.
+package-lock.json linguist-generated
+next-env.d.ts linguist-generated
+
+# Hooks run under sh, which fails on CRLF line endings.
+*.sh text eol=lf
+.husky/* text eol=lf
